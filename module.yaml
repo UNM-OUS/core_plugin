@@ -1,0 +1,34 @@
+module:
+  name: ous_digraph_module
+
+templates:
+  theme:
+    - unm
+  css:
+    unm_fonts: //cloud.typography.com/7254094/6839152/css/fonts.css
+  cssbundles:
+    digraph_core:
+      unm: unm/styles.css
+
+package:
+  defaults:
+    fields:
+      favicon: //webcore.unm.edu/v1/images/unm.ico
+
+unm:
+  loboalerts:
+    source: https://webcore.unm.edu/v2/loboalerts.json
+    cachettl: 300
+
+helpers:
+  classes:
+    loboalerts: ${module.namespace}\Theme\LoboAlertsHelper
+
+users:
+  groups:
+    canroot:
+      ous: true
+    sources:
+      ous:
+        class: ${module.namespace}\Users\OUSGroupSource
+        args: []

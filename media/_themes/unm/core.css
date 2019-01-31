@@ -1,0 +1,515 @@
+/* apply a natural box layout model to all elements, but allowing components to change */
+html {
+  box-sizing: border-box;
+}
+
+.digraph-actionbar {
+  font-size:0.8rem;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+img {
+  max-width: 100%;
+}
+
+/* fonts */
+body {
+  font-family: "Gotham A", "Gotham B", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #222222;
+  background-color: #ffffff;
+}
+
+header, footer, nav, h1, h2, h3, h4, h5, h6 {
+  font-weight: 500;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Vitesse A", "Vitesse B", "Rockwell", sans-serif;
+  font-weight: 700;
+  color: inherit;
+}
+
+h1 {
+  font-size: 1.7em;
+}
+
+h2 {
+  font-size: 1.4em;
+}
+
+h3 {
+  font-size: 1.2em;
+}
+
+h4 {
+  font-size: 1.1em;
+}
+
+h5 {
+  font-size: 1em;
+}
+
+h6 {
+  font-size: 13px;
+}
+
+/* page layout */
+body {
+  margin: 0;
+}
+
+*[role="banner"], nav, *[role="main"] {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+div.loboalert {
+  width:100%;
+}
+
+div.loboalert-wrapper {
+  max-width:35em;
+  margin:0 auto;
+}
+
+*[role="main"] {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+body > *[role="banner"], body > nav, body > footer {
+  text-align: center;
+}
+
+*[role="banner"] {
+  margin: 0;
+  padding: 0;
+}
+
+body > *[role="banner"] {
+  padding-bottom:50px;
+}
+
+nav {
+  margin-top: 0;
+}
+
+blockquote, pre, aside {
+  background: #f5f5f5;
+  border-color: #e0e0e0;
+}
+
+/* site header/hero */
+*[role="banner"] {
+  color: #fff;
+  background: #666 url('{{config.url.base}}hero.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+*[role="banner"]>h1 {
+  font-size: 42px;
+  font-weight: 700;
+  background: rgba(255,255,255,0.75);
+  margin:0;
+  padding:1rem;
+}
+
+*[role="banner"] h1 img {
+  display: block;
+  width: 100%;
+  max-width: 500px !important;
+}
+
+*[role="banner"] h1 a {
+  text-decoration: none;
+  color: #fff;
+}
+
+@media (min-width:587px) {
+  *[role="banner"] h1 img {
+    display: block;
+    margin: 0 auto;
+    max-width: 586px;
+  }
+}
+
+/* link styles */
+a:link, a:visited {
+  color: #c10037;
+}
+
+a:hover, a:active, a:focus {
+  color: #750021;
+}
+
+/* main content link styles */
+*[role="main"] a:link {
+  color: #00356a;
+}
+
+*[role="main"] a:visited {
+  color: #620c69;
+}
+
+*[role="main"] a:hover, *[role="main"] a:active, *[role="main"] a:focus {
+  color: #9b004a;
+}
+
+/* breadcrumb tweaks */
+.breadcrumb {
+  margin-bottom: 10pt;
+}
+
+/* menubar styling */
+nav, footer {
+  background: #eee;
+}
+
+*.menubar, *.menu,
+body > nav.menubar {
+  background: rgb(51, 51, 51);
+}
+
+nav.menubar .menuitem,
+nav.menu .menuitem {
+  line-height:1.4em;
+  background: transparent;
+  padding: 6pt 10pt;
+  position: relative;
+  transition: color 0.25s ease-in-out;
+  text-decoration: none;
+  color: #fff !important;
+}
+
+*.menubar *.menuitem:after {
+  content: "";
+  background: #ccc;
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  transition: all 0.25s ease-in-out;
+}
+
+*.menubar *.menuitem:hover, *[role="menu"] *.menuitem:hover {
+  background: #ddd;
+  color: #c10037 !important;
+}
+
+*.menubar *.menuitem:hover:after, *.menubar *.menuitem.selected:after {
+  width: 100%;
+}
+
+nav.menubar .menuitem.selected,
+nav.menu .menuitem.selected {
+  color: #c10037 !important;
+}
+
+nav.menubar .menuitem.selected.active-page:after,
+nav.menu .menuitem.selected.active-page:after {
+  background: #c10037 !important;
+}
+
+/* in-body menus are a different color */
+*[role="main"] *.menubar, *[role="main"] *[role="menu"] {
+  background: #555;
+}
+
+*[role="main"] *.menubar {
+  text-align: center;
+}
+
+*[role="main"] *.menubar *.menuitem, *[role="main"] *[role="menu"] *.menuitem {
+  color: #fff !important;
+}
+
+*[role="main"] *.menubar *.menuitem:after {
+  background: #ccc;
+}
+
+*[role="main"] *.menubar *.menuitem:hover, *[role="main"] *[role="menu"] *.menuitem:hover {
+  background: #ddd;
+  color: #c10037 !important;
+}
+
+*[role="main"] *.menubar *.menuitem.selected {
+  color: #c10037 !important;
+}
+
+*[role="main"] *.menubar *.menuitem.selected:after {
+  background: #c10037 !important;
+}
+
+/* complex subsection headers */
+.subsection-complex-header {
+  text-align: center;
+  color: #fff;
+  margin-top: -20pt;
+}
+
+.subsection-complex-header h1 {
+  margin-bottom: 0;
+  padding: 10pt;
+  color: #fff;
+}
+
+.subsection-complex-header *.menubar {
+  margin-top: 0;
+}
+
+.subsection-complex-header, .subsection-complex-header *.menubar, .subsection-complex-header *[role="menu"] {
+  background: #c10037;
+}
+
+.subsection-complex-header *.menubar *.menuitem.selected {
+  color: #c10037 !important;
+}
+
+.subsection-complex-header *.menubar *.menuitem.selected:after {
+  background: #c10037 !important;
+}
+
+@media print {
+  .subsection-complex-header *.menubar {
+    display: none;
+  }
+}
+
+/* unm branding top bar */
+nav.unm-navbar *.menubar {
+  display: none;
+}
+
+nav.unm-navbar {
+  background: #c10037;
+  color: #fff;
+  margin: 0;
+  border: 1px solid #c10037;
+  font-size: 13px;
+  text-align: center;
+  position: relative;
+  padding: 0 5pt;
+  text-shadow: none;
+}
+
+nav.unm-navbar a, nav.unm-navbar a.menuitem {
+  color: #fff;
+  background: transparent;
+  font-size: 13px;
+  text-decoration: none;
+  padding: 3px 10px;
+}
+
+nav.unm-navbar a:after, nav.unm-navbar a.menuitem:after {
+  display: none;
+}
+
+@media screen and (min-width:650px) {
+  nav.unm-navbar *.menubar {
+    display: inline;
+  }
+
+  nav.unm-navbar *.menubar *.menuitem:hover, nav.unm-navbar a:hover {
+    color: #ddd !important;
+    background: transparent;
+  }
+
+  nav.unm-navbar *.menubar {
+    margin: 0;
+    display: inline-block;
+    background: transparent;
+  }
+}
+
+/* unm branding search form */
+nav.unm-navbar form {
+  display: none;
+}
+
+@media screen and (min-width:800px) {
+  nav.unm-navbar form {
+    display: inline-block;
+    background: #fff;
+    border-radius: 10px;
+    padding: 0;
+    padding-left: 10px;
+    padding-right: 2px;
+    margin-right: 5px;
+    line-height: 19.5px;
+  }
+
+  nav.unm-navbar form input {
+    line-height: 19.5px;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    width: 125px;
+  }
+
+  nav.unm-navbar form button {
+    background: transparent;
+    border: 0;
+    outline: 0;
+    cursor: pointer;
+  }
+}
+
+/* unm branding logo */
+@media screen and (min-width:1100px) {
+  nav.unm-navbar {
+    text-align: right;
+  }
+
+  nav.unm-navbar a.navbar-brand {
+    display: inline-block;
+    position: absolute;
+    overflow: hidden;
+    top: -1px;
+    left: 10px;
+    width: 235px;
+    height: 70px;
+    padding: 0;
+    background: #fff !important;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    transition: all 0.25s ease-in-out;
+    transition-property: top, height;
+    border-bottom: 3px solid #c10037;
+    color: transparent !important;
+  }
+
+  nav.unm-navbar .navbar-brand:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 10px;
+    right: 10px;
+    bottom: 0;
+    background: #fff url({{config.url.base}}unm-logo-tab.png);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+}
+
+/* UNM alerts banner */
+div.loboalert {
+  color: #fff;
+  background: #e97d1f;
+  padding: 10pt;
+  z-index: 200;
+  position: relative;
+  text-align: left;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  width:100%;
+  margin:0;
+}
+
+div.loboalert a {
+  color: #fff;
+}
+
+/* div.loboalert:before {
+  display: block;
+  float: left;
+  font-family: "Font Awesome 5 Free";
+  content: "\f071";
+  font-size: 35pt;
+  line-height: 40pt;
+  margin-right: 10pt;
+} */
+
+div.loboalert:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+div.loboalert h1, div.loboalert date {
+  font-size: 15px;
+  line-height: 20pt;
+  margin: 0;
+  font-weight: bold;
+}
+
+div.loboalert h1 {
+  font-size: 25px;
+}
+
+div.loboalert date {
+  font-style: italic;
+  display: block;
+}
+
+/* footer */
+footer {
+  font-size: 11px;
+  line-height: 10pt;
+}
+
+footer h1, footer p {
+  margin: 10pt 0;
+}
+
+footer .unm-info, footer .unm-links {
+  padding: 20pt;
+}
+
+.social-icon-link {
+  display: inline;
+  font-size: inherit;
+  font-size: 2rem;
+  vertical-align: top;
+  line-height: 1.5;
+  font-weight: 400;
+  margin-right: 0.25em;
+}
+
+footer .unm-links .social-icon-link {
+  font-size: 24px;
+}
+
+@media (min-width:700px) {
+  footer .unm-info, footer .unm-links {
+    display: inline-block;
+    vertical-align: bottom;
+    text-align: left;
+    max-width: 40%;
+  }
+}
+
+@media screen {
+  footer {
+    background: #5e5d60;
+    color: #fff;
+    margin-bottom: 0;
+  }
+
+  footer *.menubar *.menuitem, footer a {
+    color: #fff !important;
+    background: transparent;
+    white-space: nowrap;
+  }
+
+  footer *.menubar *.menuitem:hover, footer a:hover {
+    color: #eee;
+    background: transparent;
+  }
+}
+
+/* print rules */
+@media print {
+  nav.unm-navbar, div.loboalert {
+    display: none;
+  }
+
+  footer[role="contentinfo"] .unm-links, footer[role="contentinfo"] .unm-info h1 {
+    display: none;
+  }
+}

@@ -1,0 +1,10 @@
+{
+    "name": "unmous/ous_digraph_module",
+    "type": "library",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Digraph\\Modules\\ous_digraph_module\\": "src/"
+        }
+    }
+}
