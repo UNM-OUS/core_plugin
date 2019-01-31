@@ -1,5 +1,5 @@
 <?php
-namespace Digraph\Modules\unm_digraph_theme\Theme;
+namespace Digraph\Modules\ous_digraph_module\Theme;
 
 use Digraph\Helpers\AbstractHelper;
 
