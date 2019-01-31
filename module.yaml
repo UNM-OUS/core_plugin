@@ -25,6 +25,12 @@ helpers:
     loboalerts: ${module.namespace}\Theme\LoboAlertsHelper
 
 users:
+  managers:
+    netid:
+      name:        UNM NetID
+      class:       ${module.namespace}\Users\NetIDUserManager
+      signup:      false
+      signin:      true
   groups:
     canroot:
       ous: true
