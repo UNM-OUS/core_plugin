@@ -16,6 +16,12 @@ package:
       favicon: //webcore.unm.edu/v1/images/unm.ico
 
 unm:
+  cas:
+    version: CAS_VERSION_2_0
+    server: login.unm.edu
+    port: 443
+    context: cas
+    setnocasservervalidation: true
   loboalerts:
     source: https://webcore.unm.edu/v2/loboalerts.json
     cachettl: 300
