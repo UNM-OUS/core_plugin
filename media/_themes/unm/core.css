@@ -383,6 +383,12 @@ nav.unm-navbar form {
     color: transparent !important;
   }
 
+  /* Add padding to banner H1 to accommodate branding logo if necessary */
+  [role="banner"]>h1 {
+    padding-left:255px;
+    padding-right:255px;
+  }
+
   nav.unm-navbar .navbar-brand:after {
     content: '';
     display: block;
