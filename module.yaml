@@ -1,6 +1,8 @@
 module:
   name: ous_digraph_module
 
+timezone: America/Denver
+
 templates:
   theme:
     - unm
