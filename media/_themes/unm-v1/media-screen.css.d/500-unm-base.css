@@ -32,6 +32,6 @@ h6 {
 }
 
 .breadcrumb {
-  border-bottom:1px dotted #999;
-  padding-bottom:0.5em;
+  border-bottom: 1px dotted #999;
+  padding: 0.5em 0;
 }

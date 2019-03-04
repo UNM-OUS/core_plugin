@@ -1,0 +1,11 @@
+#digraph-body-2col {
+  .digraph-area-wrapper {
+    display: flex;
+    justify-content: space-around;
+  }
+}
+
+#body-2col-extra {
+  flex-basis: 15em;
+  margin-left: 1em;
+}

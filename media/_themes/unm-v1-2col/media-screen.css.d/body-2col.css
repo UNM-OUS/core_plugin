@@ -1,0 +1,5 @@
+#body-2col-extra {
+  background: $(color_shade);
+  padding: $(spacing_base);
+  font-size: 0.8em;
+}
