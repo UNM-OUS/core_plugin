@@ -1,0 +1,8 @@
+/* print rules */
+@media print {
+
+  #digraph-unm,
+  #digraph-loboalerts {
+    display: none;
+  }
+}

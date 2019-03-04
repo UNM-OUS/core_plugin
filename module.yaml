@@ -3,19 +3,25 @@ module:
 
 timezone: America/Denver
 
+theme:
+  areas:
+    unm-v1: [actionbar,loboalerts,unm,masthead,navbar,meta,body,footer]
+  variables:
+    unm-v1:
+      font_family_body: '"Gotham A", "Gotham B", "Helvetica Neue", Helvetica, Arial, sans-serif'
+      font_family_headers: '"Vitesse A", "Vitesse B", "Rockwell", sans-serif'
+      color_accent: '#c10037'
+      color_background: '#fff'
+      color_foreground: '#222'
+      color_link: '#00356a'
+      color_link_visited: '#620c69'
+      color_link_hover: '#9b004a'
+      color_link_active: '#9b004a'
+
+
 templates:
-  theme:
-    - unm
   css:
     unm_fonts: //cloud.typography.com/7254094/6839152/css/fonts.css
-  cssbundles:
-    digraph_core:
-      unm: unm/styles.css
-
-package:
-  defaults:
-    fields:
-      favicon: //webcore.unm.edu/v1/images/unm.ico
 
 unm:
   cas:

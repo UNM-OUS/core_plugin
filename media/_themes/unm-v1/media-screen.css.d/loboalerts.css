@@ -1,0 +1,28 @@
+#digraph-loboalerts {
+  color: #fff;
+  background: #e97d1f;
+  z-index: 200;
+
+  div.loboalert {
+    padding-top: $(spacing_base);
+    padding-bottom: $(spacing_base);
+    line-height: 1.2em;
+
+    .loboalert-wrapper {
+      padding-bottom: 0.25em;
+    }
+  }
+
+  h1 {
+    margin: 0;
+    line-height: 1.2em;
+  }
+
+  a {
+    color: #fff;
+  }
+}
+
+.breadcrumb {
+  font-size: 0.6em;
+}

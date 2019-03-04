@@ -1,0 +1,65 @@
+#digraph-navbar {
+  margin: 0;
+  padding-left: $(spacing_base);
+  padding-right: $(spacing_base);
+}
+
+.navbar, #digraph-navbar {
+  background: rgb(51, 51, 51);
+  overflow: auto;
+}
+
+.navbar, #digraph-navbar>.digraph-area-wrapper {
+  display: flex;
+  line-height: $(line_height_compact);
+
+  .menuitem {
+    line-height: 1.4em;
+    background: transparent;
+    padding: 6pt 10pt;
+    position: relative;
+    transition: color 0.25s ease-in-out;
+    text-decoration: none;
+    color: #fff !important;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    &:after {
+      content: "";
+      background: #ccc;
+      display: block;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 3px;
+      transition: all 0.25s ease-in-out;
+    }
+
+    &:hover {
+      background: #ddd;
+      color: #c10037 !important;
+
+      &:after {
+        width: 100%;
+      }
+    }
+
+    &.selected {
+      color: #c10037 !important;
+      background: #ddd;
+
+      &:after {
+        width: 100%;
+      }
+
+      &.active-page {
+        &:after {
+          background: #c10037 !important;
+        }
+      }
+    }
+  }
+}
