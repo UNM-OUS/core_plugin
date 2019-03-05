@@ -7,6 +7,15 @@ if (!class_exists('\\phpCAS')) {
     return;
 }
 
+//force authentication
+try {
+    \phpCAS::forceAuthentication();
+} catch (\Exception $e) {
+    //it's kludgey, but wrapping this keeps it from breaking because of
+    //the way digraph redirects URLs
+}
+
+//get user
 if (\phpCAS::getUser()) {
     $this->helper('users')->id(\phpCAS::getUser().'@netid');
 } else {

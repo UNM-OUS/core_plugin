@@ -33,11 +33,4 @@ if (!defined(PHPCAS_CONFIGURED)) {
     if ($config['setnocasservervalidation']) {
         \phpCAS::setNoCasServerValidation();
     }
-    //force authentication
-    try {
-        \phpCAS::forceAuthentication();
-    } catch (\Exception $e) {
-        //it's kludgey, but wrapping this keeps it from breaking because of
-        //the way digraph redirects URLs
-    }
 }
