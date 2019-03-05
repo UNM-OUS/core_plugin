@@ -49,7 +49,7 @@
 
     &.selected {
       color: #c10037 !important;
-      background: #ddd;
+      background: #fff;
 
       &:after {
         width: 100%;
