@@ -8,4 +8,5 @@
 #body-2col-extra {
   flex-basis: 15em;
   margin-left: 1em;
+  min-width: 10em;
 }
