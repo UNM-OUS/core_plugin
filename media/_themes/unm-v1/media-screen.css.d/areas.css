@@ -13,6 +13,7 @@
 
 .digraph-area {
   text-align: center;
+  z-index:1;
 
   .digraph-area-wrapper {
     text-align: left;

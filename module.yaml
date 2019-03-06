@@ -17,10 +17,11 @@ theme:
       color_accent: '#c10037'
       color_background: '#fff'
       color_foreground: '#222'
-      color_link: '#00356a'
-      color_link_visited: '#620c69'
-      color_link_hover: '#9b004a'
-      color_link_active: '#9b004a'
+      color_link: '#ba0c2f'
+      color_link_visited: '#7c414d'
+      color_link_hover: '#72071d'
+      color_link_active: '#72071d'
+      color_lightbox_shade: rgba(0,0,0,0.9);
 
 unm:
   cas:
