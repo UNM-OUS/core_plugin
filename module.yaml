@@ -14,7 +14,7 @@ theme:
     unm-v1:
       font_family_body: '"Gotham A", "Gotham B", "Helvetica Neue", Helvetica, Arial, sans-serif'
       font_family_headers: '"Vitesse A", "Vitesse B", "Rockwell", sans-serif'
-      color_accent: '#c10037'
+      color_accent: '#ba0c2f'
       color_background: '#fff'
       color_foreground: '#222'
       color_link: '#ba0c2f'
@@ -22,6 +22,10 @@ theme:
       color_link_hover: '#72071d'
       color_link_active: '#72071d'
       color_lightbox_shade: rgba(0,0,0,0.9);
+      color_error: '#c05131'
+      color_confirmation: '#a8aa19'
+      color_notice: '#007a86'
+      color_warning: '#ed8b00'
 
 unm:
   cas:
