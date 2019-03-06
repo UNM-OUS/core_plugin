@@ -42,7 +42,7 @@
       background: $(color_lightbox_shade);
       position: fixed;
       top: 0;
-      right: 297px;
+      right: 300px;
       bottom: 0;
       left: 0;
       transition: right 0.6s;
