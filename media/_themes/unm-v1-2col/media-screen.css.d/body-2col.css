@@ -2,4 +2,5 @@
   background: $(color_shade);
   padding: $(spacing_base);
   font-size: 0.8em;
+  border-radius: $(border_radius_accent);
 }
