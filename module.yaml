@@ -26,6 +26,7 @@ theme:
       color_confirmation: '#a8aa19'
       color_notice: '#007a86'
       color_warning: '#ed8b00'
+      border_radius_accent: 4px
 
 unm:
   cas:
