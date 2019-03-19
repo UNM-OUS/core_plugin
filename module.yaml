@@ -28,12 +28,7 @@ theme:
       color_warning: '#ed8b00'
       border_radius_accent: 4px
 
-mungers:
-  setup:
-    050-unm: ${module.namespace}\UnmMunger
-
 unm:
-  cpanelhttps: true
   cas:
     version: CAS_VERSION_2_0
     server: login.unm.edu
