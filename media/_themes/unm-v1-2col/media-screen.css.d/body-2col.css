@@ -3,4 +3,8 @@
   padding: $(spacing_base);
   font-size: 0.8em;
   border-radius: $(border_radius_accent);
+
+  form.search-form {
+    font-size: 0.5em;
+  }
 }
