@@ -5,6 +5,10 @@
   }
 }
 
+#body-2col-body {
+  flex-grow: 1;
+}
+
 #body-2col-extra {
   flex-basis: 15em;
   margin-left: 1em;
