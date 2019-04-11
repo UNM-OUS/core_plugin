@@ -5,6 +5,7 @@
   background: #666 url('{{config.url.base}}hero.jpg');
   background-size: cover;
   background-repeat: no-repeat;
+  background-position: center center;
 
   .digraph-area-wrapper {
     max-width: 100%;
