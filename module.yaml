@@ -35,6 +35,7 @@ unm:
     port: 443
     context: cas
     setnocasservervalidation: true
+    fixhttpsproblems: true
   loboalerts:
     source: https://webcore.unm.edu/v2/loboalerts.json
     cachettl: 300

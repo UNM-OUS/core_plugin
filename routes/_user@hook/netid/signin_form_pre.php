@@ -8,11 +8,8 @@ if (!class_exists('\\phpCAS')) {
 }
 
 //force authentication
-try {
+if (!phpCAS::isAuthenticated()) {
     \phpCAS::forceAuthentication();
-} catch (\Exception $e) {
-    //it's kludgey, but wrapping this keeps it from breaking because of
-    //the way digraph redirects URLs
 }
 
 //get user
