@@ -1,7 +1,12 @@
 #digraph-navbar {
   margin: 0;
-  padding-left: $(spacing_base);
-  padding-right: $(spacing_base);
+  padding-left: 0;
+  padding-right: 0;
+
+  .digraph-area-wrapper {
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
 
 .navbar, #digraph-navbar {
