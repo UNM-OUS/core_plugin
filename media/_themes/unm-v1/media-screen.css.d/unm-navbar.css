@@ -21,6 +21,8 @@
     transition: color 0.25s ease-in-out;
     text-decoration: none;
     color: #fff !important;
+    min-width: 4em;
+    max-width: 10em;
 
     &:first-child {
       margin-left: 0;
