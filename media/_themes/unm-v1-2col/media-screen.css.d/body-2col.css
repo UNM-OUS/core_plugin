@@ -1,12 +1,14 @@
+#digraph-body-2col {
+  .digraph-area-wrapper {
+    padding: 0 $(spacing_base);
+  }
+}
+
 #body-2col-extra {
   background: $(color_shade);
   padding: $(spacing_base);
   font-size: 0.8em;
   border-radius: $(border_radius_accent);
-
-  .digraph-area-wrapper {
-    padding: 0 $(spacing_base);
-  }
 
   form.search-form {
     font-size: 0.5em;
