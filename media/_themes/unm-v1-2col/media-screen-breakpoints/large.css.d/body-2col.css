@@ -2,6 +2,7 @@
   .digraph-area-wrapper {
     display: flex;
     justify-content: space-around;
+    padding: 0 $(spacing_base);
   }
 }
 
