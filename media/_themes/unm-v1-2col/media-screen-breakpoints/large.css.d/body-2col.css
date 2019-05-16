@@ -2,17 +2,10 @@
   .digraph-area-wrapper {
     display: flex;
     justify-content: space-around;
-    flex-wrap: wrap;
   }
 }
 
-#body-2col-body {
-  flex-grow: 1;
-  max-width: 100%;
-}
-
 #body-2col-extra {
-  flex-basis: 15em;
+  flex-basis: 18em;
   margin-left: 1em;
-  min-width: 15em;
 }
