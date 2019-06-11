@@ -1,4 +1,6 @@
 #digraph-body-2col {
+  margin-bottom: $(spacing_base);
+
   .digraph-area-wrapper {
     padding: 0 $(spacing_base);
   }
