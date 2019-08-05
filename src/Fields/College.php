@@ -28,7 +28,11 @@ class College extends Select
             "School of Engineering" => "School of Engineering",
             "School of Law" => "School of Law",
             "School of Medicine" => "School of Medicine",
-            "University College" => "University College"
+            "University College" => "University College",
+            "UNM-Gallup" => "UNM-Gallup",
+            "UNM-Los Alamos" => "UNM-Los Alamos",
+            "UNM-Taos," => "UNM-Taos,",
+            "UNM-Valencia" => "UNM-Valencia",
         ]);
     }
 }
