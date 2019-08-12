@@ -42,7 +42,10 @@ unm:
     cachettl: 300
 
 helpers:
+  initialized:
+    ous: true
   classes:
+    ous: ${module.namespace}\Helper
     loboalerts: ${module.namespace}\Theme\LoboAlertsHelper
 
 users:
