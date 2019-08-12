@@ -13,6 +13,9 @@ class NetID extends Input
         $this->addValidatorFunction(
             'validnetid',
             function ($field) {
+                if (!$field->value()) {
+                    return true;
+                }
                 if (!preg_match('/^[a-z].{1,19}$/', $field->value())) {
                     return "NetIDs must be 2-20 characters and begin with a letter.";
                 }
