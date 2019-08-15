@@ -31,7 +31,7 @@ class College extends Select
             "University College" => "University College",
             "UNM-Gallup" => "UNM-Gallup",
             "UNM-Los Alamos" => "UNM-Los Alamos",
-            "UNM-Taos," => "UNM-Taos,",
+            "UNM-Taos" => "UNM-Taos",
             "UNM-Valencia" => "UNM-Valencia",
         ]);
     }
