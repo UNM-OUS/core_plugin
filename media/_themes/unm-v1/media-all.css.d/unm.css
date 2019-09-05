@@ -1,3 +1,9 @@
 .digraph-masthead-search {
   display: none !important;
 }
+
+#digraph-actionbar,
+#digraph-primary-actionbar,
+.digraph-actionbar {
+  background: rgb(75, 75, 75) !important;
+}
