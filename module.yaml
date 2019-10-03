@@ -17,14 +17,15 @@ theme:
   variables:
     unm-v1:
       border_radius_accent: 4px
+      color_unm: '#ba0c2f'
       color_accent: '#ba0c2f'
       color_background: '#fff'
       color_confirmation: '#a8aa19'
       color_error: '#c05131'
       color_foreground: '#222'
       color_lightbox_shade: rgba(0,0,0,0.9);
-      color_link_active: '#72071d'
-      color_link_hover: '#72071d'
+      color_link_active: '#ed8b00'
+      color_link_hover: '#ed8b00'
       color_link_visited: '#7c414d'
       color_link: '#ba0c2f'
       color_notice: '#007a86'
