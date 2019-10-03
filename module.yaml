@@ -33,6 +33,7 @@ theme:
       font_family_body: '"Gotham A", "Gotham B", "Helvetica Neue", Helvetica, Arial, sans-serif'
       font_family_headers: '"Vitesse A", "Vitesse B", "Rockwell", sans-serif'
       font_size_print: 11pt
+      color_actionbar_bg: "#4b4b4b"
 
 unm:
   cas:
