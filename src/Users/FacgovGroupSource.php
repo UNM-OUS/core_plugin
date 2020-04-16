@@ -20,7 +20,7 @@ class FacgovGroupSource extends AbstractGroupSource
     {
         //check cache
         $cache = $this->cms->cache();
-        $cacheID = md5(static::class.'.'.$source);
+        $cacheID = md5(static::class.'.'.$this->source);
         $roster = $cache->getItem($cacheID);
         //load and save into cache if cache isn't hit
         if (!$roster->isHit()) {
