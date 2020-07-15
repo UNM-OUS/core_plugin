@@ -2,7 +2,8 @@
 @media print {
 
   #digraph-unm,
-  #digraph-loboalerts {
+  #digraph-loboalerts,
+  #digraph-xsitenav {
     display: none;
   }
 }

@@ -11,9 +11,9 @@ theme:
   css:
     unm-v1:
       unm_fonts: //cloud.typography.com/7254094/6839152/css/fonts.css
-  areas:
-    unm-v1: [loboalerts,unm,masthead,actionbar,navbar,meta,body,footer]
-    unm-v1-2col: [loboalerts,unm,masthead,actionbar,navbar,meta,body-2col,footer]
+  aareas:
+    unm-v1: [loboalerts,unm,xsitenav,masthead,actionbar,navbar,meta,body,footer]
+    unm-v1-2col: [loboalerts,unm,xsitenav,masthead,actionbar,navbar,meta,body-2col,footer]
   variables:
     unm-v1:
       border_radius_accent: 4px
