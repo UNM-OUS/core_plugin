@@ -11,7 +11,7 @@ theme:
   css:
     unm-v1:
       unm_fonts: //cloud.typography.com/7254094/6839152/css/fonts.css
-  aareas:
+  areas:
     unm-v1: [loboalerts,unm,xsitenav,masthead,actionbar,navbar,meta,body,footer]
     unm-v1-2col: [loboalerts,unm,xsitenav,masthead,actionbar,navbar,meta,body-2col,footer]
   variables:
