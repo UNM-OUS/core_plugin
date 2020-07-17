@@ -38,7 +38,7 @@ nav.unm-navbar {
 /* first breakpoint */
 @media (min-width:768px) {
   #digraph-unm {
-    border-bottom: 1px solid #8a0923;
+    border: 1px solid #8a0923;
     height: 30px;
   }
   /* make navbar flex display */
@@ -53,6 +53,7 @@ nav.unm-navbar {
       width: 235px;
       z-index: 100;
       margin-left: 5px;
+      margin-top: -1px;
     }
     /* make wrapper for menubar and search flex display */
     .menu {

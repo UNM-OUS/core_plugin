@@ -2,6 +2,9 @@
   margin: 0;
   padding-left: 0;
   padding-right: 0;
+  font-size: 15px;
+  font-family: "Gotham A","Gotham B","Helvetica Neue",Helvetica,Arial,sans-serif;
+  border-top: 1px solid #a7a8aa;
 
   .digraph-area-wrapper {
     padding-left: 0;
@@ -10,24 +13,25 @@
 }
 
 .navbar, #digraph-navbar {
-  background: rgb(51, 51, 51);
+  background: #f2f2f2;
   overflow: auto;
+  padding: 10px;
 }
 
 .navbar, #digraph-navbar>.digraph-area-wrapper {
   display: flex;
   line-height: $(line_height_compact);
+  justify-content: center;
 
   .menuitem {
-    line-height: 1.4em;
+    line-height: 22px;
     background: transparent;
-    padding: 6pt 10pt;
+    padding: 5px 10px;
     position: relative;
     transition: color 0.25s ease-in-out;
     text-decoration: none;
-    color: #fff !important;
-    min-width: 3em;
-    max-width: 10em;
+    color: #ba0c2f !important;
+    font-weight: bold;
 
     &:first-child {
       margin-left: 0;
@@ -46,26 +50,17 @@
     }
 
     &:hover {
-      background: #ddd;
-      color: #c10037 !important;
+      background: #fff;
+      color: #72071d !important;
 
       &:after {
         width: 100%;
       }
     }
 
-    &.selected {
-      color: #c10037 !important;
-      background: #fff;
-
+    &.selected, &.active-page {
       &:after {
         width: 100%;
-      }
-
-      &.active-page {
-        &:after {
-          background: #c10037 !important;
-        }
       }
     }
   }
