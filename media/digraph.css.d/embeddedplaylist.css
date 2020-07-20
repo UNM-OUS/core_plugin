@@ -25,7 +25,8 @@ div.embeddedplaylist iframe {
     bottom: 0;
     left: 0;
     right: 0;
-    width: 100%;
+    width: 100% !important;
+    max-width: 100% !important;
     height: 100%;
 }
 
