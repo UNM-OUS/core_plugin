@@ -1,8 +1,21 @@
-header, footer, nav, h1, h2, h3, h4, h5, h6 {
+header,
+footer,
+nav,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 500;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 700;
   color: inherit;
 }
@@ -34,4 +47,37 @@ h6 {
 .breadcrumb {
   border-bottom: 1px dotted #999;
   padding: 0.5em 0;
+}
+
+#page-wrapper {
+  overflow-x: hidden;
+}
+
+#digraph-body {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    text-align: center;
+  }
+
+  p,
+  ul,
+  ol,
+  li,
+  blockquote,
+  .filestore-card,
+  iframe {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 30em;
+  }
+
+  .instagram-media {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
 }
