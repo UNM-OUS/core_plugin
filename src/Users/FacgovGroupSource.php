@@ -9,7 +9,7 @@ class FacgovGroupSource extends AbstractGroupSource
     protected $prefix = 'comm_';
     protected $source = null;
 
-    public function __construct(CMS &$cms, $extra=null)
+    public function __construct(CMS $cms, $extra=null)
     {
         parent::__construct($cms);
         $this->prefix = $extra['prefix'];
