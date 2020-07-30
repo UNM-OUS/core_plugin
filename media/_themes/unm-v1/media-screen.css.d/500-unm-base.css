@@ -47,6 +47,7 @@ h6 {
 .breadcrumb {
   border-bottom: 1px dotted #999;
   padding: 0.5em 0;
+  justify-content: center;
 }
 
 #page-wrapper {
@@ -79,7 +80,8 @@ h6 {
     max-width: 40rem;
   }
 
-  table {
+  table,
+  form {
     margin-left: auto;
     margin-right: auto;
     min-width: 40rem;
@@ -93,7 +95,9 @@ h6 {
 
 @media screen and (max-width:45rem) {
   #digraph-body {
-    table {
+
+    table,
+    form {
       min-width: 0;
       width: 100%;
     }
