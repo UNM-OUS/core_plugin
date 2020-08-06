@@ -7,6 +7,11 @@ permissions:
   url:
     _user/signup: [deny all]
 
+logging:
+  mail:
+    recipients:
+      - elhober@unm.edu
+
 theme:
   css:
     unm-v1:
