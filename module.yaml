@@ -12,6 +12,10 @@ logging:
     recipients:
       - elhober@unm.edu
 
+mail:
+  default:
+    from: univsec@unm.edu
+
 theme:
   css:
     unm-v1:
