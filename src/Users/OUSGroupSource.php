@@ -20,7 +20,7 @@ class OUSGroupSource extends AbstractGroupSource
         $groups = $cache->getItem($cacheID);
         //load and save into cache if cache isn't hit
         if (!$groups->isHit()) {
-            $url = 'https://secretary.unm.edu/groups/?netid='.$netid;
+            $url = 'https://secretary.unm.edu/groups/index.php?netid='.$netid;
             if ($data = json_decode(file_get_contents($url))) {
                 $groups->set($data);
                 $cache->save($groups);
