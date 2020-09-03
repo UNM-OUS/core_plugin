@@ -11,7 +11,7 @@ class FacgovGroupSource extends AbstractGroupSource
 
     const DISALLOWED_GROUPS = [
         'root',
-        'webmaster',
+        'admin',
         'editor',
         'FERPA',
         'officeStaff',
