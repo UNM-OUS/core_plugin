@@ -84,4 +84,4 @@ strings:
       _user/signin: NetID sign in
   actionbar:
     title:
-      guest: RAC Account
+      guest: Account
