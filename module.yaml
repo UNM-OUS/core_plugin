@@ -26,23 +26,23 @@ theme:
   variables:
     unm-v1:
       border_radius_accent: 4px
-      color_unm: '#ba0c2f'
-      color_accent: '#ba0c2f'
+      color_unm: '#BA0C2F'
+      color_accent: '#BA0C2F'
       color_background: '#fff'
-      color_confirmation: '#a8aa19'
-      color_error: '#c05131'
+      color_confirmation: '#8EBB14'
+      color_error: '#DE254D'
       color_foreground: '#222'
       color_lightbox_shade: rgba(0,0,0,0.9);
-      color_link_active: '#ed8b00'
-      color_link_hover: '#ed8b00'
+      color_link_active: '#ED8B00'
+      color_link_hover: '#ED8B00'
       color_link_visited: '#7c414d'
       color_link: '#ba0c2f'
-      color_notice: '#007a86'
-      color_warning: '#ed8b00'
+      color_notice: '#008DB0'
+      color_warning: '#ED8B00'
       font_family_body: '"Gotham A", "Gotham B", "Helvetica Neue", Helvetica, Arial, sans-serif'
       font_family_headers: '"Vitesse A", "Vitesse B", "Rockwell", sans-serif'
       font_size_print: 11pt
-      color_actionbar_bg: "#4b4b4b"
+      color_actionbar_bg: '#BA0C2F'
 
 unm:
   cas:
