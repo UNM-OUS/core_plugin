@@ -9,7 +9,7 @@ class NetID extends Input
     public function __construct(string $label, string $name=null, FieldInterface $parent=null)
     {
         parent::__construct($label, $name, $parent);
-        $this->addTip('Enter a valid <em>main campus</em> NetID, not including the rest of the email address (Enter like <code>netid</code>, not <code>netid@unm.edu</code>).');
+        $this->addTip('Enter a valid <em>main campus</em> NetID.');
         $this->addValidatorFunction(
             'validnetid',
             function ($field) {
@@ -29,7 +29,9 @@ class NetID extends Input
 
     public function value($set=null)
     {
-        return strtolower(parent::value($set));
+        $value = strtolower(parent::value($set));
+        $value = preg_replace('/@unm\.edu$/','',$value);
+        return $value;
     }
 
     public function default($set=null)
