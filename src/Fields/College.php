@@ -9,7 +9,7 @@ use Formward\Fields\Container;
 
 class College extends Select
 {
-    public function __construct(string $label, string $name=null, FieldInterface $parent=null, CMS &$cms=null)
+    public function __construct(string $label, string $name=null, FieldInterface $parent=null)
     {
         parent::__construct($label, $name, $parent);
         $this->options([

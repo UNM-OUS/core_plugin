@@ -9,7 +9,7 @@ use Formward\Fields\Container;
 
 class SemesterField extends Container
 {
-    public function __construct(string $label, string $name=null, FieldInterface $parent=null, CMS &$cms=null)
+    public function __construct(string $label, string $name=null, FieldInterface $parent=null)
     {
         parent::__construct($label, $name, $parent);
         $this['semester'] = new Select('Semester');
