@@ -35,6 +35,7 @@ class FacgovGroupSource extends AbstractGroupSource
             $url = $this->source;
             if ($data = json_decode(file_get_contents($url), true)) {
                 $roster->set($data);
+                $roster->expiresAfter(3600);
                 $cache->save($roster);
             }
         }

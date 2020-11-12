@@ -23,6 +23,7 @@ class OUSGroupSource extends AbstractGroupSource
             $url = 'https://secretary.unm.edu/groups/index.php?netid='.$netid;
             if ($data = json_decode(file_get_contents($url))) {
                 $groups->set($data);
+                $groups->expiresAfter(3600);
                 $cache->save($groups);
             }
         }
