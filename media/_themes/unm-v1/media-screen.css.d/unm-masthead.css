@@ -2,7 +2,7 @@
   margin: 0;
   padding: 0;
   color: #fff;
-  background: rgb(127,127,127) url('{{config.url.base}}hero.jpg');
+  background: rgb(127, 127, 127) url('{{config.url.base}}hero.jpg');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
@@ -17,6 +17,17 @@
 
   h1 {
     font-family: $(font_family_headers);
+  }
+}
+
+body.page-has-hero {
+  #digraph-masthead {
+    min-height: auto;
+    height: auto;
+    max-height: none;
+  }
+  #masthead-screen {
+    position: relative;
   }
 }
 

@@ -17,7 +17,7 @@
 #digraph-xsitenav>.digraph-area-wrapper {
     display: flex;
     line-height: $(line_height_compact);
-    justify-content: flex-end;
+    justify-content: center;
 
     .menuitem, .label
     {
