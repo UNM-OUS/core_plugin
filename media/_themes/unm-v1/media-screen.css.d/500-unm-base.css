@@ -116,6 +116,10 @@ h6 {
   text-align: center;
 }
 
+.digraph-hero-main-image {
+  background-position-x: center;
+}
+
 @media screen and (max-width:45rem) {
   #digraph-body {
 
