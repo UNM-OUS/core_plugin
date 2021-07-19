@@ -85,3 +85,8 @@ strings:
   actionbar:
     title:
       guest: Account
+
+package:
+  defaults:
+    fields:
+      favicon: //webcore.unm.edu/v1/images/unm.ico
