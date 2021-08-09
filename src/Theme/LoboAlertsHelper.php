@@ -1,4 +1,5 @@
 <?php
+
 namespace Digraph\Modules\ous_digraph_module\Theme;
 
 use Digraph\Helpers\AbstractHelper;
@@ -8,7 +9,7 @@ class LoboAlertsHelper extends AbstractHelper
     public function current()
     {
         $cache = $this->cms->cache();
-        $id = 'loboalerts.'.md5($this->cms->config['unm.loboalerts.source']);
+        $id = 'loboalerts.' . md5($this->cms->config['unm.loboalerts.source']);
         //try to find in cache
         if ($cache && $cache->hasItem($id)) {
             return $cache->getItem($id)->get();
@@ -30,6 +31,6 @@ class LoboAlertsHelper extends AbstractHelper
 
     public function active()
     {
-        return @$this->current()['alert'] != 'none';
+        return $this->current() && @$this->current()['alert'] != 'none';
     }
 }
