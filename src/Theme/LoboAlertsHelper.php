@@ -17,7 +17,7 @@ class LoboAlertsHelper extends AbstractHelper
         //read source file
         if ($file = file_get_contents($this->cms->config['unm.loboalerts.source'])) {
             if ($parsed = json_decode($file, true)) {
-                $parsed['details'] = str_replace('&#xA;', '', $parsed['details']);
+                $parsed['details'] = str_replace('&#xA;', '', @$parsed['details'] ?? '');
                 //save to cache and return
                 $citem = $cache->getItem($id);
                 $citem->expiresAfter($this->cms->config['unm.loboalerts.cachettl']);
