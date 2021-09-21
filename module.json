@@ -90,7 +90,7 @@
     },
     "loboalerts": {
       "source": "https://webcore.unm.edu/v2/loboalerts.json",
-      "cachettl": 300
+      "cachettl": 1800
     }
   },
   "helpers": {
