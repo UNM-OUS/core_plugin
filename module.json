@@ -7,6 +7,18 @@
     "url": {
       "_user/signup": [
         "deny all"
+      ],
+      "hero/edit": [
+        "allow group editor"
+      ],
+      "hero/delete": [
+        "allow group editor"
+      ],
+      "hero/edges": [
+        "allow group editor"
+      ],
+      "hero/copy": [
+        "allow group editor"
       ]
     }
   },
