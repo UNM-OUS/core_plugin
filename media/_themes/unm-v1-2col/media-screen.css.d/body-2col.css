@@ -17,7 +17,7 @@
   }
 }
 
-#digraph-body {
+#digraph-body-2col {
 
   h1,
   h2,
@@ -37,7 +37,7 @@
   iframe {
     margin-left: 0;
     margin-right: 0;
-    max-width: 30em;
+    max-width: 35em;
   }
 
   .instagram-media {
