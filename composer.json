@@ -10,7 +10,7 @@
     "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
-            "DigraphCMS\\Modules\\unmous\\ous_digraph_module\\": "src/"
+            "DigraphCMS_Plugins\\unmous\\ous_digraph_module\\": "src/"
         }
     }
 }
