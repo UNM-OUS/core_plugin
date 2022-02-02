@@ -1,6 +1,6 @@
 <?php
 
-namespace DigraphCMS_Plugins\ous_digraph_module;
+namespace DigraphCMS_Plugins\ous_digraph_module\unmous;
 
 use DigraphCMS\Plugins\AbstractPlugin;
 
