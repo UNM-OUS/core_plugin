@@ -2,17 +2,8 @@
 
 namespace DigraphCMS_Plugins\unmous\ous_digraph_module;
 
-use DigraphCMS\Plugins\AbstractPlugin;
-
-class ous_digraph_module extends AbstractPlugin
+class Plugin extends \DigraphCMS\Plugins\AbstractPlugin
 {
-    public function initialConfig(): array
-    {
-        return json_decode(file_get_contents(
-            __DIR__ . '/../config.json'
-        ), true);
-    }
-
     public function isEventSubscriber(): bool
     {
         return false;
@@ -36,10 +27,5 @@ class ous_digraph_module extends AbstractPlugin
     public function phinxFolders(): array
     {
         return [];
-    }
-
-    public function postRegistrationCallback()
-    {
-        // does nothing
     }
 }
