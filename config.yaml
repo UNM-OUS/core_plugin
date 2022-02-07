@@ -1,3 +1,23 @@
+theme:
+  active_themes: [unm]
+
+themes:
+  unm:
+    variables:
+      light:
+        font:
+          content: '"Gotham A","Gotham B","Helvetica Neue",Helvetica,Arial,sans-serif';
+          header: '"Vitesse A","Vitesse B",Cambria,Rockwell,"Times New Roman",serif';
+        theme:
+          neutral: '#63666a'
+          accent: '#ba0c2f'
+          highlight: '#8a387c'
+        cue:
+          information: '#007a86'
+          safe: '#a8aa19'
+          warning: '#8a387c'
+          danger: '#ed8b00'
+
 user_sources:
   cas:
     providers:
