@@ -36,7 +36,7 @@ nav.unm-navbar {
         display: none;
     }
 }
-/* first breakpoint */
+/* first breakpoint, wide mode */
 @media (min-width: 768px) {
     #unm-top-nav {
         border: 1px solid #8a0923;
@@ -57,7 +57,7 @@ nav.unm-navbar {
             border-bottom: 3px solid #ba0c2f;
             width: 235px;
             z-index: 100;
-            margin-left: 5px;
+            margin-left: 0;
             margin-top: -1px;
         }
         /* make wrapper for menubar and search flex display */
@@ -87,7 +87,7 @@ nav.unm-navbar {
             background: #fff;
             border-radius: 10px;
             padding: 0 2px 0 10px;
-            margin-right: 5px;
+            margin-right: 0;
             line-height: 19.5px;
             height: 22px;
             margin-top: 4px;
@@ -109,5 +109,9 @@ nav.unm-navbar {
                 cursor: pointer;
             }
         }
+    }
+    /* add padding to user menu */
+    #unm-top-nav + .action-menu--user-menu {
+        padding-left: calc(235px + var(--grid));
     }
 }
