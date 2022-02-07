@@ -115,5 +115,12 @@ nav.unm-navbar {
         padding-left: calc(235px + var(--grid));
         line-height: 14px;
         font-size: 13px;
+        background: #5e5d60;
+        color: #fff;
+
+        a[href]:hover {
+            background: rgba(255, 255, 255, 0.8);
+            color: #000;
+        }
     }
 }
