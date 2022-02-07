@@ -1,3 +1,6 @@
+unm:
+  loboalert_ttl: 3600
+
 theme:
   active_themes: [unm]
 

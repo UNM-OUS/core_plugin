@@ -110,8 +110,10 @@ nav.unm-navbar {
             }
         }
     }
-    /* add padding to user menu */
+    /* add padding to user menu, make it the right height to line up with logo */
     #unm-top-nav + .action-menu--user-menu {
         padding-left: calc(235px + var(--grid));
+        line-height: 14px;
+        font-size: 13px;
     }
 }

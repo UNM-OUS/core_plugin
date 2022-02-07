@@ -28,6 +28,7 @@ use DigraphCMS\UI\UserMenu;
 
 <body class='template-minimal no-js <?php echo implode(' ', Theme::bodyClasses()); ?>'>
     <?php
+    echo Templates::render('unm/loboalerts.php');
     echo Templates::render('unm/top-nav.php');
     echo new UserMenu(Context::url());
     echo Templates::render('sections/header.php');

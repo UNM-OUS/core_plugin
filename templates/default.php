@@ -5,7 +5,6 @@ are not some sort of error or special case.
 */
 
 use DigraphCMS\Context;
-use DigraphCMS\Session\Cookies;
 use DigraphCMS\UI\ActionMenu;
 use DigraphCMS\UI\Breadcrumb;
 use DigraphCMS\UI\Notifications;
@@ -33,7 +32,7 @@ use DigraphCMS\UI\UserMenu;
         <a href="#content">Skip to content</a>
     </section>
     <?php
-    Cookies::printConsentBanner();
+    echo Templates::render('unm/loboalerts.php');
     echo Templates::render('unm/top-nav.php');
     echo new UserMenu(Context::url());
     echo Templates::render('sections/header.php');
