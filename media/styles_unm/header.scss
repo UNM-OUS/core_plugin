@@ -3,12 +3,13 @@
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
+    padding: 0;
+    padding-bottom: $grid*8;
 
     > h1 {
         margin: 0;
         padding: $grid;
-        margin-bottom: $grid * 2;
-        background: var(--background-darker);
+        background: var(--background-a90);
         color: var(--color);
     }
 }
