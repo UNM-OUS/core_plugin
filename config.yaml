@@ -3,11 +3,14 @@ theme:
 
 themes:
   unm:
+    internal_css:
+      - /styles/unm/*.css
     variables:
       light:
         font:
-          content: '"Gotham A","Gotham B","Helvetica Neue",Helvetica,Arial,sans-serif';
-          header: '"Vitesse A","Vitesse B",Cambria,Rockwell,"Times New Roman",serif';
+          content: '"Gotham A","Gotham B","Gotham Pro","Gotham","Helvetica Neue",Helvetica,Arial,sans-serif'
+          header: '"Vitesse A","Vitesse B","Vitesse",Cambria,Rockwell,"Times New Roman",serif'
+          ui: '"Helvetica Neue",Helvetica,Arial,sans-serif'
         theme:
           neutral: '#63666a'
           accent: '#ba0c2f'
