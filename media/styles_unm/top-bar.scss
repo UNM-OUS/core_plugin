@@ -2,13 +2,13 @@
 #unm-top-nav {
     margin: 0;
     padding: 0;
-    background-color: $(color_unm);
+    background-color: #ba0c2f;
     font-size: 13px;
     line-height: 1.6em;
     height: 70px;
 
     .unm-top-nav__wrapper {
-        max-width: 76rem;
+        margin: 0;
     }
 
     * {
@@ -40,9 +40,13 @@ nav.unm-navbar {
     #unm-top-nav {
         border: 1px solid #8a0923;
         height: 30px;
+        .unm-top-nav__wrapper {
+            margin: 0 $grid/2;
+        }
     }
     /* make navbar flex display */
     nav.unm-navbar {
+        margin: 0 auto;
         display: flex;
         justify-content: space-between;
         /* put logo on left */
@@ -94,6 +98,7 @@ nav.unm-navbar {
                 outline: 0;
                 background: transparent;
                 width: 125px;
+                padding: 2px 0;
             }
 
             button {

@@ -1,0 +1,77 @@
+footer#footer {
+    font-size: 11px;
+    line-height: 10pt;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+}
+
+footer#footer h1,
+footer#footer p {
+    margin: 10pt 0;
+}
+
+footer#footer .unm-info,
+footer#footer .unm-links {
+    padding: 20pt;
+}
+
+.social-icon-link {
+    display: inline;
+    font-size: inherit;
+    font-size: 2rem;
+    vertical-align: top;
+    line-height: 1.5;
+    font-weight: 400;
+    margin-right: 0.25em;
+}
+
+footer#footer .unm-links .social-icon-link {
+    font-size: 24px;
+    text-decoration: none;
+    text-align: center;
+    .fab:after {
+        @include icofont;
+    }
+    .fa-facebook:after {
+        content: "\ed37";
+    }
+    .fa-instagram:after {
+        content: "\ed46";
+    }
+    .fa-twitter:after {
+        content: "\ed7a";
+    }
+    .fa-youtube:after {
+        content: "\e95f";
+    }
+}
+
+@media (min-width: 700px) {
+    footer#footer .unm-info,
+    footer#footer .unm-links {
+        display: inline-block;
+        vertical-align: bottom;
+        text-align: left;
+        max-width: 40%;
+    }
+}
+
+footer#footer {
+    background: #5e5d60;
+    color: #fff;
+    margin-bottom: 0;
+}
+
+footer#footer *.menubar *.menuitem,
+footer#footer a {
+    color: #fff !important;
+    background: transparent;
+    white-space: nowrap;
+}
+
+footer#footer *.menubar *.menuitem:hover,
+footer#footer a:hover {
+    color: #eee;
+    background: transparent;
+}

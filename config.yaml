@@ -4,7 +4,7 @@ theme:
 themes:
   unm:
     internal_css:
-      - /styles/unm/*.css
+      - /styles_unm/*.css
     variables:
       light:
         font:
