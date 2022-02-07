@@ -1,11 +1,11 @@
 #header {
+    background-color: var(--background-darker);
     background-image: url(/hero.jpg);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
     padding: 0;
     padding-bottom: $grid*8;
-    background: var(--background-dark);
 
     > h1 {
         margin: 0;
