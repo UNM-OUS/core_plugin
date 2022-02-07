@@ -1,6 +1,22 @@
 /* basic styling */
+#unm-top-nav {
+    margin: 0;
+    padding: 0;
+    background-color: $(color_unm);
+    font-size: 13px;
+    line-height: 1.6em;
+    height: 70px;
 
-#unm-navbar {
+    .unm-top-nav__wrapper {
+        max-width: 76rem;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+}
+
+nav.unm-navbar {
     a.navbar-brand {
         display: block;
         overflow: hidden;
@@ -19,15 +35,14 @@
         display: none;
     }
 }
-
 /* first breakpoint */
 @media (min-width: 768px) {
-    #digraph-unm {
+    #unm-top-nav {
         border: 1px solid #8a0923;
         height: 30px;
     }
     /* make navbar flex display */
-    #unm-navbar {
+    nav.unm-navbar {
         display: flex;
         justify-content: space-between;
         /* put logo on left */
