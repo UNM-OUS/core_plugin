@@ -13,6 +13,7 @@ themes:
       - /styles_unm/*.css
     variables:
       light:
+        line-length: 45em
         font:
           content: '"Gotham A","Gotham B","Gotham Pro","Gotham","Helvetica Neue",Helvetica,Arial,sans-serif'
           header: '"Vitesse A","Vitesse B","Vitesse",Cambria,Rockwell,"Times New Roman",serif'
