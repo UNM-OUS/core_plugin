@@ -7,7 +7,6 @@
     padding: 0;
     padding-bottom: $grid * 8;
     box-shadow: var(--shadow-inset);
-    border-bottom: 2px solid var(--background-lighter);
 
     > h1 {
         margin: 0;
@@ -15,4 +14,13 @@
         background: var(--background-a90);
         color: var(--color);
     }
+}
+
+// styles to accent the body content
+#content {
+    border-top: 2px solid var(--background-lighter);
+}
+body {
+    background: radial-gradient(circle, var(--background-light) 0%, var(--background) 100%);
+    background-attachment: fixed;
 }
