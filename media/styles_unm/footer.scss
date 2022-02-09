@@ -4,6 +4,8 @@ footer#footer {
     margin-left: 0;
     margin-right: 0;
     margin-bottom: 0;
+    box-shadow: var(--shadow-inset);
+    border-top: 2px solid var(--background-darker);
 }
 
 footer#footer h1,

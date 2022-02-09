@@ -5,7 +5,9 @@
     background-repeat: no-repeat;
     background-size: cover;
     padding: 0;
-    padding-bottom: $grid*8;
+    padding-bottom: $grid * 8;
+    box-shadow: var(--shadow-inset);
+    border-bottom: 2px solid var(--background-lighter);
 
     > h1 {
         margin: 0;

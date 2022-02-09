@@ -36,6 +36,27 @@ nav.unm-navbar {
         display: none;
     }
 }
+
+.action-menu--user-menu {
+    line-height: 14px;
+    font-size: 13px;
+    background: #5e5d60;
+    color: #fff;
+
+    .action-menu__user-actions {
+        justify-content: center;
+        align-content: center;
+        ul {
+            flex-wrap: nowrap;
+        }
+    }
+
+    a[href]:hover {
+        background: rgba(255, 255, 255, 0.8);
+        color: #000;
+    }
+}
+
 /* first breakpoint, wide mode */
 @media (min-width: 768px) {
     #unm-top-nav {
@@ -111,16 +132,14 @@ nav.unm-navbar {
         }
     }
     /* add padding to user menu, make it the right height to line up with logo */
-    #unm-top-nav + .action-menu--user-menu {
-        padding-left: calc(235px + var(--grid));
-        line-height: 14px;
-        font-size: 13px;
-        background: #5e5d60;
-        color: #fff;
-
-        a[href]:hover {
-            background: rgba(255, 255, 255, 0.8);
-            color: #000;
+    .action-menu--user-menu {
+        padding-left: calc(235px + var(--grid)) !important;
+        flex-direction: row-reverse;
+        flex-wrap: wrap;
+    
+        .action-menu__user-actions {
+            justify-content: flex-end;
+            align-content: flex-end;
         }
     }
 }
