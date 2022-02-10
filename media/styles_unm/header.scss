@@ -5,14 +5,23 @@
     background-repeat: no-repeat;
     background-size: cover;
     padding: 0;
-    padding-bottom: $grid * 8;
     box-shadow: var(--shadow-inset);
+    min-height: 6 * $grid;
+    height: 20vh;
+    position: relative;
+    overflow: hidden;
 
     > h1 {
         margin: 0;
         padding: $grid;
         background: var(--background-a90);
         color: var(--color);
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        box-shadow: var(--shadow);
+        border-top: 1px solid var(--background);
     }
 }
 
