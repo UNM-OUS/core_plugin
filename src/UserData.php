@@ -42,6 +42,10 @@ class UserData
         return @static::data()[$netID] ?? [];
     }
 
+    public static function known(string $netID): bool {
+        return @static::data()[$netID] !== null;
+    }
+
     public static function data(): array
     {
         static $data;
