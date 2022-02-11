@@ -22,13 +22,13 @@ themes:
           ui: '"Helvetica Neue",Helvetica,Arial,sans-serif'
         theme:
           neutral: '#63666a'
-          accent: '#ba0c2f'
-          highlight: '#8a387c'
+          accent: '#a7a8aa'
+          highlight: '#ba0c2f'
         cue:
           information: '#007a86'
-          safe: '#a8aa19'
-          warning: '#8a387c'
-          danger: '#ed8b00'
+          safe: '#43A047'
+          warning: '#FFA000'
+          danger: '#F4511E'
 
 user_sources:
   cas:
