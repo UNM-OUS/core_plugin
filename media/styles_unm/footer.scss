@@ -77,3 +77,8 @@ footer#footer a:hover {
     color: #eee;
     background: transparent;
 }
+
+// space out footer from body
+#content {
+    margin-bottom: $grid * 2;
+}
