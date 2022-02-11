@@ -1,5 +1,7 @@
 unm:
   loboalert_ttl: 3600
+  block_unknown_netids: false
+  known_netids: []
 
 theme:
   active_themes: [unm]
@@ -8,9 +10,9 @@ theme:
 themes:
   unm:
     external_css:
-      - https://cloud.typography.com/7254094/6839152/css/fonts.css
+      unm_fonts: https://cloud.typography.com/7254094/6839152/css/fonts.css
     internal_css:
-      - /styles_unm/*.css
+      unm: /styles_unm/*.css
     variables:
       light:
         line-length: 45em

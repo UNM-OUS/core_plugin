@@ -25,6 +25,15 @@
     }
 }
 
+// hide login link for blocked unknown netids variations
+body.block-unknown-netids {
+    .action-menu__user-actions--guest {
+        .signin-link {
+            display: none;
+        }
+    }
+}
+
 // styles to accent the body content
 #content {
     border-top: 2px solid var(--background-lighter);

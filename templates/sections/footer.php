@@ -1,6 +1,8 @@
 <?php
 
+use DigraphCMS\Context;
 use DigraphCMS\Media\Media;
+use DigraphCMS\Users\Users;
 
 $logo = Media::get('/unm-footer-logo.png');
 
@@ -35,6 +37,10 @@ $logo = Media::get('/unm-footer-logo.png');
             <a href="http://www.unm.edu/contactunm.html">Contact UNM</a>
             <a href="https://www.unm.edu/consumer-information/"><span>Consumer Information</span></a>
             <a href="http://nmhedss2.state.nm.us/Dashboard/index.aspx?ID=21">New Mexico Higher Education Dashboard</a>
+        </p>
+
+        <p style="opacity:0.25;">
+            <a href="<?php echo Users::signinUrl(Context::url()) ?>">Log in to this site</a>
         </p>
     </div>
 </footer>

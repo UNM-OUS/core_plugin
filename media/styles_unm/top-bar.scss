@@ -51,6 +51,12 @@ nav.unm-navbar {
         }
     }
 
+    .action-menu__user-actions--guest {
+        h2 {
+            display: none;
+        }
+    }
+
     a[href]:hover {
         background: rgba(255, 255, 255, 0.8);
         color: #000;
@@ -136,7 +142,7 @@ nav.unm-navbar {
         padding-left: calc(235px + var(--grid)) !important;
         flex-direction: row-reverse;
         flex-wrap: wrap;
-    
+
         .action-menu__user-actions {
             justify-content: flex-end;
             align-content: flex-end;
