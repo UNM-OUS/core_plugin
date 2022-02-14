@@ -2,13 +2,16 @@
 
 namespace DigraphCMS_Plugins\unmous\ous_digraph_module;
 
+use DigraphCMS\Cache\Cache;
 use DigraphCMS\Cache\CacheNamespace;
 use DigraphCMS\Config;
 use DigraphCMS\DB\DB;
+use Spyc;
 
 class UserData
 {
-    public static function userGroups(string $userID): array {
+    public static function userGroups(string $userID): array
+    {
         $groups = [];
         foreach (static::userNetIDs($userID) as $netID) {
             foreach (static::netIDGroups($netID) as $group) {
@@ -42,7 +45,8 @@ class UserData
         return @static::data()[$netID] ?? [];
     }
 
-    public static function known(string $netID): bool {
+    public static function known(string $netID): bool
+    {
         return @static::data()[$netID] !== null;
     }
 
@@ -54,9 +58,21 @@ class UserData
 
     protected static function buildData(): array
     {
-        $data = array_filter(Config::get('unm.known_netids'));
-        // TODO: pull and merge centralized data from ... somewhere?
-        return $data;
+        // return merged/filtered data from two sources
+        return array_filter(array_merge(
+            // get data from central config file
+            Cache::get(
+                'unm/userdata',
+                function () {
+                    return Spyc::YAMLLoadString(
+                        file_get_contents('https://secretary.unm.edu/known_netids.yaml')
+                    );
+                },
+                Config::get('unm.userdata_ttl')
+            ),
+            // get data from local config
+            Config::get('unm.known_netids')
+        ));
     }
 
     public static function cache(): CacheNamespace
