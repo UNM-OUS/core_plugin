@@ -6,22 +6,28 @@
     background-size: cover;
     padding: 0;
     box-shadow: var(--shadow-inset);
-    min-height: 6 * $grid;
+    min-height: 8 * $grid;
     height: 20vh;
-    position: relative;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    z-index: 1;
 
-    > h1 {
-        margin: 0;
-        padding: $grid;
-        background: var(--background-a90);
+    > #header__wrapper {
+        background: var(--background-a80);
         color: var(--color);
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        box-shadow: var(--shadow);
+        box-shadow: var(--shadow-inset);
         border-top: 1px solid var(--background);
+        > h1 {
+            margin: 0;
+            padding: $grid;
+            a {
+                text-decoration: none;
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
     }
 }
 
@@ -34,9 +40,25 @@ body.block-unknown-netids {
     }
 }
 
+// main navbar
+#main-nav {
+    @include unm-menubar(transparent);
+    font-size: larger;
+    font-weight: light;
+    border-top: 1px solid var(--background-a80);
+}
+
 // styles to accent the body content
+#breadcrumb {
+    border-top: 1px solid var(--background-light);
+}
 #content {
     border-top: 2px solid var(--background-lighter);
+}
+#breadcrumb {
+    position: relative;
+    box-shadow: var(--shadow-inset);
+    z-index: 2;
 }
 body {
     background: radial-gradient(circle, var(--background-light) 0%, var(--background) 100%);

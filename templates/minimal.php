@@ -32,11 +32,10 @@ use DigraphCMS\UI\UserMenu;
     echo Templates::render('unm/top-nav.php');
     echo new UserMenu(Context::url());
     echo Templates::render('sections/header.php');
-    echo Templates::render('sections/navbar.php');
-    Notifications::printSection();
     if (Context::response()->status() == 200) {
         Breadcrumb::print();
     }
+    Notifications::printSection();
     ?>
     <main id="content">
         <?php echo Context::response()->content(); ?>

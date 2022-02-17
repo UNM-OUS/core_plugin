@@ -1,0 +1,44 @@
+@mixin unm-menubar($background: var(--background-dark), $foreground: var(--color)) {
+    background-color: $background;
+    color: $foreground;
+    font-weight: inherit;
+    font-family: $font-content;
+    .menuitem {
+        font-weight: inherit;
+        a.menuitem__link {
+            position: relative;
+            font-weight: inherit;
+            padding: $grid/2 $grid;
+            background-color: rgba(255, 255, 255, 0);
+            transition: all 500ms ease-out;
+            text-decoration: none;
+            &:before {
+                content: "";
+                position: absolute;
+                display: block;
+                background: var(--theme-neutral);
+                height: 4px;
+                bottom: 0;
+                left: 0;
+                width: 0;
+                transition: all 500ms ease-out;
+                opacity: 0.5;
+            }
+        }
+
+        &:hover,
+        &:focus,
+        &.menuitem--focus {
+            a.menuitem__link {
+                text-decoration: none;
+                background-color: var(--background-lighter);
+                color: rgb(186, 12, 47);
+                box-shadow: var(--shadow);
+                z-index: 10;
+                &:before {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}

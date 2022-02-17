@@ -17,7 +17,10 @@ themes:
       unm: /styles_unm/*.css
     variables:
       light:
-        line-length: 45em
+        line-length: 45rem
+        line-height: 1.6
+        shadow: 0 calc(var(--grid)/4) var(--grid) rgba(0,0,0,0.15)
+        shadow-inset: inset 0 calc(var(--grid)/4) var(--grid) rgba(0,0,0,0.05)
         font:
           content: '"Gotham A","Gotham B","Gotham Pro","Gotham","Helvetica Neue",Helvetica,Arial,sans-serif'
           header: '"Vitesse A","Vitesse B","Vitesse",Cambria,Rockwell,"Times New Roman",serif'
@@ -31,6 +34,9 @@ themes:
           safe: '#43A047'
           warning: '#FFA000'
           danger: '#F4511E'
+      dark:
+        shadow: 0 calc(var(--grid)/4) var(--grid) rgba(0,0,0,0.3)
+        shadow-inset: inset 0 -calc(var(--grid)/4) var(--grid) rgba(0,0,0,0.3)
 
 user_sources:
   cas:

@@ -35,13 +35,12 @@ use DigraphCMS\UI\UserMenu;
     echo Templates::render('unm/loboalerts.php');
     echo Templates::render('unm/top-nav.php');
     echo new UserMenu(Context::url());
-    echo Templates::render('sections/header.php');
-    echo Templates::render('sections/navbar.php');
+    echo Templates::render('sections/header.php');;
     Breadcrumb::print();
-    echo new ActionMenu(Context::url(), false);
     Notifications::printSection();
     ?>
     <main id="content">
+        <?php echo new ActionMenu(Context::url(), false); ?>
         <?php echo Context::response()->content(); ?>
     </main>
     <?php
