@@ -32,7 +32,7 @@ nav.unm-navbar {
     }
 
     #unm_search_form,
-    .menubar {
+    .unm-menubar {
         display: none;
     }
 }
@@ -93,7 +93,7 @@ nav.unm-navbar {
             justify-content: flex-end;
         }
         /* style menubar */
-        .menubar {
+        .unm-menubar {
             display: flex;
             line-height: 30px;
             font-size: 13px;

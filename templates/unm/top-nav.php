@@ -4,10 +4,10 @@
             <a class="navbar-brand" href="http://www.unm.edu">The University of New Mexico</a>
 
             <div class="menu">
-                <div class="menubar">
-                    <a class="menuitem" href="http://directory.unm.edu/departments/" title="UNM A to Z">UNM A-Z</a>
-                    <a class="menuitem" href="https://my.unm.edu" title="myUNM">myUNM</a>
-                    <a class="menuitem" href="http://directory.unm.edu" title="Directory">Directory</a>
+                <div class="unm-menubar">
+                    <a class="unm-menuitem" href="http://directory.unm.edu/departments/" title="UNM A to Z">UNM A-Z</a>
+                    <a class="unm-menuitem" href="https://my.unm.edu" title="myUNM">myUNM</a>
+                    <a class="unm-menuitem" href="http://directory.unm.edu" title="Directory">Directory</a>
                 </div>
                 <!-- search form -->
                 <form action="//search.unm.edu/search" id="unm_search_form" method="get">
