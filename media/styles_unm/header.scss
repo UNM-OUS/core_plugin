@@ -42,24 +42,17 @@ body.block-unknown-netids {
 
 // main navbar
 #main-nav {
-    @include unm-menubar(transparent);
+    @include unm-menubar(var(--background-a50));
     font-size: larger;
     font-weight: light;
     border-top: 1px solid var(--background-a50);
 }
 
 // styles to accent the body content
-#breadcrumb {
-    border-top: 1px solid var(--background-light);
-}
 #content {
     border-top: 2px solid var(--background-lighter);
 }
-#breadcrumb {
-    position: relative;
-    box-shadow: var(--shadow-inset);
-    z-index: 2;
-}
+
 body {
     background: radial-gradient(circle, var(--background-light) 0%, var(--background) 100%);
     background-attachment: fixed;
