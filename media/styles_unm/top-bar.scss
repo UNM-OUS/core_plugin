@@ -37,29 +37,17 @@ nav.unm-navbar {
     }
 }
 
-.action-menu--user-menu {
-    line-height: 14px;
-    font-size: 13px;
+.menubar--usermenu {
+    line-height: 18px;
+    font-size: 14px;
     background: #333;
     color: #fff;
+    justify-content: center;
 
-    .action-menu__user-actions {
-        justify-content: center;
-        align-content: center;
-        ul {
-            flex-wrap: nowrap;
+    .menuitem {
+        .menuitem__link {
+            padding: $grid/2 $grid;
         }
-    }
-
-    .action-menu__user-actions--guest {
-        h2 {
-            display: none;
-        }
-    }
-
-    a[href]:hover {
-        background: rgba(255, 255, 255, 0.8);
-        color: #000;
     }
 }
 
@@ -97,6 +85,7 @@ nav.unm-navbar {
             display: flex;
             line-height: 30px;
             font-size: 13px;
+            height: 30px;
 
             a {
                 color: #fff !important;
@@ -138,14 +127,9 @@ nav.unm-navbar {
         }
     }
     /* add padding to user menu, make it the right height to line up with logo */
-    .action-menu--user-menu {
+    .menubar--usermenu {
         padding-left: calc(235px + var(--grid)) !important;
-        flex-direction: row-reverse;
-        flex-wrap: wrap;
-
-        .action-menu__user-actions {
-            justify-content: flex-end;
-            align-content: flex-end;
-        }
+        justify-content: flex-end;
+        padding-right: $grid/2;
     }
 }
