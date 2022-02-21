@@ -34,14 +34,14 @@ use DigraphCMS\UI\UserMenu;
     <?php
     echo Templates::render('unm/loboalerts.php');
     echo Templates::render('unm/top-nav.php');
-    echo new UserMenu(Context::url());
+    echo new UserMenu;
     echo Templates::render('sections/header.php');;
     ?>
     <main id="content">
         <?php
-        Notifications::printSection();
-        echo new ActionMenu(Context::url(), false);
         Breadcrumb::print();
+        echo new ActionMenu;
+        Notifications::printSection();
         echo '<div id="main-content">';
         echo Context::response()->content();
         echo '</div>';

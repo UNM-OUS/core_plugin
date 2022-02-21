@@ -5,6 +5,7 @@ get so many resources allocated.
 */
 
 use DigraphCMS\Context;
+use DigraphCMS\UI\ActionMenu;
 use DigraphCMS\UI\Breadcrumb;
 use DigraphCMS\UI\Notifications;
 use DigraphCMS\UI\Templates;
@@ -30,15 +31,14 @@ use DigraphCMS\UI\UserMenu;
     <?php
     echo Templates::render('unm/loboalerts.php');
     echo Templates::render('unm/top-nav.php');
-    echo new UserMenu(Context::url());
+    echo new UserMenu;
     echo Templates::render('sections/header.php');
     ?>
     <main id="content">
         <?php
+        Breadcrumb::print();
+        echo new ActionMenu;
         Notifications::printSection();
-        if (Context::response()->status() == 200) {
-            Breadcrumb::print();
-        }
         echo '<div id="main-content">';
         echo Context::response()->content();
         echo '</div>';
