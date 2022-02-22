@@ -1,0 +1,23 @@
+#loboalert {
+    @include uncolored-links;
+    background: var(--cue-danger);
+    color: var(--cue-danger-inv);
+    padding: $grid;
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    p {
+        margin: 0;
+        font-size: inherit;
+    }
+    h1 {
+        font-size: 1.5em;
+        margin-bottom: $grid/2;
+    }
+}
+
+#loboalert__content {
+    max-width: $line-length;
+}
