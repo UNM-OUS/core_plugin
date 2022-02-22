@@ -49,9 +49,16 @@ body.block-unknown-netids {
 
     &.menubar--overflowed {
         &.menubar--overflowed--open {
-            background: var(--background-darker);
+            background: var(--background-dark);
+
             .menubar--overflowed__toggle {
-                font-weight: bold;
+                background: var(--background-darker);
+
+                .menuitem__link {
+                    &:before {
+                        display: none;
+                    }
+                }
             }
         }
     }
