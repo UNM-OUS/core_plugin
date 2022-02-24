@@ -2,8 +2,7 @@ unm:
   loboalert_ttl: 3600
   userdata_ttl: 3600
   block_unknown_netids: false
-  known_netids:
-    elhober: [admins]
+  known_netids: []
 
 theme:
   active_themes: [unm]
@@ -26,14 +25,14 @@ themes:
           header: '"Vitesse A","Vitesse B","Vitesse",Cambria,Rockwell,"Times New Roman",serif'
           ui: '"Helvetica Neue",Helvetica,Arial,sans-serif'
         theme:
-          neutral: '#63666a'
-          accent: '#a7a8aa'
-          highlight: '#ba0c2f'
+          neutral: "#63666a"
+          accent: "#a7a8aa"
+          highlight: "#ba0c2f"
         cue:
-          information: '#007a86'
-          safe: '#43A047'
-          warning: '#FFA000'
-          danger: '#F4511E'
+          information: "#007a86"
+          safe: "#43A047"
+          warning: "#FFA000"
+          danger: "#F4511E"
       dark:
         shadow: 0 calc(var(--grid)/4) var(--grid) rgba(0,0,0,0.3)
         shadow-inset: inset 0 -calc(var(--grid)/4) var(--grid) rgba(0,0,0,0.3)
