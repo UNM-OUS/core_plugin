@@ -36,7 +36,7 @@ class UserData
             function ($row) {
                 return $row['provider_id'];
             },
-            $query->execute()->fetchAll()
+            $query->fetchAll()
         );
     }
 
@@ -64,9 +64,16 @@ class UserData
             Cache::get(
                 'unm/userdata',
                 function () {
-                    return Spyc::YAMLLoadString(
-                        file_get_contents('https://secretary.unm.edu/known_netids.yaml')
-                    );
+                    $curl = curl_init(Config::get('unm.user_source'));
+                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+                    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+                    $resp = curl_exec($curl);
+                    if ($resp === false) {
+                        throw new \Exception('UNM user source failed to load: ' . curl_error($curl));
+                    }
+                    curl_close($curl);
+                    return Spyc::YAMLLoadString($resp);
                 },
                 Config::get('unm.userdata_ttl')
             ),
