@@ -66,8 +66,8 @@ class UserData
                 function () {
                     $curl = curl_init(Config::get('unm.user_source'));
                     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-                    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-                    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+                    // curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+                    // curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
                     $resp = curl_exec($curl);
                     if ($resp === false) {
                         throw new \Exception('UNM user source failed to load: ' . curl_error($curl));

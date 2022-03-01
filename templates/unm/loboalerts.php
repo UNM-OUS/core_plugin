@@ -8,8 +8,17 @@ use DigraphCMS\HTML\DIV;
 $data = Cache::get(
     'unm/loboalerts',
     function () {
-        if ($file = file_get_contents('http://webcore.unm.edu/v2/loboalerts.json')) {
-            if ($data = json_decode($file, true)) {
+        $curl = curl_init('http://webcore.unm.edu/v2/loboalerts.json');
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        // curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        // curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        $resp = curl_exec($curl);
+        if ($resp === false) {
+            throw new \Exception('UNM user source failed to load: ' . curl_error($curl));
+        }
+        curl_close($curl);
+        if ($resp) {
+            if ($data = json_decode($resp, true)) {
                 if (@$data['alert'] != 'none') {
                     $data['details'] = str_replace('&#xA;', '', @$data['details'] ?? '');
                     return $data;
