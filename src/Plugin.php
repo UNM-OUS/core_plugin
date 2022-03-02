@@ -43,7 +43,7 @@ class Plugin extends \DigraphCMS\Plugins\AbstractPlugin
                 throw new AccessDeniedError('You are not on the list of known NetIDs for this site');
             }
         }
-        $user->name($netID);
+        $user->name(UserData::netIDName($netID) ?? $netID);
     }
 
     public function mediaFolders(): array
