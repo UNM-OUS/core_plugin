@@ -44,6 +44,7 @@ class Plugin extends \DigraphCMS\Plugins\AbstractPlugin
             }
         }
         $user->name(UserData::netIDName($netID) ?? $netID);
+        $user->addEmail($netID . '@unm.edu');
     }
 
     public function mediaFolders(): array

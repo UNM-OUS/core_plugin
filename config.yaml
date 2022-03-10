@@ -8,6 +8,9 @@ theme:
   active_themes: [unm]
   timezone: America/Denver
 
+email:
+  from: univsec@unm.edu
+
 themes:
   unm:
     external_css:
