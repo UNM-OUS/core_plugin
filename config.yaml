@@ -12,6 +12,12 @@ email:
   from: univsec@unm.edu
 
 themes:
+  unm_dev:
+    internal_css:
+      unm_dev: /styles_unm_dev/*.css
+  unm_test:
+    internal_css:
+      unm_test: /styles_unm_test/*.css
   unm:
     external_css:
       unm_fonts: https://cloud.typography.com/7254094/6839152/css/fonts.css
