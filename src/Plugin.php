@@ -66,4 +66,9 @@ class Plugin extends \DigraphCMS\Plugins\AbstractPlugin
     {
         return [];
     }
+
+    public function path(): string
+    {
+        return realpath(__DIR__ . '/..');
+    }
 }
