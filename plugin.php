@@ -4,10 +4,11 @@ namespace DigraphCMS_Plugins\unmous\ous_digraph_module;
 
 use DigraphCMS\Config;
 use DigraphCMS\HTTP\AccessDeniedError;
+use DigraphCMS\Plugins\AbstractPlugin;
 use DigraphCMS\Users\User;
 use DigraphCMS\Users\Users;
 
-class Plugin extends \DigraphCMS\Plugins\AbstractPlugin
+class OUS extends AbstractPlugin
 {
 
     public static function onUserGroups(string $userID, array &$groups)
