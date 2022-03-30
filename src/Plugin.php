@@ -46,29 +46,4 @@ class Plugin extends \DigraphCMS\Plugins\AbstractPlugin
         $user->name(UserData::netIDName($netID) ?? $netID);
         $user->addEmail($netID . '@unm.edu', 'Main campus NetID', true);
     }
-
-    public function mediaFolders(): array
-    {
-        return [__DIR__ . '/../media'];
-    }
-
-    public function routeFolders(): array
-    {
-        return [__DIR__ . '/../routes'];
-    }
-
-    public function templateFolders(): array
-    {
-        return [__DIR__ . '/../templates'];
-    }
-
-    public function phinxFolders(): array
-    {
-        return [];
-    }
-
-    public function path(): string
-    {
-        return realpath(__DIR__ . '/..');
-    }
 }
