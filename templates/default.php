@@ -5,6 +5,7 @@ are not some sort of error or special case.
 */
 
 use DigraphCMS\Context;
+use DigraphCMS\Cron\Cron;
 use DigraphCMS\UI\ActionMenu;
 use DigraphCMS\UI\Breadcrumb;
 use DigraphCMS\UI\Notifications;
@@ -49,6 +50,7 @@ use DigraphCMS\UI\UserMenu;
     </main>
     <?php
     echo Templates::render('sections/footer.php');
+    echo Cron::renderPoorMansCron();
     ?>
 </body>
 
