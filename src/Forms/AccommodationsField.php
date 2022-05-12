@@ -82,7 +82,7 @@ class AccommodationsField extends FIELDSET
                 $this->needs,
                 $this->extraRequested,
                 $this->extraRequest,
-                $this->email ?? ''
+                $this->phone ?? ''
             ]
         );
     }
