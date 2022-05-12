@@ -24,12 +24,15 @@ class AccommodationsField extends FIELDSET
             'other' => 'I require an accommodation not listed here'
         ]);
         $this->extraRequest = new Field('Please specify any accommodations you require', new TEXTAREA);
-        $this->phone = $phone ? new Field('Phone number', new Phone) : null;
+        $this->phone = $phone
+            ? (new Field('Phone number', new Phone))
+            ->addClass('accommodations-field__phone')
+            ->addTip('We will use this phone number to contact you if necessary to coordinate accommodations')
+            : null;
         // set up classes
         $this->requested->addClass('accommodations-field__requested');
         $this->needs->addClass('accommodations-field__needs');
         $this->extraRequest->addClass('accommodations-field__extra-request');
-        if ($this->phone) $this->phone->addClass('accommodations-field__phone');
         // set up validation
         $this->needs->addValidator(function () {
             if ($this->requested && !$this->needs->value()) return "Please select the accommodations you require";
@@ -79,10 +82,10 @@ class AccommodationsField extends FIELDSET
             parent::children(),
             [
                 $this->requested,
+                $this->phone ?? '',
                 $this->needs,
                 $this->extraRequested,
                 $this->extraRequest,
-                $this->phone ?? ''
             ]
         );
     }
