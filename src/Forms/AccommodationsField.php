@@ -15,7 +15,7 @@ class AccommodationsField extends FIELDSET
     {
         parent::__construct($label ?? 'Special accommodations');
         // set up fields
-        $this->requested = new CheckboxField('I require special accomodations');
+        $this->requested = new CheckboxField('I require special accommodations');
         $this->needs = new CheckboxListField('Accommodations required', [
             'wheelchair' => 'Wheelchair access',
             'stairs' => 'Inability to negotiate stairs',
