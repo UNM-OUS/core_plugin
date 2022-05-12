@@ -50,6 +50,23 @@ class AccommodationsField extends FIELDSET
         }
     }
 
+    /**
+     * Set the default values using an array the same shape as what is returned
+     * by value()
+     *
+     * @param array|null $value
+     * @return $this
+     */
+    public function setDefault(array $value = null)
+    {
+        $value = $value ?? [];
+        $this->requested->setDefault(@$value['requested'] ?? false);
+        $this->needs->setDefault(@$value['needs'] ?? []);
+        if (@$this->value['extra']) $this->extra->setDefault($value['extra']);
+        if ($this->phone && @$this->value['phone']) $this->phone->setDefault($value['phone']);
+        return $this;
+    }
+
     public function value($useDefault = false): ?array
     {
         if (!$this->requested->value($useDefault)) return null;
@@ -58,7 +75,7 @@ class AccommodationsField extends FIELDSET
                 'requested' => $this->requested->value($useDefault),
                 'needs' => $this->needs->value($useDefault),
                 'extra' => $this->extraRequest->value($useDefault),
-                'email' => $this->email->value($useDefault)
+                'phone' => $this->phone->value($useDefault)
             ],
             function ($e) {
                 return !!$e;
