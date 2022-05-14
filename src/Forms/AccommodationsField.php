@@ -62,8 +62,8 @@ class AccommodationsField extends FIELDSET
         $value = $value ?? [];
         $this->requested->setDefault(@$value['requested'] ?? false);
         $this->needs->setDefault(@$value['needs'] ?? []);
-        if (@$this->value['extra']) $this->extra->setDefault($value['extra']);
-        if ($this->phone && @$this->value['phone']) $this->phone->setDefault($value['phone']);
+        if (@$value['extra']) $this->extra->setDefault($value['extra']);
+        if ($this->phone && @$value['phone']) $this->phone->setDefault($value['phone']);
         return $this;
     }
 
