@@ -11,6 +11,8 @@ use DigraphCMS\HTML\Forms\TEXTAREA;
 
 class AccommodationsField extends FIELDSET
 {
+    protected $requested, $needs, $extraRequest, $phone;
+
     public function __construct(string $label = null, bool $phone = false)
     {
         parent::__construct($label ?? 'Special accommodations');
@@ -101,7 +103,6 @@ class AccommodationsField extends FIELDSET
                 $this->requested,
                 $this->phone ?? '',
                 $this->needs,
-                $this->extraRequested,
                 $this->extraRequest,
             ]
         );
