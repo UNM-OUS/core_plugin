@@ -3,6 +3,10 @@ unm:
   userdata_ttl: 3600
   block_unknown_netids: false
   known_netids: []
+  shared_db:
+    dsn: null
+    user: null
+    pass: null
 
 theme:
   active_themes: [unm]
