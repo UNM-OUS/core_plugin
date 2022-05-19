@@ -37,16 +37,16 @@ class AccommodationsField extends FIELDSET
         $this->extraRequest->addClass('accommodations-field__extra-request');
         // set up validation
         $this->needs->addValidator(function () {
-            if ($this->requested && !$this->needs->value()) return "Please select the accommodations you require";
+            if ($this->requested->value() && !$this->needs->value()) return "Please select the accommodations you require";
             return null;
         });
         $this->extraRequest->addValidator(function () {
-            if (in_array('other', $this->needs->value()) && !$this->extraRequest->value()) return "Please indicate the accommodations you require";
+            if ($this->requested->value() && in_array('other', $this->needs->value()) && !$this->extraRequest->value()) return "Please indicate the accommodations you require";
             return null;
         });
         if ($this->phone) {
             $this->phone->addValidator(function () {
-                if ($this->requested && !$this->phone->value()) return "Please provide a phone number so that we can contact you regarding your accommodations";
+                if ($this->requested->value() && !$this->phone->value()) return "Please provide a phone number so that we can contact you regarding your accommodations";
                 return null;
             });
         }
