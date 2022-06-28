@@ -1,3 +1,8 @@
+<?php
+
+use DigraphCMS\URL\URL;
+
+?>
 <div id="unm-top-nav">
     <div class="unm-top-nav__wrapper">
         <nav class="unm-navbar" role="complementary">
@@ -10,10 +15,10 @@
                     <a class="unm-menuitem" href="http://directory.unm.edu" title="Directory">Directory</a>
                 </div>
                 <!-- search form -->
-                <form action="//search.unm.edu/search" id="unm_search_form" method="get">
+                <form action="<?php echo new URL('/~search/'); ?>" id="unm_search_form" method="get">
                     <div class="input-append search-query">
-                        <input accesskey="4" id="unm_search_form_q" maxlength="255" name="q" placeholder="Search" title="input search query here" type="text">
-                        <button accesskey="s" class="btn" id="unm_search_for_submit" name="submit" title="submit search" type="submit">
+                        <input accesskey="4" id="unm_search_form_q" maxlength="255" name="search--query" placeholder="Search this site" title="input search query here" type="text">
+                        <button accesskey="s" class="btn" id="unm_search_for_submit" title="submit search" type="submit">
                             <span class="fa fa-search"></span></button>
                     </div>
                 </form>
