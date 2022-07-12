@@ -7,6 +7,55 @@ unm:
     dsn: null
     user: null
     pass: null
+  semesters:
+    2032:
+      spring: [1, 19]
+      summer: [6, 31]
+      fall: [8, 16]
+    2031:
+      spring: [1, 20]
+      summer: [6, 2]
+      fall: [8, 18]
+    2030:
+      spring: [1, 21]
+      summer: [6, 3]
+      fall: [8, 19]
+    2029:
+      spring: [1, 15]
+      summer: [6, 4]
+      fall: [8, 20]
+    2028:
+      spring: [1, 17]
+      summer: [6, 5]
+      fall: [8, 21]
+    2027:
+      spring: [1, 18]
+      summer: [6, 7]
+      fall: [8, 23]
+    2026:
+      spring: [1, 19]
+      summer: [6, 1]
+      fall: [8, 17]
+    2025:
+      spring: [1, 20]
+      summer: [6, 2]
+      fall: [8, 18]
+    2024:
+      spring: [1, 15]
+      summer: [6, 3]
+      fall: [8, 19]
+    2023:
+      spring: [1, 16]
+      summer: [6, 5]
+      fall: [8, 21]
+    2022:
+      spring: [1, 17]
+      summer: [6, 6]
+      fall: [8, 22]
+    2021:
+      spring: [1, 18]
+      summer: [6, 7]
+      fall: [8, 23]
 
 theme:
   active_themes: [unm]
