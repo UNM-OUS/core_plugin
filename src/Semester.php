@@ -115,7 +115,7 @@ class Semester
 
     public function month(): int
     {
-        if ($c = Config::get('unm.semesters.' . $this->year . '.' . strtolower($this->semster))) return $c[0];
+        if ($c = Config::get('unm.semesters.' . $this->year . '.' . strtolower($this->semester))) return $c[0];
         elseif ($this->semester == 'Spring') return Semesters::SPRING_DEFAULT[0];
         elseif ($this->semester == 'Summer') return Semesters::SUMMER_DEFAULT[0];
         else return Semesters::FALL_DEFAULT[0];
@@ -123,7 +123,7 @@ class Semester
 
     public function day(): int
     {
-        if ($c = Config::get('unm.semesters.' . $this->year . '.' . strtolower($this->semster))) return $c[1];
+        if ($c = Config::get('unm.semesters.' . $this->year . '.' . strtolower($this->semester))) return $c[1];
         elseif ($this->semester == 'Spring') return Semesters::SPRING_DEFAULT[1];
         elseif ($this->semester == 'Summer') return Semesters::SUMMER_DEFAULT[1];
         else return Semesters::FALL_DEFAULT[1];
