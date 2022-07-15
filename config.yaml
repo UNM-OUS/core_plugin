@@ -57,6 +57,9 @@ unm:
       summer: [6, 7]
       fall: [8, 23]
 
+sidebar:
+  default_state: false
+
 theme:
   active_themes: [unm]
   timezone: America/Denver

@@ -10,7 +10,6 @@ use DigraphCMS\UI\Breadcrumb;
 use DigraphCMS\UI\Notifications;
 use DigraphCMS\UI\Templates;
 use DigraphCMS\UI\Theme;
-use DigraphCMS\UI\UserMenu;
 
 ?>
 <!DOCTYPE html>
@@ -29,18 +28,17 @@ use DigraphCMS\UI\UserMenu;
 
 <body class='template-minimal no-js <?php echo implode(' ', Theme::bodyClasses()); ?>'>
     <?php
-    echo Templates::render('unm/loboalerts.php');
-    echo Templates::render('unm/top-nav.php');
-    echo new UserMenu;
-    echo Templates::render('sections/header.php');
+    echo Templates::render('sections/navbar.php');
     ?>
     <main id="content">
         <?php
+        echo '<div id="page-wrapper">';
         Breadcrumb::print();
         echo new ActionMenu;
         Notifications::printSection();
-        echo '<div id="main-content">';
+        echo '<div id="article">';
         echo Context::response()->content();
+        echo '</div>';
         echo '</div>';
         ?>
     </main>

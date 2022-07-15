@@ -6,9 +6,11 @@ are not some sort of error or special case.
 
 use DigraphCMS\Context;
 use DigraphCMS\Cron\Cron;
+use DigraphCMS\Session\Cookies;
 use DigraphCMS\UI\ActionMenu;
 use DigraphCMS\UI\Breadcrumb;
 use DigraphCMS\UI\Notifications;
+use DigraphCMS\UI\Sidebar\Sidebar;
 use DigraphCMS\UI\Templates;
 use DigraphCMS\UI\Theme;
 use DigraphCMS\UI\UserMenu;
@@ -33,19 +35,23 @@ use DigraphCMS\UI\UserMenu;
         <a href="#content">Skip to content</a>
     </section>
     <?php
+    Cookies::printConsentBanner();
     echo Templates::render('unm/loboalerts.php');
     echo Templates::render('unm/top-nav.php');
     echo new UserMenu;
     echo Templates::render('sections/header.php');;
     ?>
-    <main id="content">
+    <main id="page-wrapper">
         <?php
+        echo '<div id="content">';
         Breadcrumb::print();
         echo new ActionMenu;
         Notifications::printSection();
-        echo '<div id="main-content">';
+        echo '<div id="article">';
         echo Context::response()->content();
         echo '</div>';
+        echo '</div>';
+        echo Sidebar::render();
         ?>
     </main>
     <?php

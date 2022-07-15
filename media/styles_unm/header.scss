@@ -64,6 +64,7 @@
     font-size: larger;
     font-weight: lighter;
     border-top: 1px solid var(--background-a50);
+    border-bottom: 2px solid var(--background-lighter);
 
     &.menubar--overflowed {
         &.menubar--overflowed--open {
@@ -80,11 +81,6 @@
             }
         }
     }
-}
-
-// styles to accent the body content
-#content {
-    border-top: 2px solid var(--background-lighter);
 }
 
 body {
