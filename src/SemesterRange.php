@@ -23,9 +23,10 @@ class SemesterRange
 
     public function __toString()
     {
-        if (!$this->start && !$this->end) return 'all';
-        elseif (!$this->start) return 'up to ' . $this->end;
+        if (!$this->start && !$this->end) return 'any time';
+        elseif (!$this->start) return $this->end . ' or earlier';
         elseif (!$this->end) return $this->start . ' or later';
+        elseif ($this->end == $this->start->next()) return $this->start . ' or ' . $this->end;
         else return $this->start . ' to ' . $this->end;
     }
 
