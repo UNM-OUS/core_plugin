@@ -21,6 +21,14 @@ class SemesterRange
         $this->end = $end;
     }
 
+    public function __toString()
+    {
+        if (!$this->start && !$this->end) return 'all';
+        elseif (!$this->start) return 'up to ' . $this->end;
+        elseif (!$this->end) return $this->start . ' or later';
+        else return $this->start . ' to ' . $this->end;
+    }
+
     public function start(): ?Semester
     {
         return $this->start;
