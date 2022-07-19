@@ -17,7 +17,7 @@ class EmailOrNetIDInput extends INPUT
                 }
                 // disallow alternate unm emails
                 if (preg_match('/@.+\.unm\.edu$/', $this->value(), $matches)) {
-                    return "Anyone associated with UNM should be referenced by their main campus NetID, not their <em>" . $matches[0] . "</em> email address";
+                    return "Anyone associated with UNM should be referenced by their main campus NetID, not their <em>" . $matches[0] . "</em> email address. This is in many cases important for data consistency and login system integrations.";
                 }
             } else {
                 // validate as NetID
