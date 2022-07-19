@@ -20,14 +20,12 @@ class SemesterField extends Field
         if ($summers) $first = Semesters::current();
         else $first = Semesters::latestFull();
         // use startOffset to move starting point forward/backward as needed
-        if ($startOffset) {
-            if ($startOffset < 0) do {
-                $first = $summers ? $first->previous() : $first->previousFull();
-            } while ($startOffset++);
-            if ($startOffset > 0) do {
-                $first = $summers ? $first->next() : $first->nextFull();
-            } while ($startOffset--);
-        }
+        if ($startOffset < 0) do {
+            $first = $summers ? $first->previous() : $first->previousFull();
+        } while (++$startOffset);
+        if ($startOffset > 0) do {
+            $first = $summers ? $first->next() : $first->nextFull();
+        } while (--$startOffset);
         // set up field with options
         $field = new SELECT();
         $field->setOption($first, $first->__toString());
