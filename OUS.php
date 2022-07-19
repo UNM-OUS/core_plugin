@@ -11,6 +11,19 @@ use DigraphCMS\Users\Users;
 class OUS extends AbstractPlugin
 {
 
+    public static function userNetIDs(string $userID): array
+    {
+        return array_map(
+            function ($row) {
+                return $row['provider_id'];
+            },
+            DB::query()->from('user_source')
+                ->where('user_uuid = ?', [Context::url()->action()])
+                ->where('source = "cas" AND provider = "netid"')
+                ->fetchAll()
+        );
+    }
+
     public static function onUserGroups(string $userID, array &$groups)
     {
         foreach (UserData::userGroups($userID) as $group) {
