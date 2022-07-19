@@ -3,6 +3,8 @@
 namespace DigraphCMS_Plugins\unmous\ous_digraph_module;
 
 use DigraphCMS\Config;
+use DigraphCMS\Context;
+use DigraphCMS\DB\DB;
 use DigraphCMS\HTTP\AccessDeniedError;
 use DigraphCMS\Plugins\AbstractPlugin;
 use DigraphCMS\Users\User;
@@ -18,7 +20,7 @@ class OUS extends AbstractPlugin
                 return $row['provider_id'];
             },
             DB::query()->from('user_source')
-                ->where('user_uuid = ?', [Context::url()->action()])
+                ->where('user_uuid = ?', [$userID])
                 ->where('source = "cas" AND provider = "netid"')
                 ->fetchAll()
         );
