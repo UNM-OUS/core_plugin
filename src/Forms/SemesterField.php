@@ -29,7 +29,7 @@ class SemesterField extends Field
         // set up field with options
         $field = new SELECT();
         $field->setOption($first, $first->__toString());
-        foreach ($summers ? $first->allUpcoming($count) : $first->allUpcomingFull($count) as $semester) {
+        foreach ($summers ? $first->allUpcoming($count - 1) : $first->allUpcomingFull($count - 1) as $semester) {
             $field->setOption($semester, $semester->__toString());
         }
         parent::__construct($label, $field);
