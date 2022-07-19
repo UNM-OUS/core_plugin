@@ -17,19 +17,20 @@ class AccommodationsField extends FIELDSET
     {
         parent::__construct($label ?? 'Special accommodations');
         // set up fields
-        $this->requested = new CheckboxField('I require special accommodations');
-        $this->needs = new CheckboxListField('Accommodations required', [
+        $this->requested = new CheckboxField('I require accessibility accommodations');
+        $this->needs = new CheckboxListField('Accommodations requested for', [
             'wheelchair' => 'Wheelchair access',
             'stairs' => 'Inability to negotiate stairs',
-            'mobility' => 'Use of cane, walker, or crutches',
-            'asl' => 'Requires signed language interpreter',
+            'mobility' => 'Use of cane, walker, or other mobility device',
+            'vision' => 'Blindness or severe visual impairment',
+            'hearing' => 'Deaf or hard of hearing',
             'other' => 'I require an accommodation not listed here'
         ]);
         $this->extraRequest = new Field('Please specify any accommodations you require', new TEXTAREA);
         $this->phone = $phone
             ? (new Field('Phone number', new Phone))
             ->addClass('accommodations-field__phone')
-            ->addTip('We will use this phone number to contact you if necessary to coordinate accommodations')
+            ->addTip('Used to contact you if necessary to coordinate accommodations')
             : null;
         // set up classes
         $this->requested->addClass('accommodations-field__requested');
