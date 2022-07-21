@@ -7,20 +7,20 @@ use Flatrr\FlatArray;
 
 class PersonInfo extends FlatArray
 {
-    protected $netid;
+    protected $identifier;
     protected static $personCache = [];
 
-    public static function setFor(?string $netid, array $data)
+    public static function setFor(?string $identifier, array $data)
     {
-        if ($data && $person = static::forNetID($netid)) {
+        if ($data && $person = static::fetch($identifier)) {
             $person->set(null, $data);
             $person->save();
         }
     }
 
-    public static function getFor(?string $netid, $key)
+    public static function getFor(?string $identifier, $key)
     {
-        if ($person = static::forNetID($netid)) {
+        if ($person = static::fetch($identifier)) {
             if (!is_array($key)) $key = [$key];
             foreach ($key as $k) {
                 if ($person[$k] !== null) return $person[$k];
@@ -29,43 +29,43 @@ class PersonInfo extends FlatArray
         return null;
     }
 
-    public static function getFullNameFor(?string $netid): ?string
+    public static function getFullNameFor(?string $identifier): ?string
     {
-        if ($person = static::forNetID($netid)) return $person->fullName();
+        if ($person = static::fetch($identifier)) return $person->fullName();
         return null;
     }
 
-    public static function getFirstNameFor(?string $netid): ?string
+    public static function getFirstNameFor(?string $identifier): ?string
     {
-        if ($person = static::forNetID($netid)) return $person->firstName();
+        if ($person = static::fetch($identifier)) return $person->firstName();
         return null;
     }
 
-    public static function getLastNameFor(?string $netid): ?string
+    public static function getLastNameFor(?string $identifier): ?string
     {
-        if ($person = static::forNetID($netid)) return $person->lastName();
+        if ($person = static::fetch($identifier)) return $person->lastName();
         return null;
     }
 
-    public static function forNetID(?string $netid): ?PersonInfo
+    public static function fetch(?string $identifier): ?PersonInfo
     {
-        if (!isset(static::$personCache[$netid])) static::$personCache[$netid] = static::doGetForNetID($netid);
-        return static::$personCache[$netid];
+        if (!isset(static::$personCache[$identifier])) static::$personCache[$identifier] = static::doFetch($identifier);
+        return static::$personCache[$identifier];
     }
 
-    protected static function doGetForNetID(?string $netid): ?PersonInfo
+    protected static function doFetch(?string $identifier): ?PersonInfo
     {
-        if (!$netid) return null;
+        if (!$identifier) return null;
         $person = SharedDB::query()->from('person_info')
-            ->where('netid', $netid)
+            ->where('Identifier', $identifier)
             ->fetch();
-        if ($person) return new PersonInfo($person['netid'], json_decode($person['data'], true));
-        else return new PersonInfo($netid);
+        if ($person) return new PersonInfo($person['Identifier'], json_decode($person['data'], true));
+        else return new PersonInfo($identifier);
     }
 
-    protected function __construct(?string $netid, array $data = [])
+    protected function __construct(?string $identifier, array $data = [])
     {
-        $this->netid = $netid;
+        $this->Identifier = $identifier;
         $this->set(null, $data);
     }
 
@@ -90,16 +90,16 @@ class PersonInfo extends FlatArray
         else return null;
     }
 
-    public function netID(): ?string
+    public function Identifier(): ?string
     {
-        return $this->netid;
+        return $this->Identifier;
     }
 
     public function exists(): bool
     {
         return !!SharedDB::query()
             ->from('person_info')
-            ->where('netid', $this->netid)
+            ->where('Identifier', $this->Identifier)
             ->count();
     }
 
@@ -112,12 +112,12 @@ class PersonInfo extends FlatArray
                 [
                     'data' => json_encode($this->get())
                 ]
-            )->where('netid', $this->netid);
+            )->where('Identifier', $this->Identifier);
         } else {
             $query = $query->insertInto(
                 'person_info',
                 [
-                    'netid' => $this->netid,
+                    'Identifier' => $this->Identifier,
                     'data' => json_encode($this->get())
                 ]
             );
