@@ -3,18 +3,19 @@
 namespace DigraphCMS_Plugins\unmous\ous_digraph_module;
 
 use DigraphCMS\Config;
-use DigraphCMS\Context;
 use DigraphCMS\DB\DB;
 use DigraphCMS\HTTP\AccessDeniedError;
 use DigraphCMS\Plugins\AbstractPlugin;
+use DigraphCMS\Session\Session;
 use DigraphCMS\Users\User;
 use DigraphCMS\Users\Users;
 
 class OUS extends AbstractPlugin
 {
 
-    public static function userNetIDs(string $userID): array
+    public static function userNetIDs(string $userID = null): array
     {
+        $userID = $userID ?? Session::uuid();
         return array_map(
             function ($row) {
                 return $row['provider_id'];
