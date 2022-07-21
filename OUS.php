@@ -69,7 +69,6 @@ class OUS extends AbstractPlugin
         $netIDs = static::userNetIDs($user->uuid());
         foreach ($netIDs as $netID) {
             $name = UserData::netIDName($netID)
-                ?? PersonInfo::getFullNameFor($netID)
                 ?? PersonInfo::getFirstNameFor($netID);
             if ($name) {
                 $user->name($name);
