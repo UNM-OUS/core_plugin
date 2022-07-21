@@ -59,7 +59,7 @@ class PersonInfo extends FlatArray
         $person = SharedDB::query()->from('person_info')
             ->where('netid', $netid)
             ->fetch();
-        if ($person) return new PersonInfo($person['netid'], json_decode($person['data']));
+        if ($person) return new PersonInfo($person['netid'], json_decode($person['data'], true));
         else return new PersonInfo($netid);
     }
 
