@@ -8,12 +8,12 @@ use Flatrr\FlatArray;
 class PersonInfo extends FlatArray
 {
     protected $netid;
-    protected $personCache = [];
+    protected static $personCache = [];
 
     public static function setFor(?string $netid, array $data)
     {
         if ($data && $person = static::forNetID($netid)) {
-            $person->merge($data, null, true);
+            $person->set(null, $data);
             $person->save();
         }
     }
@@ -26,6 +26,24 @@ class PersonInfo extends FlatArray
                 if ($person[$k] !== null) return $person[$k];
             }
         }
+        return null;
+    }
+
+    public static function getFullNameFor(?string $netid): ?string
+    {
+        if ($person = static::forNetID($netid)) return $person->fullName();
+        return null;
+    }
+
+    public static function getFirstNameFor(?string $netid): ?string
+    {
+        if ($person = static::forNetID($netid)) return $person->firstName();
+        return null;
+    }
+
+    public static function getLastNameFor(?string $netid): ?string
+    {
+        if ($person = static::forNetID($netid)) return $person->lastName();
         return null;
     }
 
@@ -42,7 +60,7 @@ class PersonInfo extends FlatArray
             ->where('netid', $netid)
             ->fetch();
         if ($person) return new PersonInfo($person['netid'], json_decode($person['data']));
-        else return null;
+        else return new PersonInfo($netid);
     }
 
     protected function __construct(?string $netid, array $data = [])
@@ -92,7 +110,6 @@ class PersonInfo extends FlatArray
             $query = $query->update(
                 'person_info',
                 [
-                    'netid' => $this->netid ? $this->netid : null,
                     'data' => json_encode($this->get())
                 ]
             )->where('netid', $this->netid);
@@ -100,6 +117,7 @@ class PersonInfo extends FlatArray
             $query = $query->insertInto(
                 'person_info',
                 [
+                    'netid' => $this->netid,
                     'data' => json_encode($this->get())
                 ]
             );

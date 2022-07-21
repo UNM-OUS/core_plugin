@@ -6,6 +6,7 @@ use DigraphCMS\Config;
 use DigraphCMS\DB\DB;
 use DigraphCMS\HTTP\AccessDeniedError;
 use DigraphCMS\Plugins\AbstractPlugin;
+use DigraphCMS\Session\Authentication;
 use DigraphCMS\Session\Session;
 use DigraphCMS\Users\User;
 use DigraphCMS\Users\Users;
@@ -52,7 +53,28 @@ class OUS extends AbstractPlugin
                 throw new AccessDeniedError('You are not on the list of known NetIDs for this site');
             }
         }
-        $user->name(UserData::netIDName($netID) ?? $netID);
+        $user->name(
+            UserData::netIDName($netID)
+                ?? PersonInfo::getFullNameFor($netID)
+                ?? PersonInfo::getFirstNameFor($netID)
+                ?? $netID
+        );
         $user->addEmail($netID . '@unm.edu', 'Main campus NetID', true);
+    }
+
+    public static function onAuthentication(Authentication $auth)
+    {
+        $user = $auth->user();
+        if ($user['name_explicitly_set']) return;
+        $netIDs = static::userNetIDs($user->uuid());
+        foreach ($netIDs as $netID) {
+            $name = UserData::netIDName($netID)
+                ?? PersonInfo::getFullNameFor($netID)
+                ?? PersonInfo::getFirstNameFor($netID);
+            if ($name) {
+                $user->name($name);
+                $user->update();
+            }
+        }
     }
 }
