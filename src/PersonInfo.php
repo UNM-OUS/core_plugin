@@ -49,23 +49,24 @@ class PersonInfo extends FlatArray
 
     public static function fetch(?string $identifier): ?PersonInfo
     {
-        if (!isset(static::$personCache[$identifier])) static::$personCache[$identifier] = static::doFetch($identifier);
-        return static::$personCache[$identifier];
+        if (!$identifier) return null;
+        elseif (!isset(static::$personCache[$identifier])) static::$personCache[$identifier] = static::doFetch($identifier);
+        else return static::$personCache[$identifier];
     }
 
     protected static function doFetch(?string $identifier): ?PersonInfo
     {
         if (!$identifier) return null;
         $person = SharedDB::query()->from('person_info')
-            ->where('Identifier', $identifier)
+            ->where('identifier', $identifier)
             ->fetch();
-        if ($person) return new PersonInfo($person['Identifier'], json_decode($person['data'], true));
+        if ($person) return new PersonInfo($person['identifier'], json_decode($person['data'], true));
         else return new PersonInfo($identifier);
     }
 
     protected function __construct(?string $identifier, array $data = [])
     {
-        $this->Identifier = $identifier;
+        $this->identifier = $identifier;
         $this->set(null, $data);
     }
 
@@ -90,16 +91,16 @@ class PersonInfo extends FlatArray
         else return null;
     }
 
-    public function Identifier(): ?string
+    public function identifier(): ?string
     {
-        return $this->Identifier;
+        return $this->identifier;
     }
 
     public function exists(): bool
     {
         return !!SharedDB::query()
             ->from('person_info')
-            ->where('Identifier', $this->Identifier)
+            ->where('identifier', $this->identifier)
             ->count();
     }
 
@@ -112,12 +113,12 @@ class PersonInfo extends FlatArray
                 [
                     'data' => json_encode($this->get())
                 ]
-            )->where('Identifier', $this->Identifier);
+            )->where('identifier', $this->identifier);
         } else {
             $query = $query->insertInto(
                 'person_info',
                 [
-                    'Identifier' => $this->Identifier,
+                    'identifier' => $this->identifier,
                     'data' => json_encode($this->get())
                 ]
             );
