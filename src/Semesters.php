@@ -58,14 +58,14 @@ class Semesters
         $year = intval(date('Y', $date));
         $month = intval(date('n', $date));
         $day = intval(date('j', $date));
-        if ($month <= static::spring($year)[0] && $day < static::spring($year)[1]) {
+        if ($month < static::spring($year)[0] || ($month == static::spring($year)[0] && $day < static::spring($year)[1])) {
             // it is still the fall of the previous calendar year
             $year--;
             $semester = 'Fall';
-        } elseif ($month <= static::summer($year)[0] && $day < static::summer($year)[1]) {
+        } elseif ($month < static::summer($year)[0] || ($month == static::summer($year)[0] && $day < static::summer($year)[1])) {
             // it is spring of the current calendar year
             $semester = 'Spring';
-        } elseif ($month <= static::fall($year)[0] && $day < static::fall($year)[1]) {
+        } elseif ($month < static::fall($year)[0] || ($month == static::fall($year)[0] && $day < static::fall($year)[1])) {
             // it is summer of the current calendar year
             $semester = 'Summer';
         } else {
