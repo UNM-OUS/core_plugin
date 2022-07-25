@@ -50,8 +50,8 @@ class PersonInfo extends FlatArray
     public static function fetch(?string $identifier): ?PersonInfo
     {
         if (!$identifier) return null;
-        elseif (!isset(static::$personCache[$identifier])) static::$personCache[$identifier] = static::doFetch($identifier);
-        else return static::$personCache[$identifier];
+        if (!isset(static::$personCache[$identifier])) static::$personCache[$identifier] = static::doFetch($identifier);
+        return @static::$personCache[$identifier];
     }
 
     protected static function doFetch(?string $identifier): ?PersonInfo
