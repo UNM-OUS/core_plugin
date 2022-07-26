@@ -72,6 +72,7 @@ class OUS extends AbstractPlugin
                 ?? PersonInfo::getFirstNameFor($netID);
             if ($name) {
                 $user->name($name);
+                $user['name_explicitly_set'] = true;
                 $user->update();
             }
         }
