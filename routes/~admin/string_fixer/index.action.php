@@ -18,7 +18,7 @@ use DigraphCMS\UI\Pagination\PaginatedTable;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedDB;
 
 $rules = SharedDB::query()->from('stringfix')
-    ->order('needs_review ASC')
+    ->order('needs_review desc')
     ->order('COALESCE(output,input)');
 
 $table = new PaginatedTable(
