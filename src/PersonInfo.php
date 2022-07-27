@@ -8,6 +8,7 @@ use Flatrr\FlatArray;
 class PersonInfo extends FlatArray
 {
     protected $identifier;
+    protected $type, $org, $department;
     protected static $personCache = [];
 
     public static function setFor(?string $identifier, array $data)
@@ -47,6 +48,24 @@ class PersonInfo extends FlatArray
         return null;
     }
 
+    public static function getTypeFor(?string $identifier): ?string
+    {
+        if ($person = static::fetch($identifier)) return $person->type();
+        return null;
+    }
+
+    public static function getOrgFor(?string $identifier): ?string
+    {
+        if ($person = static::fetch($identifier)) return $person->org();
+        return null;
+    }
+
+    public static function getDepartmentFor(?string $identifier): ?string
+    {
+        if ($person = static::fetch($identifier)) return $person->department();
+        return null;
+    }
+
     public static function fetch(?string $identifier): ?PersonInfo
     {
         if (!$identifier) return null;
@@ -60,13 +79,16 @@ class PersonInfo extends FlatArray
         $person = SharedDB::query()->from('person_info')
             ->where('identifier', $identifier)
             ->fetch();
-        if ($person) return new PersonInfo($person['identifier'], json_decode($person['data'], true));
+        if ($person) return new PersonInfo($person['identifier'], $person['type'], $person['org'], $person['department'], json_decode($person['data'], true));
         else return new PersonInfo($identifier);
     }
 
-    protected function __construct(?string $identifier, array $data = [])
+    protected function __construct(?string $identifier, ?string $type = null, ?string $org = null, ?string $department = null, array $data = [])
     {
         $this->identifier = $identifier;
+        $this->type = $type;
+        $this->org = $org;
+        $this->department = $department;
         $this->set(null, $data);
     }
 
@@ -104,6 +126,51 @@ class PersonInfo extends FlatArray
             ->count();
     }
 
+    public function type(): ?string
+    {
+        return $this->type;
+    }
+
+    public function org(): ?string
+    {
+        return $this->org;
+    }
+
+    public function department(): ?string
+    {
+        return $this->department;
+    }
+
+    /**
+     * @param null|string #Parameter#6bc4d90b 
+     * @return $this 
+     */
+    public function setType(?string $value)
+    {
+        $this->type = $value;
+        return $this;
+    }
+
+    /**
+     * @param null|string #Parameter#6bc4d90b 
+     * @return $this 
+     */
+    public function setOrg(?string $value)
+    {
+        $this->org = $value;
+        return $this;
+    }
+
+    /**
+     * @param null|string #Parameter#6bc4d90b 
+     * @return $this 
+     */
+    public function setDepartment(?string $value)
+    {
+        $this->department = $value;
+        return $this;
+    }
+
     public function save(): bool
     {
         $query = SharedDB::query();
@@ -111,7 +178,10 @@ class PersonInfo extends FlatArray
             $query = $query->update(
                 'person_info',
                 [
-                    'data' => json_encode($this->get())
+                    'data' => json_encode($this->get()),
+                    'type' => $this->type(),
+                    'org' => $this->org(),
+                    'department' => $this->department(),
                 ]
             )->where('identifier', $this->identifier);
         } else {
@@ -119,7 +189,10 @@ class PersonInfo extends FlatArray
                 'person_info',
                 [
                     'identifier' => $this->identifier,
-                    'data' => json_encode($this->get())
+                    'data' => json_encode($this->get()),
+                    'type' => $this->type(),
+                    'org' => $this->org(),
+                    'department' => $this->department(),
                 ]
             );
         }
