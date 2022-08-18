@@ -28,10 +28,30 @@ class SemesterField extends Field
         } while (--$startOffset);
         // set up field with options
         $field = new SELECT();
-        $field->setOption($first, $first->__toString());
+        $field->setOption($first->intVal(), $first->__toString());
         foreach ($summers ? $first->allUpcoming($count - 1) : $first->allUpcomingFull($count - 1) as $semester) {
-            $field->setOption($semester, $semester->__toString());
+            $field->setOption($semester->intVal(), $semester->__toString());
         }
         parent::__construct($label, $field);
+    }
+
+    public function value($useDefault = false)
+    {
+        return ($value = parent::value($useDefault))
+            ? Semester::fromCode($value)
+            : null;
+    }
+
+    public function default()
+    {
+        return ($value = parent::default())
+            ? Semester::fromCode($value)
+            : null;
+    }
+
+    public function setDefault($default)
+    {
+        parent::setDefault($default ? $default->intVal() : null);
+        return $this;
     }
 }
