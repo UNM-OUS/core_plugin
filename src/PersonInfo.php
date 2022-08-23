@@ -14,7 +14,7 @@ class PersonInfo extends FlatArray
     public static function setFor(?string $identifier, array $data)
     {
         if ($data && $person = static::fetch($identifier)) {
-            $person->set(null, $data);
+            $person->merge($data, null, true);
             $person->save();
         }
     }
@@ -69,8 +69,8 @@ class PersonInfo extends FlatArray
     public static function fetch(?string $identifier): ?PersonInfo
     {
         if (!$identifier) return null;
-        if (!isset(static::$personCache[$identifier])) static::$personCache[$identifier] = static::doFetch($identifier);
-        return @static::$personCache[$identifier];
+        return @static::$personCache[$identifier]
+            ?? static::$personCache[$identifier] = static::doFetch($identifier);
     }
 
     protected static function doFetch(?string $identifier): ?PersonInfo
