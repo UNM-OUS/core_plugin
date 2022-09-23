@@ -18,6 +18,7 @@
 
 nav.unm-navbar {
     margin: 0;
+
     a.navbar-brand {
         display: block;
         overflow: hidden;
@@ -56,15 +57,18 @@ nav.unm-navbar {
     #unm-top-nav {
         border: 1px solid #8a0923;
         height: 30px;
+
         .unm-top-nav__wrapper {
             margin: 0 $grid/2;
         }
     }
+
     /* make navbar flex display */
     nav.unm-navbar {
         margin: 0 auto;
         display: flex;
         justify-content: space-between;
+
         /* put logo on left */
         a.navbar-brand {
             display: block;
@@ -75,11 +79,13 @@ nav.unm-navbar {
             margin-left: 0;
             margin-top: -1px;
         }
+
         /* make wrapper for menubar and search flex display */
         .menu {
             display: flex;
             justify-content: flex-end;
         }
+
         /* style menubar */
         .unm-menubar {
             display: flex;
@@ -97,6 +103,7 @@ nav.unm-navbar {
                 }
             }
         }
+
         /* style search form */
         #unm_search_form {
             display: block;
@@ -117,6 +124,10 @@ nav.unm-navbar {
                 width: 125px;
                 padding: 2px 0;
                 font-size: 12px;
+
+                &::placeholder {
+                    color: #777;
+                }
             }
 
             button {
@@ -127,6 +138,7 @@ nav.unm-navbar {
             }
         }
     }
+
     /* add padding to user menu, make it the right height to line up with logo */
     .menubar--usermenu {
         padding-left: calc(235px + var(--grid)) !important;
