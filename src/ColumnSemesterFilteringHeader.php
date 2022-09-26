@@ -47,13 +47,13 @@ class ColumnSemesterFilteringHeader extends AbstractColumnFilteringHeader
         if ($query instanceof QueriesSelect) {
             $query->asObject(false);
             $lowest = clone $query;
-            $lowest = $lowest->limit(1)->offset(0)
+            $lowest = @$lowest->limit(1)->offset(0)
                 ->select($this->column() . ' AS semfilter_column', true)
                 ->order(null)->order($this->column() . ' ASC')
                 ->fetchAll()[0]['semfilter_column'];
             $this->startSemester = $lowest ? Semester::fromCode($lowest) : $this->startSemester;
             $highest = clone $query;
-            $highest = $highest->limit(1)->offset(0)
+            $highest = @$highest->limit(1)->offset(0)
                 ->select($this->column() . ' AS semfilter_column', true)
                 ->order(null)->order($this->column() . ' ASC')
                 ->fetchAll()[0]['semfilter_column'];
