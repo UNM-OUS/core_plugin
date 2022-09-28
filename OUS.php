@@ -8,11 +8,30 @@ use DigraphCMS\HTTP\AccessDeniedError;
 use DigraphCMS\Plugins\AbstractPlugin;
 use DigraphCMS\Session\Authentication;
 use DigraphCMS\Session\Session;
+use DigraphCMS\UI\UserMenu;
+use DigraphCMS\URL\URL;
+use DigraphCMS\Users\Permissions;
 use DigraphCMS\Users\User;
 use DigraphCMS\Users\Users;
 
 class OUS extends AbstractPlugin
 {
+
+    public static function onStaticUrlPermissions_ous(URL $url)
+    {
+        return Permissions::inMetaGroup('ous__edit');
+    }
+
+    public static function onStaticUrlName_ous(URL $url)
+    {
+        if ($url->action() == 'index') return "OUS";
+        else return null;
+    }
+
+    public static function onUserMenu_user(UserMenu $menu)
+    {
+        if (Permissions::inMetaGroup('ous__edit')) $menu->addURL(new URL('/~ous/'));
+    }
 
     public static function userNetIDs(string $userID = null): array
     {
