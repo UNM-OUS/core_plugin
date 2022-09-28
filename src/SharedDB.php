@@ -1,11 +1,14 @@
-<?php 
+<?php
+
 namespace DigraphCMS_Plugins\unmous\ous_digraph_module;
 
 use DigraphCMS\Config;
+use DigraphCMS\DB\SqliteShim;
 use Envms\FluentPDO\Query;
 use PDO;
 
-abstract class SharedDB {
+abstract class SharedDB
+{
     protected static function pdo(): PDO
     {
         static $pdo;
@@ -16,6 +19,11 @@ abstract class SharedDB {
                 Config::get('unm.shared_db.pass')
             );
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            if ($pdo->getAttribute(PDO::ATTR_DRIVER_NAME) == 'sqlite') {
+                if (Config::get('db.sqlite.create_functions')) {
+                    SqliteShim::createFunctions($pdo);
+                }
+            }
         }
         return $pdo;
     }
