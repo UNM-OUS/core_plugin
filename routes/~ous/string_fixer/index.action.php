@@ -14,6 +14,7 @@ use DigraphCMS\HTML\Forms\FormWrapper;
 use DigraphCMS\HTML\Forms\INPUT;
 use DigraphCMS\HTML\Icon;
 use DigraphCMS\HTTP\RefreshException;
+use DigraphCMS\UI\Pagination\ColumnStringFilteringHeader;
 use DigraphCMS\UI\Pagination\PaginatedTable;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedDB;
 
@@ -53,9 +54,9 @@ $table = new PaginatedTable(
     },
     [
         '',
-        'Category',
-        'Input',
-        'Output',
+        new ColumnStringFilteringHeader('Category', 'category'),
+        new ColumnStringFilteringHeader('Input', 'input'),
+        new ColumnStringFilteringHeader('Output', 'output'),
     ]
 );
 
