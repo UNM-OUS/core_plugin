@@ -19,9 +19,9 @@ $column = AbstractMappedSelect::parseJsonRefs('${data.affiliation.department}');
 $query = SharedDB::query()->from('person_info')
     ->disableSmartJoin()
     ->select("$column as department", true)
-    ->where("department is not null AND department <> ?", [''])
-    ->groupBy("department")
-    ->order("department ASC");
+    ->where("$column is not null AND $column <> ?", [''])
+    ->groupBy("$column")
+    ->order("$column ASC");
 
 if (Context::arg('org')) {
     $query->where(AbstractMappedSelect::parseJsonRefs('${data.affiliation.org}'), Context::arg('org'));

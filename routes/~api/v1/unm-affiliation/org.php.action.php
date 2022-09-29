@@ -19,9 +19,9 @@ $column = AbstractMappedSelect::parseJsonRefs('${data.affiliation.org}');
 $query = SharedDB::query()->from('person_info')
     ->disableSmartJoin()
     ->select("$column as org", true)
-    ->where("org is not null AND org <> ?", [''])
-    ->groupBy("org")
-    ->order("org ASC");
+    ->where("$column is not null AND $column <> ?", [''])
+    ->groupBy("$column")
+    ->order("$column ASC");
 
 if (Context::arg('query')) {
     $query->where('org LIKE ?', '%' . Context::arg('query') . '%');
