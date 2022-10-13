@@ -14,7 +14,7 @@ $data = Cache::get(
         // curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         $resp = curl_exec($curl);
         if ($resp === false) {
-            throw new \Exception('UNM user source failed to load: ' . curl_error($curl));
+            throw new \Exception('Loboalerts source failed to load: ' . curl_error($curl));
         }
         curl_close($curl);
         if ($resp) {
