@@ -3,10 +3,8 @@
 namespace DigraphCMS_Plugins\unmous\ous_digraph_module;
 
 use DigraphCMS\Cache\Cache;
-use DigraphCMS\Cache\CacheNamespace;
 use DigraphCMS\Config;
 use DigraphCMS\DB\DB;
-use Spyc;
 
 class UserData
 {

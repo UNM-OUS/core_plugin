@@ -4,6 +4,7 @@ namespace DigraphCMS_Plugins\unmous\ous_digraph_module;
 
 use DigraphCMS\Cache\Cache;
 use DigraphCMS\Config;
+use DigraphCMS\Curl\CurlHelper;
 use DigraphCMS\DB\DB;
 use DigraphCMS\HTTP\AccessDeniedError;
 use DigraphCMS\Plugins\AbstractPlugin;
@@ -28,14 +29,9 @@ class OUS extends AbstractPlugin
      */
     public static function cronJob_frequent()
     {
-        $curl = curl_init(Config::get('unm.user_source'));
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        $resp = curl_exec($curl);
-        if ($resp === false) {
-            throw new \Exception('UNM user source failed to load: ' . curl_error($curl));
-        }
-        curl_close($curl);
-        if ($resp = Spyc::YAMLLoadString($resp)) Cache::set('unm/userdata', $resp, 86400);
+        $data = CurlHelper::get(Config::get('unm.user_source'));
+        if ($data === false) throw new \Exception('UNM user source failed to load: ' . CurlHelper::error());
+        if ($data = Spyc::YAMLLoadString($data)) Cache::set('unm/userdata', $data, 86400);
     }
 
     public static function onStaticUrlPermissions_ous(URL $url)
