@@ -2,6 +2,7 @@
 
 namespace DigraphCMS_Plugins\unmous\ous_digraph_module;
 
+use DigraphCMS\Cache\Cache;
 use DigraphCMS\Config;
 use DigraphCMS\DB\DB;
 use DigraphCMS\HTTP\AccessDeniedError;
@@ -13,9 +14,29 @@ use DigraphCMS\URL\URL;
 use DigraphCMS\Users\Permissions;
 use DigraphCMS\Users\User;
 use DigraphCMS\Users\Users;
+use Spyc;
 
 class OUS extends AbstractPlugin
 {
+
+    /**
+     * Frequently pull fresh permissions from user source. Cache them for
+     * up to 24 hours, in case they disappear from the source or it becomes
+     * unreachable for some reason.
+     *
+     * @return void
+     */
+    public static function cronJob_frequent()
+    {
+        $curl = curl_init(Config::get('unm.user_source'));
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        $resp = curl_exec($curl);
+        if ($resp === false) {
+            throw new \Exception('UNM user source failed to load: ' . curl_error($curl));
+        }
+        curl_close($curl);
+        if ($resp = Spyc::YAMLLoadString($resp)) Cache::set('unm/userdata', $resp, 86400);
+    }
 
     public static function onStaticUrlPermissions_ous(URL $url)
     {

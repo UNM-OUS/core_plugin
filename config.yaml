@@ -1,6 +1,4 @@
 unm:
-  loboalert_ttl: 3600
-  userdata_ttl: 3600
   block_unknown_netids: false
   known_netids: []
   shared_db:

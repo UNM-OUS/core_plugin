@@ -36,7 +36,6 @@ use DigraphCMS\UI\UserMenu;
     </section>
     <?php
     Cookies::printConsentBanner();
-    echo Templates::render('unm/loboalerts.php');
     echo Templates::render('unm/top-nav.php');
     echo new UserMenu;
     echo Templates::render('sections/header.php');;

@@ -40,7 +40,8 @@ class UserData
         );
     }
 
-    public static function netIDName(string $netID): ?string {
+    public static function netIDName(string $netID): ?string
+    {
         return @static::data()[$netID]['name'];
     }
 
@@ -56,39 +57,12 @@ class UserData
 
     public static function data(): array
     {
-        static $data;
-        return $data ?? $data = static::buildData();
-    }
-
-    protected static function buildData(): array
-    {
         // return merged/filtered data from two sources
         return array_filter(array_merge(
             // get data from central config file
-            Cache::get(
-                'unm/userdata',
-                function () {
-                    $curl = curl_init(Config::get('unm.user_source'));
-                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-                    // curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-                    // curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-                    $resp = curl_exec($curl);
-                    if ($resp === false) {
-                        throw new \Exception('UNM user source failed to load: ' . curl_error($curl));
-                    }
-                    curl_close($curl);
-                    return Spyc::YAMLLoadString($resp);
-                },
-                Config::get('unm.userdata_ttl')
-            ),
+            Cache::get('unm/userdata') ?? [],
             // get data from local config
             Config::get('unm.known_netids')
         ));
-    }
-
-    public static function cache(): CacheNamespace
-    {
-        static $cache;
-        return $cache ?? $cache = new CacheNamespace('unm/userdata');
     }
 }
