@@ -30,7 +30,8 @@ class SemesterRange
             if ($this->start->year() == $this->end->year()) return sprintf('%s and %s %s', $this->start->semester(), $this->end->semester(), $this->end->year());
             else return $this->start . ' and ' . $this->end;
         } else {
-            if ($this->start->year() == $this->end->year()) return sprintf('%s to %s %s', $this->start->semester(), $this->end->semester(), $this->end->year());
+            if ($this->start == $this->end) return $this->start->__toString();
+            elseif ($this->start->year() == $this->end->year()) return sprintf('%s to %s %s', $this->start->semester(), $this->end->semester(), $this->end->year());
             else return $this->start . ' to ' . $this->end;
         }
     }
