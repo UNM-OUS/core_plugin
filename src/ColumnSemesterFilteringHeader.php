@@ -8,7 +8,6 @@ use DigraphCMS\HTML\Forms\SELECT;
 use DigraphCMS\HTTP\RedirectException;
 use DigraphCMS\UI\Format;
 use DigraphCMS\UI\Pagination\AbstractColumnFilteringHeader;
-use DigraphCMS_Plugins\unmous\ous_digraph_module\Forms\SemesterField;
 use Envms\FluentPDO\Queries\Select as QueriesSelect;
 
 class ColumnSemesterFilteringHeader extends AbstractColumnFilteringHeader

@@ -16,6 +16,7 @@ use DigraphCMS\Users\Permissions;
 use DigraphCMS\Users\User;
 use DigraphCMS\Users\Users;
 use Spyc;
+use Thunder\Shortcode\Shortcode\ShortcodeInterface;
 
 class OUS extends AbstractPlugin
 {
@@ -32,6 +33,18 @@ class OUS extends AbstractPlugin
         $data = CurlHelper::get(Config::get('unm.user_source'));
         if ($data === false) throw new \Exception('UNM user source failed to load: ' . CurlHelper::error());
         if ($data = Spyc::YAMLLoadString($data)) Cache::set('unm/userdata', $data, 86400);
+    }
+
+    public static function onShortCode_semester(ShortcodeInterface $s): ?string
+    {
+        $semester = Semesters::current();
+        if (0 < $i = intval($s->getParameter('next'))) {
+            while (--$i) $semester = $semester->next();
+        }
+        if (0 < $i = intval($s->getParameter('previous'))) {
+            while (--$i) $semester = $semester->previous();
+        }
+        return $semester->__toString();
     }
 
     public static function onStaticUrlPermissions_ous(URL $url)
