@@ -2,9 +2,7 @@
 
 namespace DigraphCMS_Plugins\unmous\ous_digraph_module;
 
-use DigraphCMS\Cache\Cache;
 use DigraphCMS\Config;
-use DigraphCMS\Curl\CurlHelper;
 use DigraphCMS\DB\DB;
 use DigraphCMS\HTTP\AccessDeniedError;
 use DigraphCMS\Plugins\AbstractPlugin;
@@ -15,24 +13,21 @@ use DigraphCMS\URL\URL;
 use DigraphCMS\Users\Permissions;
 use DigraphCMS\Users\User;
 use DigraphCMS\Users\Users;
-use Spyc;
 use Thunder\Shortcode\Shortcode\ShortcodeInterface;
 
 class OUS extends AbstractPlugin
 {
 
     /**
-     * Frequently pull fresh permissions from user source. Cache them for
+     * as maintenance pull fresh permissions from user source. Cache them for
      * up to 24 hours, in case they disappear from the source or it becomes
      * unreachable for some reason.
      *
      * @return void
      */
-    public static function cronJob_frequent()
+    public static function cronJob_maintenance()
     {
-        $data = CurlHelper::get(Config::get('unm.user_source'));
-        if ($data === false) throw new \Exception('UNM user source failed to load: ' . CurlHelper::error());
-        if ($data = Spyc::YAMLLoadString($data)) Cache::set('unm/userdata', $data, 86400);
+        UserData::data(true);
     }
 
     public static function onShortCode_semester(ShortcodeInterface $s): ?string
