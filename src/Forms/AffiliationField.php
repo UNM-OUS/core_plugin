@@ -154,7 +154,7 @@ class AffiliationField extends FIELDSET
                 ->addForm($form);
         }
 
-        if (isset($org) && $org->value()) {
+        if (isset($org) && $org->value() && !in_array($org->value(), ['Other'])) {
             $department = (new AutocompleteField(
                 'Department',
                 (new AutocompleteInput(
