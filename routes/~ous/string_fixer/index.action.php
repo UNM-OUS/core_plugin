@@ -5,8 +5,9 @@
     New terms that need to have their output value confirmed are listed at the top.
 </p>
 <p>
-    Note that these rules are generally applied at the time of import for performance reasons.
+    Note that these rules are generally applied at the time of import for performance and data integrity reasons.
     This means that updating things here will not retroactively update things like degree or faculty/staff lists that have already been imported.
+    If you have updated something here, you will need to re-import the data that it would change.
 </p>
 <?php
 

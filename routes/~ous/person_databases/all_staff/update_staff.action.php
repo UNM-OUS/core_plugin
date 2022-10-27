@@ -22,6 +22,7 @@ use DigraphCMS\HTML\Forms\UploadSingle;
 use DigraphCMS\HTTP\RedirectException;
 use DigraphCMS\URL\URL;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\PersonInfo;
+use DigraphCMS_Plugins\unmous\ous_digraph_module\Semesters;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedDB;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\StringFixer;
 
@@ -51,15 +52,16 @@ if ($form->ready()) {
     $job = new SpreadsheetJob(
         $f['tmp_name'],
         function (array $row) {
-            $name = preg_split('/ +/', $row['name']);
-            $lastName = array_pop($name);
-            $firstName = implode(' ', $name);
             // process things that need string fixing
             $organization = StringFixer::organization($row['org level 3 desc']);
             $department = StringFixer::department($row['org desc']);
             $title = StringFixer::jobTitle($row['job title']);
             $netID = strtolower($row['netid']);
             $email = strtolower($row['email']);
+            // load name, allowing overrides from PersonInfo
+            $name = preg_split('/ +/', $row['name']);
+            $lastName = PersonInfo::getFirstNameFor($netID) ?? array_pop($name);
+            $firstName = PersonInfo::getLastNameFor($netID) ?? implode(' ', $name);
             // update staff
             SharedDB::query()
                 ->insertInto(
@@ -83,11 +85,14 @@ if ($form->ready()) {
                     $netID,
                     [
                         'affiliation' => [
-                            'type' => 'Staff',
+                            'type' => PersonInfo::getFor($netID, 'affiliation.type') != 'Staff'
+                                ? 'Staff'
+                                : PersonInfo::getFor($netID, 'affiliation.type'),
                             'org' => $organization,
                             'department' => $department,
                             'title' => $title,
-                        ]
+                        ],
+                        'staff' => Semesters::current()->intVal()
                     ]
                 );
             } else {
@@ -104,7 +109,8 @@ if ($form->ready()) {
                             'org' => $organization,
                             'department' => $department,
                             'title' => $title,
-                        ]
+                        ],
+                        'staff' => Semesters::current()->intVal()
                     ]
                 );
             }

@@ -10,6 +10,7 @@ use DigraphCMS\Session\Authentication;
 use DigraphCMS\Session\Session;
 use DigraphCMS\UI\UserMenu;
 use DigraphCMS\URL\URL;
+use DigraphCMS\Users\Group;
 use DigraphCMS\Users\Permissions;
 use DigraphCMS\Users\User;
 use DigraphCMS\Users\Users;
@@ -75,7 +76,7 @@ class OUS extends AbstractPlugin
     public static function onUserGroups(string $userID, array &$groups)
     {
         foreach (UserData::userGroups($userID) as $group) {
-            if ($group = Users::group($group)) {
+            if ($group instanceof Group || $group = Users::group($group)) {
                 $groups[] = $group;
             }
         }

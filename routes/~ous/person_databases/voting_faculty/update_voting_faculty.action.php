@@ -22,6 +22,7 @@ use DigraphCMS\HTML\Forms\UploadSingle;
 use DigraphCMS\HTTP\RedirectException;
 use DigraphCMS\URL\URL;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\PersonInfo;
+use DigraphCMS_Plugins\unmous\ous_digraph_module\Semesters;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedDB;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\StringFixer;
 
@@ -51,15 +52,16 @@ if ($form->ready()) {
     $job = new SpreadsheetJob(
         $f['tmp_name'],
         function (array $row) {
-            preg_match('/^(.+), (.+?)( [A-Z].)*$/', $row['full name'], $matches);
-            $firstName = $matches[2];
-            $lastName = $matches[1];
             // process things that need string fixing
-            $college = StringFixer::college($row['org level 3 desc']);
+            $college = StringFixer::organization($row['org level 3 desc']);
             $department = StringFixer::department($row['org desc']);
             $title = StringFixer::jobTitle($row['job title']);
             $netID = strtolower($row['netid']);
             $email = strtolower($row['email']);
+            // load name, allowing overrides from PersonInfo
+            $name = preg_split('/ +/', $row['name']);
+            $lastName = PersonInfo::getFirstNameFor($netID) ?? array_pop($name);
+            $firstName = PersonInfo::getLastNameFor($netID) ?? implode(' ', $name);
             // update voting_faculty
             SharedDB::query()
                 ->insertInto(
@@ -87,6 +89,10 @@ if ($form->ready()) {
                             'org' => $college,
                             'department' => $department,
                             'title' => $title,
+                        ],
+                        'faculty' => [
+                            'voting' => Semesters::current()->intVal(),
+                            'semester' => Semesters::current()->intVal(),
                         ]
                     ]
                 );
@@ -104,6 +110,10 @@ if ($form->ready()) {
                             'org' => $college,
                             'department' => $department,
                             'title' => $title,
+                        ],
+                        'faculty' => [
+                            'voting' => Semesters::current()->intVal(),
+                            'semester' => Semesters::current()->intVal(),
                         ]
                     ]
                 );
