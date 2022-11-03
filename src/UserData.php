@@ -146,7 +146,7 @@ class UserData
         // if force refresh is true or stored cache isn't set or is expired, run job to get data
         if ($forceRefresh || !Cache::exists('unm/userdata') || Cache::expired('unm/userdata')) {
             $data = CurlHelper::get(Config::get('unm.user_source'));
-            if ($data === false) throw new \Exception('UNM user source failed to load: ' . CurlHelper::error());
+            if ($data === null) throw new \Exception('UNM user source failed to load: ' . CurlHelper::error());
             if ($data = Spyc::YAMLLoadString($data)) Cache::set('unm/userdata', $data, -1);
             return $cache = $data;
         }
