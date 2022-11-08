@@ -28,7 +28,7 @@ if (Context::arg('org')) {
 }
 
 if (Context::arg('query')) {
-    $query->where('department LIKE ?', '%' . Context::arg('query') . '%');
+    $query->where("$column LIKE ?", '%' . Context::arg('query') . '%');
 }
 
 $otherExists = false;

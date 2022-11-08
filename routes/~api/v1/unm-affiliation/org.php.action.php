@@ -24,7 +24,7 @@ $query = SharedDB::query()->from('person_info')
     ->order("$column ASC");
 
 if (Context::arg('query')) {
-    $query->where('org LIKE ?', '%' . Context::arg('query') . '%');
+    $query->where("$column LIKE ?", '%' . Context::arg('query') . '%');
 }
 
 $otherExists = false;
