@@ -8,7 +8,6 @@ use Flatrr\FlatArray;
 class PersonInfo extends FlatArray
 {
     protected $identifier;
-    protected static $personCache = [];
 
     public static function setFor(?string $identifier, array $data)
     {
@@ -49,9 +48,10 @@ class PersonInfo extends FlatArray
 
     public static function fetch(?string $identifier): ?PersonInfo
     {
+        static $cache = [];
         if (!$identifier) return null;
-        return @static::$personCache[$identifier]
-            ?? static::$personCache[$identifier] = static::doFetch($identifier);
+        return @$cache[$identifier]
+            ?? $cache[$identifier] = static::doFetch($identifier);
     }
 
     protected static function doFetch(?string $identifier): ?PersonInfo
