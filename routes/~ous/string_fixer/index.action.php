@@ -61,4 +61,22 @@ $table = new PaginatedTable(
     ]
 );
 
+$table->download(
+    'String fixer rules',
+    function (array $row): array {
+        return [
+            $row['needs_review'] ? 'Y' : '',
+            $row['category'],
+            $row['input'],
+            $row['output'],
+        ];
+    },
+    [
+        'Needs review',
+        'Category',
+        'Input',
+        'Output',
+    ]
+);
+
 echo $table;
