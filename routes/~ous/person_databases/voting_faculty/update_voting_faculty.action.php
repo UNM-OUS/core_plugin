@@ -59,9 +59,11 @@ if ($form->ready()) {
             $netID = strtolower($row['netid']);
             $email = strtolower($row['email']);
             // load name, allowing overrides from PersonInfo
-            $name = preg_split('/ +/', $row['name']);
-            $lastName = PersonInfo::getFirstNameFor($netID) ?? array_pop($name);
-            $firstName = PersonInfo::getLastNameFor($netID) ?? implode(' ', $name);
+            $name = preg_replace('/^(.+?), (.+)$/', '$2 $1', $row['full name']);
+            $name = preg_split('/ +/', $name);
+            $lastName = array_pop($name);
+            $lastName = PersonInfo::getLastNameFor($netID) ?? $lastName;
+            $firstName = PersonInfo::getFirstNameFor($netID) ?? implode(' ', $name);
             // update voting_faculty
             SharedDB::query()
                 ->insertInto(
@@ -79,7 +81,7 @@ if ($form->ready()) {
             // update personinfo
             if (in_array(PersonInfo::getFor($netID, 'affiliation.type'), ['Upper administration', 'Regent'])) {
                 // this person is or has been important, don't update their personinfo
-            } elseif (PersonInfo::getFullNameFor($netID)) {
+            } elseif (trim(PersonInfo::getFullNameFor($netID))) {
                 // this person is in the system, do a lighter update
                 PersonInfo::setFor(
                     $netID,
@@ -104,7 +106,7 @@ if ($form->ready()) {
                         'email' => $email,
                         'firstname' => $firstName,
                         'lastname' => $lastName,
-                        'fullname' => "$firstName $lastName",
+                        'fullname' => preg_replace('/^(.+?), (.+)$/', '$2 $1', $row['full name']),
                         'affiliation' => [
                             'type' => 'Faculty',
                             'org' => $college,
