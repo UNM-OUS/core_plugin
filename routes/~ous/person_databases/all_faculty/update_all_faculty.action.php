@@ -81,7 +81,7 @@ if ($form->ready()) {
             // update personinfo
             if (in_array(PersonInfo::getFor($netID, 'affiliation.type'), ['Upper administration', 'Regent'])) {
                 // this person is or has been important, don't update their personinfo
-            } elseif (trim(PersonInfo::getFullNameFor($netID))) {
+            } elseif (PersonInfo::getFirstNameFor($netID) && PersonInfo::getLastNameFor($netID)) {
                 // this person is in the system, do a lighter update
                 PersonInfo::setFor(
                     $netID,
@@ -105,7 +105,7 @@ if ($form->ready()) {
                         'email' => $email,
                         'firstname' => $firstName,
                         'lastname' => $lastName,
-                        'fullname' => preg_replace('/^(.+?), (.+)$/', '$2 $1', $row['full name']),
+                        'fullname' => trim(preg_replace('/^(.+?), (.+)$/', '$2 $1', $row['full name'])),
                         'affiliation' => [
                             'type' => 'Faculty',
                             'org' => $college,

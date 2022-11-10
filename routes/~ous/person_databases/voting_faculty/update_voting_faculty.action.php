@@ -106,7 +106,7 @@ if ($form->ready()) {
                         'email' => $email,
                         'firstname' => $firstName,
                         'lastname' => $lastName,
-                        'fullname' => preg_replace('/^(.+?), (.+)$/', '$2 $1', $row['full name']),
+                        'fullname' => trim(preg_replace('/^(.+?), (.+)$/', '$2 $1', $row['full name'])),
                         'affiliation' => [
                             'type' => 'Faculty',
                             'org' => $college,
