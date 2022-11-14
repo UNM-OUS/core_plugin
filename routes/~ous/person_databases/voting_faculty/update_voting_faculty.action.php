@@ -62,8 +62,8 @@ if ($form->ready()) {
             $name = preg_replace('/^(.+?), (.+)$/', '$2 $1', $row['full name']);
             $name = preg_split('/ +/', $name);
             $lastName = array_pop($name);
-            $lastName = PersonInfo::getLastNameFor($netID) ?? $lastName;
-            $firstName = PersonInfo::getFirstNameFor($netID) ?? implode(' ', $name);
+            $lastName = PersonInfo::getLastNameFor($netID) ? PersonInfo::getLastNameFor($netID) : $lastName;
+            $firstName = PersonInfo::getFirstNameFor($netID) ? PersonInfo::getFirstNameFor($netID) : implode(' ', $name);
             // update voting_faculty
             SharedDB::query()
                 ->insertInto(

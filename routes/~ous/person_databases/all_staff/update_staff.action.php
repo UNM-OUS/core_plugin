@@ -61,8 +61,8 @@ if ($form->ready()) {
             // load name, allowing overrides from PersonInfo
             $name = preg_split('/ +/', $row['name']);
             $lastName = array_pop($name);
-            $lastName = PersonInfo::getLastNameFor($netID) ?? $lastName;
-            $firstName = PersonInfo::getFirstNameFor($netID) ?? implode(' ', $name);
+            $lastName = PersonInfo::getLastNameFor($netID) ? PersonInfo::getLastNameFor($netID) : $lastName;
+            $firstName = PersonInfo::getFirstNameFor($netID) ? PersonInfo::getFirstNameFor($netID) : implode(' ', $name);
             // update staff
             SharedDB::query()
                 ->insertInto(
