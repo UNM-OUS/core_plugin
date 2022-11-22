@@ -8,19 +8,23 @@ use Generator;
 
 class Semester
 {
-    protected $year, $semester;
+    /** @var int */
+    protected $year;
+    /** @var int stored as code so that objects can be compared with < and > */
+    protected $semester;
 
     public function __construct(int $year, string $semester)
     {
         $semester = ucfirst(trim(strtolower($semester)));
         if (!isset(Semesters::SEMESTERS[$semester])) throw new \Exception("Invalid semester name", 1);
         $this->year = $year;
-        $this->semester = $semester;
+        $this->semester = Semesters::SEMESTERS[$semester];
     }
 
     public static function fromString(string $string): ?Semester
     {
-        if (preg_match('/(spring|summer|fall) ([0-9]{4})/i', $string, $m)) {
+        $string = trim($string);
+        if (preg_match('/^(spring|summer|fall) ([0-9]{4})$/i', $string, $m)) {
             return new Semester($m[2], $m[1]);
         } else return null;
     }
@@ -39,7 +43,7 @@ class Semester
         $code = intval($code);
         $year = floor($code / 100);
         $semester = @array_flip(Semesters::SEMESTERS)[$code - $year * 100];
-        if (!$year || !$code) return null;
+        if (!$year || $year < 1000 || $year > 9999 || !$semester) return null;
         else return new Semester($year, $semester);
     }
 
@@ -87,51 +91,51 @@ class Semester
 
     public function next(): Semester
     {
-        if ($this->semester == 'Spring') return new Semester($this->year, 'Summer');
-        elseif ($this->semester == 'Summer') return new Semester($this->year, 'Fall');
+        if ($this->semester == 10) return new Semester($this->year, 'Summer');
+        elseif ($this->semester == 60) return new Semester($this->year, 'Fall');
         else return new Semester($this->year + 1, 'Spring');
     }
 
     public function nextFull(): Semester
     {
-        if ($this->semester == 'Spring') return new Semester($this->year, 'Fall');
-        elseif ($this->semester == 'Summer') return new Semester($this->year, 'Fall');
+        if ($this->semester == 10) return new Semester($this->year, 'Fall');
+        elseif ($this->semester == 60) return new Semester($this->year, 'Fall');
         else return new Semester($this->year + 1, 'Spring');
     }
 
     public function previous(): Semester
     {
-        if ($this->semester == 'Spring') return new Semester($this->year - 1, 'Fall');
-        elseif ($this->semester == 'Summer') return new Semester($this->year, 'Spring');
+        if ($this->semester == 10) return new Semester($this->year - 1, 'Fall');
+        elseif ($this->semester == 60) return new Semester($this->year, 'Spring');
         else return new Semester($this->year, 'Summer');
     }
 
     public function previousFull(): Semester
     {
-        if ($this->semester == 'Spring') return new Semester($this->year - 1, 'Fall');
-        elseif ($this->semester == 'Summer') return new Semester($this->year, 'Spring');
+        if ($this->semester == 10) return new Semester($this->year - 1, 'Fall');
+        elseif ($this->semester == 60) return new Semester($this->year, 'Spring');
         else return new Semester($this->year, 'Spring');
     }
 
     public function month(): int
     {
-        if ($c = Config::get('unm.semesters.' . $this->year . '.' . strtolower($this->semester))) return $c[0];
-        elseif ($this->semester == 'Spring') return Semesters::SPRING_DEFAULT[0];
-        elseif ($this->semester == 'Summer') return Semesters::SUMMER_DEFAULT[0];
+        if ($c = Config::get('unm.semesters.' . $this->year . '.' . strtolower($this->semester()))) return $c[0];
+        elseif ($this->semester == 10) return Semesters::SPRING_DEFAULT[0];
+        elseif ($this->semester == 60) return Semesters::SUMMER_DEFAULT[0];
         else return Semesters::FALL_DEFAULT[0];
     }
 
     public function day(): int
     {
-        if ($c = Config::get('unm.semesters.' . $this->year . '.' . strtolower($this->semester))) return $c[1];
-        elseif ($this->semester == 'Spring') return Semesters::SPRING_DEFAULT[1];
-        elseif ($this->semester == 'Summer') return Semesters::SUMMER_DEFAULT[1];
+        if ($c = Config::get('unm.semesters.' . $this->year . '.' . strtolower($this->semester()))) return $c[1];
+        elseif ($this->semester == 10) return Semesters::SPRING_DEFAULT[1];
+        elseif ($this->semester == 60) return Semesters::SUMMER_DEFAULT[1];
         else return Semesters::FALL_DEFAULT[1];
     }
 
     public function intVal(): int
     {
-        return $this->year * 100
+        return ($this->year * 100)
             + Semesters::SEMESTERS[$this->semester];
     }
 
@@ -142,27 +146,11 @@ class Semester
 
     public function semester(): string
     {
-        return $this->semester;
-    }
-
-    public function isEq(Semester $semester): bool
-    {
-        return $this->year == $semester->year()
-            && $this->semester = $semester->semester();
-    }
-
-    public function isBefore(Semester $semester): bool
-    {
-        return $this->intVal() < $semester->intVal();
-    }
-
-    public function isAfter(Semester $semester): bool
-    {
-        return $this->intVal() > $semester->intVal();
+        return @array_flip(Semesters::SEMESTERS)[$this->semester];
     }
 
     public function __toString()
     {
-        return sprintf('%s %s', $this->semester, $this->year);
+        return sprintf('%s %s', $this->semester(), $this->year);
     }
 }
