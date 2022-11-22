@@ -89,32 +89,40 @@ class Semester
         while ($limit === null or $limit--) yield $current = $current->previousFull();
     }
 
-    public function next(): Semester
+    public function next(int $times = 1): Semester
     {
-        if ($this->semester == 10) return new Semester($this->year, 'Summer');
-        elseif ($this->semester == 60) return new Semester($this->year, 'Fall');
-        else return new Semester($this->year + 1, 'Spring');
+        if ($times <= 0) return clone $this;
+        if ($this->semester == 10) $output = new Semester($this->year, 'Summer');
+        elseif ($this->semester == 60) $output = new Semester($this->year, 'Fall');
+        else $output = new Semester($this->year + 1, 'Spring');
+        return $output->next($times - 1);
     }
 
-    public function nextFull(): Semester
+    public function nextFull(int $times = 1): Semester
     {
-        if ($this->semester == 10) return new Semester($this->year, 'Fall');
-        elseif ($this->semester == 60) return new Semester($this->year, 'Fall');
-        else return new Semester($this->year + 1, 'Spring');
+        if ($times <= 0) return clone $this;
+        if ($this->semester == 10) $output = new Semester($this->year, 'Fall');
+        elseif ($this->semester == 60) $output = new Semester($this->year, 'Fall');
+        else $output = new Semester($this->year + 1, 'Spring');
+        return $output->nextFull($times - 1);
     }
 
-    public function previous(): Semester
+    public function previous(int $times = 1): Semester
     {
-        if ($this->semester == 10) return new Semester($this->year - 1, 'Fall');
-        elseif ($this->semester == 60) return new Semester($this->year, 'Spring');
-        else return new Semester($this->year, 'Summer');
+        if ($times <= 0) return clone $this;
+        if ($this->semester == 10) $output = new Semester($this->year - 1, 'Fall');
+        elseif ($this->semester == 60) $output = new Semester($this->year, 'Spring');
+        else $output = new Semester($this->year, 'Summer');
+        return $output->previous($times - 1);
     }
 
-    public function previousFull(): Semester
+    public function previousFull(int $times = 1): Semester
     {
-        if ($this->semester == 10) return new Semester($this->year - 1, 'Fall');
-        elseif ($this->semester == 60) return new Semester($this->year, 'Spring');
-        else return new Semester($this->year, 'Spring');
+        if ($times <= 0) return clone $this;
+        if ($this->semester == 10) $output = new Semester($this->year - 1, 'Fall');
+        elseif ($this->semester == 60) $output = new Semester($this->year, 'Spring');
+        else $output = new Semester($this->year, 'Spring');
+        return $output->previousFull($times - 1);
     }
 
     public function month(): int

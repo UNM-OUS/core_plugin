@@ -266,4 +266,100 @@ class SemesterTest extends TestCase
             $fall->end()
         );
     }
+
+    public function testNextN(): void
+    {
+        $this->assertEquals(
+            new Semester(2000, 'summer'),
+            (new Semester(2000, 'summer'))->next(0)
+        );
+        $this->assertEquals(
+            new Semester(2000, 'fall'),
+            (new Semester(2000, 'summer'))->next()
+        );
+        $this->assertEquals(
+            new Semester(2000, 'fall'),
+            (new Semester(2000, 'summer'))->next(1)
+        );
+        $this->assertEquals(
+            new Semester(2001, 'spring'),
+            (new Semester(2000, 'summer'))->next(2)
+        );
+        $this->assertEquals(
+            new Semester(2001, 'summer'),
+            (new Semester(2000, 'summer'))->next(3)
+        );
+    }
+
+    public function testNextFullN(): void
+    {
+        $this->assertEquals(
+            new Semester(2000, 'summer'),
+            (new Semester(2000, 'summer'))->nextFull(0)
+        );
+        $this->assertEquals(
+            new Semester(2000, 'fall'),
+            (new Semester(2000, 'summer'))->nextFull()
+        );
+        $this->assertEquals(
+            new Semester(2000, 'fall'),
+            (new Semester(2000, 'summer'))->nextFull(1)
+        );
+        $this->assertEquals(
+            new Semester(2001, 'spring'),
+            (new Semester(2000, 'summer'))->nextFull(2)
+        );
+        $this->assertEquals(
+            new Semester(2001, 'fall'),
+            (new Semester(2000, 'summer'))->nextFull(3)
+        );
+    }
+
+    public function testPreviousN(): void
+    {
+        $this->assertEquals(
+            new Semester(2000, 'summer'),
+            (new Semester(2000, 'summer'))->previous(0)
+        );
+        $this->assertEquals(
+            new Semester(2000, 'spring'),
+            (new Semester(2000, 'summer'))->previous()
+        );
+        $this->assertEquals(
+            new Semester(2000, 'spring'),
+            (new Semester(2000, 'summer'))->previous(1)
+        );
+        $this->assertEquals(
+            new Semester(1999, 'fall'),
+            (new Semester(2000, 'summer'))->previous(2)
+        );
+        $this->assertEquals(
+            new Semester(1999, 'summer'),
+            (new Semester(2000, 'summer'))->previous(3)
+        );
+    }
+
+    public function testPreviousFullN(): void
+    {
+        $this->assertEquals(
+            new Semester(2000, 'summer'),
+            (new Semester(2000, 'summer'))->previousFull(0)
+        );
+        $this->assertEquals(
+            new Semester(2000, 'spring'),
+            (new Semester(2000, 'summer'))->previousFull()
+        );
+        $this->assertEquals(
+            new Semester(2000, 'spring'),
+            (new Semester(2000, 'summer'))->previousFull(1)
+        );
+        $this->assertEquals(
+            new Semester(1999, 'fall'),
+            (new Semester(2000, 'summer'))->previousFull(2)
+        );
+        $this->assertEquals(
+            new Semester(1999, 'spring'),
+            (new Semester(2000, 'summer'))->previousFull(3)
+        );
+    }
 }
