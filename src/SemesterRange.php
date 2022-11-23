@@ -49,8 +49,8 @@ class SemesterRange
     public function contains(?Semester $semester): bool
     {
         if (!$semester) return false;
-        elseif ($this->start && $semester->isBefore($this->start)) return false;
-        elseif ($this->end && $semester->isAfter($this->end)) return false;
+        elseif ($this->start && $semester < $this->start) return false;
+        elseif ($this->end && $semester > $this->end) return false;
         else return true;
     }
 }
