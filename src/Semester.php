@@ -144,7 +144,7 @@ class Semester
     public function intVal(): int
     {
         return ($this->year * 100)
-            + Semesters::SEMESTERS[$this->semester];
+            + Semesters::SEMESTERS[$this->semester()];
     }
 
     public function year(): int

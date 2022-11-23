@@ -78,6 +78,37 @@ class SemesterTest extends TestCase
         $this->assertNull(
             Semester::fromCode('200100')
         );
+        $this->assertEquals(
+            new Semester(2000, 'spring'),
+            Semester::fromCode(200010)
+        );
+        $this->assertEquals(
+            new Semester(2001, 'summer'),
+            Semester::fromCode(200160)
+        );
+        $this->assertEquals(
+            new Semester(2002, 'fall'),
+            Semester::fromCode(200280)
+        );
+        $this->assertNull(
+            Semester::fromCode(200100)
+        );
+    }
+
+    public function testToInt(): void
+    {
+        $this->assertEquals(
+            200010,
+            (new Semester(2000, 'spring'))->intVal()
+        );
+        $this->assertEquals(
+            200060,
+            (new Semester(2000, 'summer'))->intVal()
+        );
+        $this->assertEquals(
+            200080,
+            (new Semester(2000, 'fall'))->intVal()
+        );
     }
 
     public function testInvalidConstruct(): void
