@@ -1,6 +1,4 @@
 parameters:
   level: 2
   paths:
-    - plugins
-  scanDirectories:
-    - vendor
+    - src

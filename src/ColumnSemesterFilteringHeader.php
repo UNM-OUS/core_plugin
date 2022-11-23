@@ -64,7 +64,7 @@ class ColumnSemesterFilteringHeader extends AbstractColumnFilteringHeader
         $semester = clone $this->startSemester;
         for ($i = 0; $i < 50; $i++) {
             $options[$semester->intVal()] = $semester->__toString();
-            if ($semester >= $this->endSemester)) break;
+            if ($semester >= $this->endSemester) break;
             $semester = $this->summers
                 ? $semester->next()
                 : $semester->nextFull();

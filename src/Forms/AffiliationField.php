@@ -152,7 +152,7 @@ class AffiliationField extends FIELDSET
                 ))->addClass('autocomplete-input--autopopulate')
             ))->setDefault(@$this->value()['org'])
                 ->addForm($form);
-        }
+        } else $org = null;
 
         if (isset($org) && $org->value() && !in_array($org->value(), ['Other'])) {
             $department = (new AutocompleteField(
@@ -176,13 +176,13 @@ class AffiliationField extends FIELDSET
                 ))->addClass('autocomplete-input--autopopulate')
             ))->setDefault(@$this->value()['department'])
                 ->addForm($form);
-        }
+        } else $department = null;
 
         $form->addCallback(function () use ($type, $org, $department) {
             // verify that we have everything
             if (!$type->value()) return;
-            if (isset($org) && !$org->value()) return;
-            if (isset($department) && !$department->value()) return;
+            if ($org && !$org->value()) return;
+            if ($department && !$department->value()) return;
             // save data into personinfo
             PersonInfo::setFor($this->for, [
                 'affiliation' => [
