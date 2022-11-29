@@ -38,7 +38,8 @@ use DigraphCMS\UI\UserMenu;
     Cookies::printConsentBanner();
     echo Templates::render('unm/top-nav.php');
     echo new UserMenu;
-    echo Templates::render('sections/header.php');;
+    echo Templates::render('sections/header.php');
+    echo Templates::render('unm/loboalerts.php');
     ?>
     <main id="page-wrapper">
         <?php
