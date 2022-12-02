@@ -99,8 +99,7 @@ class OUS extends AbstractPlugin
             }
         }
         $user->name(
-            UserData::netIDName($netID)
-                ?? PersonInfo::getFullNameFor($netID)
+            PersonInfo::getFullNameFor($netID)
                 ?? PersonInfo::getFirstNameFor($netID)
                 ?? $netID
         );
@@ -113,8 +112,9 @@ class OUS extends AbstractPlugin
         if ($user['name_explicitly_set']) return;
         $netIDs = static::userNetIDs($user->uuid());
         foreach ($netIDs as $netID) {
-            $name = UserData::netIDName($netID)
-                ?? PersonInfo::getFullNameFor($netID);
+            $name = PersonInfo::getFullNameFor($netID)
+                ?? PersonInfo::getFirstNameFor($netID)
+                ?? $netID;
             if ($name) {
                 $user->name($name);
                 $user['name_explicitly_set'] = true;

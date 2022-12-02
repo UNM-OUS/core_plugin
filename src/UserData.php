@@ -112,11 +112,6 @@ class UserData
         );
     }
 
-    public static function netIDName(string $netID): ?string
-    {
-        return @static::data()[$netID]['name'];
-    }
-
     public static function netIDGroups(string $netID): array
     {
         return @static::data()[$netID]['groups'] ?? [];
