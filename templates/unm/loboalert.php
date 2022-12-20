@@ -1,8 +1,6 @@
 <?php
 
 use DigraphCMS\Context;
-use DigraphCMS\Session\Cookies;
-use DigraphCMS\UI\CallbackLink;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\LoboAlerts\LoboAlert;
 
 /** @var LoboAlert */

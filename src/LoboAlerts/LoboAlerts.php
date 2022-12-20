@@ -4,7 +4,6 @@ namespace DigraphCMS_Plugins\unmous\ous_digraph_module\LoboAlerts;
 
 use DigraphCMS\Cache\Cache;
 use DigraphCMS\Curl\CurlHelper;
-use DigraphCMS\Events\Dispatcher;
 
 class LoboAlerts
 {
@@ -13,12 +12,13 @@ class LoboAlerts
         return Cache::get(
             'unm/loboalerts',
             function (): array {
+                /** @var array<int,LoboAlert> */
                 $alerts = [];
                 // get alerts from main source
                 $loboAlert = CurlHelper::get('https://webcore.unm.edu/v2/loboalerts.json');
                 if ($loboAlert && $loboAlert = json_decode($loboAlert, true)) {
                     if ($loboAlert['alert'] != 'none') {
-                        $alerts = new LoboAlert(
+                        $alerts[] = new LoboAlert(
                             $loboAlert['title'],
                             str_replace('&#xA;', '', @$loboAlert['details'] ?? ''),
                             'warning',
@@ -40,7 +40,7 @@ class LoboAlerts
                 }
                 return $alerts;
             },
-            3600
+            60
         );
     }
 }

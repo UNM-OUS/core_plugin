@@ -42,8 +42,10 @@ class Semester
     {
         $code = intval($code);
         $year = floor($code / 100);
+        if (!$year) return null;
         $semester = @array_flip(Semesters::SEMESTERS)[$code - $year * 100];
-        if (!$year || $year < 1000 || $year > 9999 || !$semester) return null;
+        if (!$semester) return null; // @phpstan-ignore-line
+        if ($year < 1000 || $year > 9999) return null;
         else return new Semester($year, $semester);
     }
 

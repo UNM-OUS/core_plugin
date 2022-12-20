@@ -45,7 +45,7 @@ class UserData
         return array_unique($groups);
     }
 
-    public static function netIdIsFaculty(string $netID): bool
+    public static function netIdIsFaculty(string $netID): ?bool
     {
         static $cache = [];
         if (!$netID) return null;
@@ -55,7 +55,7 @@ class UserData
                 ->where('netid', $netID)->count());
     }
 
-    public static function netIdIsVotingFaculty(string $netID): bool
+    public static function netIdIsVotingFaculty(string $netID): ?bool
     {
         static $cache = [];
         if (!$netID) return null;
@@ -65,7 +65,7 @@ class UserData
                 ->where('netid', $netID)->count());
     }
 
-    public static function netIdIsStaff(string $netID): bool
+    public static function netIdIsStaff(string $netID): ?bool
     {
         static $cache = [];
         if (!$netID) return null;
