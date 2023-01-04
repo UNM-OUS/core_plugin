@@ -62,7 +62,7 @@ class OUS extends AbstractPlugin
     public static function userNetIDs(string $userID = null): array
     {
         $userID = $userID ?? Session::uuid();
-        return array_map(
+        return array_values(array_map(
             function ($row) {
                 return $row['provider_id'];
             },
@@ -70,7 +70,7 @@ class OUS extends AbstractPlugin
                 ->where('user_uuid = ?', [$userID])
                 ->where('source = "cas" AND provider = "netid"')
                 ->fetchAll()
-        );
+        ));
     }
 
     public static function onUserGroups(string $userID, array &$groups)
