@@ -6,9 +6,13 @@ unm:
     user: null
     pass: null
   semesters:
+    2033:
+      spring: [1, 17]
+      summer: [6, 6]
+      fall: [8, 22]
     2032:
       spring: [1, 19]
-      summer: [6, 31]
+      summer: [5, 31]
       fall: [8, 16]
     2031:
       spring: [1, 20]
