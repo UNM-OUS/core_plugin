@@ -19,7 +19,7 @@ class LoboAlerts
                 if ($loboAlert && $loboAlert = json_decode($loboAlert, true)) {
                     if ($loboAlert['alert'] != 'none') {
                         $alerts[] = new LoboAlert(
-                            $loboAlert['title'],
+                            $loboAlert['alert'] ?? 'LoboAlert',
                             str_replace('&#xA;', '', @$loboAlert['details'] ?? ''),
                             'warning',
                             md5(serialize($loboAlert))
