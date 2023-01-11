@@ -2,22 +2,29 @@
 
 namespace DigraphCMS_Plugins\unmous\ous_digraph_module\Forms;
 
+use DigraphCMS\HTML\DIV;
 use DigraphCMS\HTML\Forms\Field;
 use DigraphCMS\HTML\Forms\Fields\CheckboxField;
 use DigraphCMS\HTML\Forms\Fields\CheckboxListField;
 use DigraphCMS\HTML\Forms\FIELDSET;
 use DigraphCMS\HTML\Forms\Phone;
 use DigraphCMS\HTML\Forms\TEXTAREA;
+use DigraphCMS\UI\Templates;
 
 class AccommodationsField extends FIELDSET
 {
-    protected $requested, $needs, $extraRequest, $phone;
+    protected $requested, $blurb, $needs, $extraRequest, $phone;
 
-    public function __construct(string $label = null, bool $phone = false)
+    public function __construct(string $label = null, bool $phone = false, string $blurbTemplate = null)
     {
         parent::__construct($label ?? 'Special accommodations');
         // set up fields
         $this->requested = new CheckboxField('I require accessibility accommodations');
+        if ($blurbTemplate) {
+            $this->blurb = (new DIV)
+                ->addChild(Templates::render($blurbTemplate))
+                ->addClass('accommodations-field__blurb');
+        }
         $this->needs = new CheckboxListField('Accommodations requested for', [
             'wheelchair' => 'Wheelchair access',
             'stairs' => 'Inability to negotiate stairs',
@@ -102,6 +109,7 @@ class AccommodationsField extends FIELDSET
             parent::children(),
             [
                 $this->requested,
+                $this->blurb ?? '',
                 $this->phone ?? '',
                 $this->needs,
                 $this->extraRequest,
