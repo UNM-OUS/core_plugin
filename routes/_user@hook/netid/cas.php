@@ -31,7 +31,7 @@ if (!defined(PHPCAS_CONFIGURED)) {
             $version = CAS_VERSION_2_0;
     }
     \phpCAS::client(
-        CAS_VERSION_2_0,
+        $version,
         $config['server'],
         intval($config['port']),
         $config['context']
