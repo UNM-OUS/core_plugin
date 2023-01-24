@@ -54,7 +54,7 @@ class ColumnSemesterFilteringHeader extends AbstractColumnFilteringHeader
             $highest = clone $query;
             $highest = @$highest->limit(1)->offset(0)
                 ->select($this->column() . ' AS semfilter_column', true)
-                ->order(null)->order($this->column() . ' ASC')
+                ->order(null)->order($this->column() . ' DESC')
                 ->fetchAll()[0]['semfilter_column'];
             $this->endSemester = $highest ? Semester::fromCode($highest) : $this->endSemester;
         }
