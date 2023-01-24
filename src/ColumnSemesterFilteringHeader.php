@@ -41,7 +41,7 @@ class ColumnSemesterFilteringHeader extends AbstractColumnFilteringHeader
         $form = $this->form();
 
         // try to determine start and end semesters automatically
-        $query = $this->section ? clone $this->section->source() : null;
+        $query = $this->section ? clone $this->section->rawSource() : null;
         if ($query instanceof AbstractMappedSelect) $query = clone $query->query();
         if ($query instanceof QueriesSelect) {
             $query->asObject(false);
@@ -72,12 +72,12 @@ class ColumnSemesterFilteringHeader extends AbstractColumnFilteringHeader
 
         $start = (new Field('Start', new SELECT($options)))
             ->setID('start')
-            ->setDefault(@$this->config()['start'] ? Format::parseDate($this->config()['start']) : null)
+            ->setDefault(@$this->config()['start'] ?? $this->startSemester->intVal())
             ->addForm($form);
 
-        $end = (new Field('End date', new SELECT($options)))
+        $end = (new Field('End', new SELECT($options)))
             ->setID('end')
-            ->setDefault(@$this->config()['end'] ? Format::parseDate($this->config()['end']) : null)
+            ->setDefault(@$this->config()['end'] ?? $this->endSemester->intVal())
             ->addForm($form);
 
         $end->addValidator(function () use ($start, $end) {
