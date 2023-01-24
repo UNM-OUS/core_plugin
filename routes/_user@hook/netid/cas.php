@@ -5,7 +5,7 @@ if (!class_exists('\\phpCAS')) {
     return;
 }
 //set up CAS
-if (!defined(PHPCAS_CONFIGURED)) {
+if (!defined('PHPCAS_CONFIGURED')) {
     //remember that we've configured CAS
     define(PHPCAS_CONFIGURED, true);
     //pull our config so that we can test different CAS servers per-environment
