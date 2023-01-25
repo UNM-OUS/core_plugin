@@ -67,9 +67,4 @@ class LoboAlert
     {
         return $this->class;
     }
-
-    public function render(): string
-    {
-        return Templates::render('unm/loboalert.php', ['loboalert' => $this]);
-    }
 }
