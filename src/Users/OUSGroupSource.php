@@ -26,7 +26,7 @@ class OUSGroupSource extends AbstractGroupSource
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            if ($data = json_decode(curl_exec($ch))) {
+            if ($data = json_decode(curl_exec($ch), true)) {
                 $groups->set($data);
                 $groups->expiresAfter(3600);
                 $cache->save($groups);
