@@ -1,4 +1,5 @@
 <?php
+
 namespace Digraph\Modules\ous_digraph_module\Users;
 
 use Digraph\CMS;
@@ -33,11 +34,16 @@ class FacgovGroupSource extends AbstractGroupSource
         //load and save into cache if cache isn't hit
         if (!$roster->isHit()) {
             $url = $this->source;
-            if ($data = json_decode(file_get_contents($url), true)) {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            if ($data = json_decode(curl_exec($ch), true)) {
                 $roster->set($data);
                 $roster->expiresAfter(3600);
                 $cache->save($roster);
             }
+            curl_close($ch);
         }
         //return
         $roster = $roster->get();
