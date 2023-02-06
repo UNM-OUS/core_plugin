@@ -72,23 +72,29 @@ class PersonInfo extends FlatArray
 
     public function fullName(): ?string
     {
-        if ($this['fullname']) return $this['fullname'];
-        elseif ($this['firstname'] && $this['lastname']) return $this['firstname'] . ' ' . $this['lastname'];
-        else return null;
+        if ($this['fullname']) $output =  $this['fullname'];
+        elseif ($this['firstname'] && $this['lastname']) $output = $this['firstname'] . ' ' . $this['lastname'];
+        else $output = null;
+        if ($output) $output = trim($output);
+        return $output ? $output : null;
     }
 
     public function firstName(): ?string
     {
-        if ($this['firstname']) return $this['firstname'];
-        elseif ($this['fullname']) return preg_replace('/ .*$/', '', $this['fullname']);
-        else return null;
+        if ($this['firstname']) $output = $this['firstname'];
+        elseif ($this['fullname']) $output = preg_replace('/ .*$/', '', $this['fullname']);
+        else $output = null;
+        if ($output) $output = trim($output);
+        return $output ? $output : null;
     }
 
     public function lastName(): ?string
     {
-        if ($this['lastname']) return $this['lastname'];
-        elseif ($this['fullname']) return preg_replace('/^.* /', '', $this['fullname']);
-        else return null;
+        if ($this['lastname']) $output = $this['lastname'];
+        elseif ($this['fullname']) $output = preg_replace('/^.* /', '', $this['fullname']);
+        else $output = null;
+        if ($output) $output = trim($output);
+        return $output ? $output : null;
     }
 
     public function identifier(): ?string

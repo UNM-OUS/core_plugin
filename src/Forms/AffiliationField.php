@@ -23,9 +23,9 @@ class AffiliationField extends FIELDSET
     protected $required = false;
     protected $interface;
 
-    public function __construct(string $label = 'UNM affiliation', string $for)
+    public function __construct(?string $label, string $for)
     {
-        parent::__construct($label);
+        parent::__construct($label ?? 'UNM affiliation');
         $this->for = $for;
         $this->setID('unm-affiliation-form--' . crc32($for));
     }

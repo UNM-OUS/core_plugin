@@ -17,6 +17,7 @@ use DigraphCMS\Context;
 use DigraphCMS\Cron\DeferredProgressBar;
 use DigraphCMS\Cron\SpreadsheetJob;
 use DigraphCMS\HTML\Forms\Field;
+use DigraphCMS\HTML\Forms\Fields\CheckboxField;
 use DigraphCMS\HTML\Forms\FormWrapper;
 use DigraphCMS\HTML\Forms\UploadSingle;
 use DigraphCMS\HTTP\RedirectException;
@@ -37,12 +38,16 @@ if ($job = Context::arg('job')) {
 
 $form = new FormWrapper();
 
+$lastNameFirst = (new CheckboxField('Last names first'))
+    ->addForm($form);
+
 $file = (new Field('Staff list spreadsheet', $upload = new UploadSingle()))
     ->setRequired(true)
     ->addForm($form);
 
 if ($form->ready()) {
     $f = $upload->value();
+    $lastNameFirst = $lastNameFirst->value();
     // empty existing values
     SharedDB::query()
         ->deleteFrom('staff')
@@ -51,7 +56,7 @@ if ($form->ready()) {
     // begin spreadsheet job
     $job = new SpreadsheetJob(
         $f['tmp_name'],
-        function (array $row) {
+        function (array $row) use ($lastNameFirst) {
             // process things that need string fixing
             $organization = StringFixer::organization($row['org level 3 desc']);
             $department = StringFixer::department($row['org desc']);
@@ -59,7 +64,11 @@ if ($form->ready()) {
             $netID = strtolower($row['netid']);
             $email = strtolower($row['email']);
             // load name, allowing overrides from PersonInfo
-            $name = preg_split('/ +/', $row['name']);
+            $name = $row['name'] ?? $row['full name'];
+            if ($lastNameFirst) {
+                $name = preg_replace('/^(.+?), (.+)$/', '$2 $1', $name);
+            }
+            $name = preg_split('/ +/', $name);
             $lastName = array_pop($name);
             $lastName = PersonInfo::getLastNameFor($netID) ? PersonInfo::getLastNameFor($netID) : $lastName;
             $firstName = PersonInfo::getFirstNameFor($netID) ? PersonInfo::getFirstNameFor($netID) : implode(' ', $name);
