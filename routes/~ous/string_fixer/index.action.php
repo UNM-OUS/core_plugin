@@ -40,7 +40,7 @@ $table = new PaginatedTable(
         $form->addCallback(function () use ($row, $input) {
             SharedDB::query()->update('stringfix', [
                 'output' => $input->value(),
-                'needs_review' => false,
+                'needs_review' => 0,
             ])->where('category', $row['category'])
                 ->where('input', $row['input'])
                 ->execute();
