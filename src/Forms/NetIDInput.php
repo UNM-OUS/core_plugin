@@ -26,6 +26,6 @@ class NetIDInput extends INPUT
 
     public function value($useDefault = false)
     {
-        return strtolower(parent::value($useDefault));
+        return strtolower(parent::value($useDefault) ?? '');
     }
 }
