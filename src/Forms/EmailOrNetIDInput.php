@@ -37,6 +37,6 @@ class EmailOrNetIDInput extends INPUT
 
     public function value($useDefault = false)
     {
-        return preg_replace('/@unm\.edu$/', '', strtolower(parent::value($useDefault)));
+        return preg_replace('/@unm\.edu$/', '', strtolower(parent::value($useDefault) ?? ''));
     }
 }
