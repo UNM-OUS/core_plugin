@@ -129,6 +129,13 @@ if ($form->ready()) {
             }
             // return status
             return "Updated faculty: $firstName $lastName";
+        },
+        null,
+        null,
+        function () {
+            // empty out existing values in all_faculty table
+            SharedDB::query()->getPdo()->exec("DELETE FROM all_faculty");
+            return "Truncated all_faculty table";
         }
     );
     // redirect to job

@@ -126,6 +126,13 @@ if ($form->ready()) {
             }
             // return status
             return "Updated staff: $firstName $lastName";
+        },
+        null,
+        null,
+        function () {
+            // empty out existing values in staff table
+            SharedDB::query()->getPdo()->exec("DELETE FROM staff");
+            return "Truncated staff table";
         }
     );
     // redirect to job

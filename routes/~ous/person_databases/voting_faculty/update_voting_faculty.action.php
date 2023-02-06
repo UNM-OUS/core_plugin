@@ -131,6 +131,13 @@ if ($form->ready()) {
             }
             // return status
             return "Updated voting faculty: $firstName $lastName";
+        },
+        null,
+        null,
+        function () {
+            // empty out existing values in voting_faculty table
+            SharedDB::query()->getPdo()->exec("DELETE FROM voting_faculty");
+            return "Truncated voting_faculty table";
         }
     );
     // redirect to job
