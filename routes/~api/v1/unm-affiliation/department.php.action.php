@@ -61,4 +61,4 @@ if (!$queryExists && Context::arg('query') && Permissions::inMetaGroup('unmaffil
     ];
 }
 
-echo json_encode($results);
+echo json_encode(array_values($results));
