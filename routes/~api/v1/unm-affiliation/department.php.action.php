@@ -27,12 +27,13 @@ if (Context::arg('org')) {
     $query->where(AbstractMappedSelect::parseJsonRefs('${data.affiliation.org}'), Context::arg('org'));
 }
 
-if (Context::arg('query')) {
-    $query->where("$column LIKE ?", '%' . Context::arg('query') . '%');
-}
-
 $otherExists = false;
 $queryExists = false;
+
+$q = strtolower(Context::arg('query'));
+$results = array_filter($query->fetchAll(), function (array $row) use ($q): bool {
+    return str_contains(strtolower($row['department']), $q);
+});
 
 $results = array_map(
     function (array $row) use (&$otherExists, &$queryExists): array {

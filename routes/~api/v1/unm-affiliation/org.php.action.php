@@ -23,12 +23,13 @@ $query = SharedDB::query()->from('person_info')
     ->groupBy("$column")
     ->order("$column ASC");
 
-if (Context::arg('query')) {
-    $query->where("$column LIKE ?", '%' . Context::arg('query') . '%');
-}
-
 $otherExists = false;
 $queryExists = false;
+
+$q = strtolower(Context::arg('query'));
+$results = array_filter($query->fetchAll(), function (array $row) use ($q): bool {
+    return str_contains(strtolower($row['org']), $q);
+});
 
 $results = array_map(
     function (array $row) use (&$otherExists, &$queryExists): array {
@@ -39,7 +40,7 @@ $results = array_map(
             'value' => $row['org'],
         ];
     },
-    $query->fetchAll()
+    $results
 );
 
 if (!$otherExists) {
