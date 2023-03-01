@@ -114,5 +114,5 @@ user_sources:
         server: login.unm.edu
         port: 443
         context: cas
-        setnocasservervalidation: true
-        fixhttpsproblems: true
+        # setnocasservervalidation: true
+        # fixhttpsproblems: true
