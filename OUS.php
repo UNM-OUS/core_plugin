@@ -72,10 +72,10 @@ class OUS extends AbstractPlugin
                 ->fetchAll()
         );
         $netIDs = array_filter($netIDs, function ($e): bool {
-            if (!preg_match('/^[a-z].{1,19}$/', $this->value())) {
+            if (!preg_match('/^[a-z].{1,19}$/', $e)) {
                 return false;
             }
-            if (preg_match('/[^a-z0-9_]/', $this->value())) {
+            if (preg_match('/[^a-z0-9_]/', $e)) {
                 return false;
             }
             return true;
