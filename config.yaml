@@ -110,8 +110,8 @@ user_sources:
       netid:
         name: UNM NetID
         active: true
-        version: CAS_VERSION_2_0
-        server: login.unm.edu
+        version: CAS_VERSION_3_0
+        server: casprod.unm.edu # formerly login.unm.edu
         port: 443
         context: cas
         setnocasservervalidation: true
