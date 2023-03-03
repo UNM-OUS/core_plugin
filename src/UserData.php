@@ -8,6 +8,8 @@ use DigraphCMS\Config;
 use DigraphCMS\DB\DB;
 use DigraphCMS\URL\URL;
 use DigraphCMS\Users\Group;
+use DigraphCMS\Users\User;
+use DigraphCMS\Users\Users;
 use Spyc;
 
 class UserData
@@ -97,6 +99,15 @@ class UserData
     {
         static $cache = [];
         return @$cache[$userID] ?? $cache[$userID] = static::userNetIDs($userID);
+    }
+
+    public static function userFromNetID(string $netID): ?User
+    {
+        $query = DB::query()->from('user_source')
+            ->where('provider_id = ?', [$netID])
+            ->where('source = "cas" AND provider = "netid"');
+        if ($result = $query->fetch()) return Users::get($result['user_uuid']);
+        else return null;
     }
 
     protected static function userNetIDs(string $userID): array
