@@ -16,7 +16,7 @@ class LoboAlerts
                 $alerts = [];
                 // get alerts from main source
                 $loboAlert = CurlHelper::get('https://webcore.unm.edu/v2/loboalerts.json');
-                if ($loboAlert && $loboAlert = json_decode($loboAlert, true)) {
+                if ($loboAlert && $loboAlert = json_decode($loboAlert, true, 512, JSON_THROW_ON_ERROR)) {
                     if ($loboAlert['alert'] != 'none') {
                         $alerts[] = new LoboAlert(
                             $loboAlert['alert'] ?? 'LoboAlert',

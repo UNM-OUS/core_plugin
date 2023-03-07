@@ -39,7 +39,7 @@ $query = SharedDB::query()->from('person_info')
 $table = new PaginatedTable(
     $query,
     function (array $row): array {
-        $data = json_decode($row['data'], true);
+        $data = json_decode($row['data'], true, 512, JSON_THROW_ON_ERROR);
         return [
             sprintf('<a href="%s">%s</a>', new URL('record:' . $row['identifier']), $row['identifier']),
             @$data['firstname'],
