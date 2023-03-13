@@ -4,6 +4,7 @@ namespace DigraphCMS_Plugins\unmous\ous_digraph_module;
 
 use DigraphCMS\Config;
 use DigraphCMS\DB\DB;
+use DigraphCMS\ExceptionLog;
 use DigraphCMS\HTTP\AccessDeniedError;
 use DigraphCMS\Plugins\AbstractPlugin;
 use DigraphCMS\Session\Authentication;
@@ -105,6 +106,7 @@ class OUS extends AbstractPlugin
     {
         if (Config::get('unm.block_unknown_netids')) {
             if (!UserData::known($netID)) {
+                ExceptionLog::log(new AccessDeniedError($netID . ' is not allowed to use this site'));
                 throw new AccessDeniedError('You are not on the list of known NetIDs for this site');
             }
         }
