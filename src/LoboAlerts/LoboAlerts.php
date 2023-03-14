@@ -27,17 +27,17 @@ class LoboAlerts
                     }
                 }
                 // get COVID alert, either from OUS site or from main site
-                $covidBanner = CurlHelper::get('https://www.unm.edu/includes/temp-alert.html');
-                if ($covidBanner) {
-                    $covidBanner = trim(preg_replace('/<!-- [^\-]+? -->/', '', $covidBanner));
-                    do {
-                        $previous = $covidBanner;
-                        $covidBanner = trim(preg_replace('/^<div[^>]*>(.+)<\/div>$/is', '$1', $covidBanner));
-                    } while ($previous != $covidBanner);
-                    if ($covidBanner = LoboAlert::parse($covidBanner, 'covid')) {
-                        $alerts[] = $covidBanner;
-                    }
-                }
+                // $covidBanner = CurlHelper::get('https://www.unm.edu/includes/temp-alert.html');
+                // if ($covidBanner) {
+                //     $covidBanner = trim(preg_replace('/<!-- [^\-]+? -->/', '', $covidBanner));
+                //     do {
+                //         $previous = $covidBanner;
+                //         $covidBanner = trim(preg_replace('/^<div[^>]*>(.+)<\/div>$/is', '$1', $covidBanner));
+                //     } while ($previous != $covidBanner);
+                //     if ($covidBanner = LoboAlert::parse($covidBanner, 'covid')) {
+                //         $alerts[] = $covidBanner;
+                //     }
+                // }
                 return $alerts;
             },
             60

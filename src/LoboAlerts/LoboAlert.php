@@ -22,8 +22,9 @@ class LoboAlert
     {
         $html = trim($html);
         $parsed = preg_match('/^<h[1-6].+?>(.+?)<\/h[1-6]>(.+)$/is', $html, $matches);
-        $title = trim(strip_tags(html_entity_decode($matches[1])), '\t\n\r\0\x0B ');
-        $content = trim($matches[2]);
+        if ($parsed === false) return null;
+        $title = trim(strip_tags(html_entity_decode(@$matches[1] ?? '')), '\t\n\r\0\x0B ');
+        $content = trim(@$matches[2] ?? '');
         return new LoboAlert(
             $title,
             $content,
