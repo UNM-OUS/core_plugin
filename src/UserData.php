@@ -10,6 +10,7 @@ use DigraphCMS\URL\URL;
 use DigraphCMS\Users\Group;
 use DigraphCMS\Users\User;
 use DigraphCMS\Users\Users;
+use Exception;
 use Spyc;
 
 class UserData
@@ -154,7 +155,8 @@ class UserData
             $data = CurlHelper::get(Config::get('unm.user_source'));
             if ($data === null) throw new \Exception('UNM user source failed to load: ' . CurlHelper::error());
             if ($data = Spyc::YAMLLoadString($data)) Cache::set('unm/userdata', $data, -1);
-            return $cache = $data ? $data : [];
+            else throw new Exception('UNM user source failed to parse');
+            return $cache = $data;
         }
         // otherwise just return the main cache value
         return $cache = Cache::get('unm/userdata');
