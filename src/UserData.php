@@ -154,7 +154,7 @@ class UserData
             $data = CurlHelper::get(Config::get('unm.user_source'));
             if ($data === null) throw new \Exception('UNM user source failed to load: ' . CurlHelper::error());
             if ($data = Spyc::YAMLLoadString($data)) Cache::set('unm/userdata', $data, -1);
-            return $cache = $data;
+            return $cache = $data ? $data : [];
         }
         // otherwise just return the main cache value
         return $cache = Cache::get('unm/userdata');
