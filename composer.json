@@ -1,5 +1,5 @@
 {
-    "name": "unmous/ous_digraph_module",
+    "name": "unmous/core_plugin",
     "type": "digraph-plugin",
     "require": {
         "jasig/phpcas": "^1.3",
