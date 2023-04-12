@@ -135,4 +135,9 @@ class ColumnSemesterFilteringHeader extends AbstractColumnFilteringHeader
     {
         return [];
     }
+
+    public function getLikeClauses(): array
+    {
+        return [];
+    }
 }
