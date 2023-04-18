@@ -91,6 +91,17 @@ themes:
           content: '"Gotham A","Gotham B","Gotham Pro","Gotham","Helvetica Neue",Helvetica,Seravek,"Gill Sans Nova",Ubuntu,Calibri,"DejaVu Sans",source-sans-pro,sans-serif'
           header: '"Vitesse A","Vitesse B","Vitesse",Rockwell,"Rockwell Nova","Roboto Slab","DejaVu Serif","Sitka Small",serif;'
           ui: "Seravek,'Gill Sans Nova',Ubuntu,Calibri,'DejaVu Sans',source-sans-pro,sans-serif"
+        unm:
+          cherry: "#ba0c2f"
+          turquoise: "#007a86"
+          silver: "#a7a8aa"
+          gray: "#63666a"
+          yellow: "#ffc600"
+          orange: "#ed8b00"
+          red: "#c05131"
+          brown: "#d6a461"
+          green: "#a8aa19"
+          purple: "#8a387c"
         theme:
           neutral: "#63666a"
           accent: "#a7a8aa"
