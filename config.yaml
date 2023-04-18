@@ -90,7 +90,7 @@ themes:
         font:
           content: '"Gotham A","Gotham B","Gotham Pro","Gotham","Helvetica Neue",Helvetica,Seravek,"Gill Sans Nova",Ubuntu,Calibri,"DejaVu Sans",source-sans-pro,sans-serif'
           header: '"Vitesse A","Vitesse B","Vitesse",Rockwell,"Rockwell Nova","Roboto Slab","DejaVu Serif","Sitka Small",serif;'
-          ui: 'system-ui,sans-serif'
+          ui: "Seravek,'Gill Sans Nova',Ubuntu,Calibri,'DejaVu Sans',source-sans-pro,sans-serif"
         theme:
           neutral: "#63666a"
           accent: "#a7a8aa"
