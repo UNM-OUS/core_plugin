@@ -59,7 +59,8 @@ class Semester
                 $this->month(),
                 $this->day()
             )
-        ))->setTime(0, 0, 0, 0);
+        )
+        )->setTime(0, 0, 0, 0);
     }
 
     public function end(): DateTime
@@ -67,24 +68,40 @@ class Semester
         return $this->next()->start()->modify('-1 second');
     }
 
+    /**
+     * @param int $limit
+     * @return Generator<int,Semester>
+     */
     public function allUpcoming(int $limit = null): Generator
     {
         $current = $this;
         while ($limit === null or $limit--) yield $current = $current->next();
     }
 
+    /**
+     * @param int $limit
+     * @return Generator<int,Semester>
+     */
     public function allUpcomingFull(int $limit = null): Generator
     {
         $current = $this;
         while ($limit === null or $limit--) yield $current = $current->nextFull();
     }
 
+    /**
+     * @param int $limit
+     * @return Generator<int,Semester>
+     */
     public function allPast(int $limit = null): Generator
     {
         $current = $this;
         while ($limit === null or $limit--) yield $current = $current->previous();
     }
 
+    /**
+     * @param int $limit
+     * @return Generator<int,Semester>
+     */
     public function allPastFull(int $limit = null): Generator
     {
         $current = $this;
