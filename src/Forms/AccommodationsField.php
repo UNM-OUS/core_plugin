@@ -7,6 +7,7 @@ use DigraphCMS\HTML\Forms\Field;
 use DigraphCMS\HTML\Forms\Fields\CheckboxField;
 use DigraphCMS\HTML\Forms\Fields\CheckboxListField;
 use DigraphCMS\HTML\Forms\FIELDSET;
+use DigraphCMS\HTML\Forms\FormWrapper;
 use DigraphCMS\HTML\Forms\Phone;
 use DigraphCMS\HTML\Forms\TEXTAREA;
 use DigraphCMS\UI\Templates;
@@ -58,6 +59,11 @@ class AccommodationsField extends FIELDSET
                 return null;
             });
         }
+    }
+
+    public function addForm(FormWrapper $form): static {
+        $form->addChild($this);
+        return $this;
     }
 
     /**
