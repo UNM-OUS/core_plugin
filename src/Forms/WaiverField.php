@@ -5,6 +5,7 @@ namespace DigraphCMS_Plugins\unmous\ous_digraph_module\Forms;
 use DigraphCMS\HTML\DIV;
 use DigraphCMS\HTML\Forms\Fields\CheckboxField;
 use DigraphCMS\HTML\Forms\FIELDSET;
+use DigraphCMS\HTML\Forms\FormWrapper;
 use DigraphCMS\UI\Templates;
 
 class WaiverField extends FIELDSET
@@ -21,6 +22,11 @@ class WaiverField extends FIELDSET
             ->setRequired(true);
         $this->addChild($this->waiverText);
         $this->addChild($this->checkbox);
+    }
+
+    public function addForm(FormWrapper $form): static {
+        $form->addChild($this);
+        return $this;
     }
 
     public function value(bool $useDefault = false)
