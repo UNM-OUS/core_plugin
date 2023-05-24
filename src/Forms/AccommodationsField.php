@@ -91,7 +91,7 @@ class AccommodationsField extends FIELDSET
                 'requested' => $this->requested->value($useDefault),
                 'needs' => $this->needs->value($useDefault),
                 'extra' => $this->extraRequest->value($useDefault),
-                'phone' => $this->phone->value($useDefault)
+                'phone' => $this->phone ? $this->phone->value($useDefault) : null
             ],
             function ($e) {
                 return !!$e;
