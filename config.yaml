@@ -5,7 +5,8 @@ unm:
     dsn: null
     user: null
     pass: null
-  semesters:
+  semester_prelaunch: "P7D" # give each semester a 7 day "buffer" where we switch before its official start
+  semesters: # known start dates of semesters
     2033:
       spring: [1, 17]
       summer: [6, 6]

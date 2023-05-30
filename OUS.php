@@ -32,6 +32,13 @@ class OUS extends AbstractPlugin
         UserData::data(true);
     }
 
+    public static function cronJob_maintenance_heavy()
+    {
+        SharedDB::query()->deleteFrom('person_info')
+            ->where('updated < ?', strtotime('2 years ago'))
+            ->execute();
+    }
+
     public static function onShortCode_semester(ShortcodeInterface $s): ?string
     {
         $semester = Semesters::current();
@@ -112,8 +119,8 @@ class OUS extends AbstractPlugin
         }
         $user->name(
             PersonInfo::getFullNameFor($netID)
-                ?? PersonInfo::getFirstNameFor($netID)
-                ?? $netID
+            ?? PersonInfo::getFirstNameFor($netID)
+            ?? $netID
         );
         $user->addEmail($netID . '@unm.edu', 'Main campus NetID', true);
     }

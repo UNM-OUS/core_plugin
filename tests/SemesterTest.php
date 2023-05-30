@@ -271,29 +271,29 @@ class SemesterTest extends TestCase
         Config::set('unm.semesters.1801', null);
         $spring = new Semester(1800, 'spring');
         $this->assertEquals(
-            (new DateTime())->setDate(1800, 1, 15)->setTime(0, 0, 0, 0),
+            (new DateTime())->setDate(1800, 1, 8)->setTime(0, 0, 0, 0),
             $spring->start()
         );
         $this->assertEquals(
-            (new DateTime())->setDate(1800, 6, 1)->setTime(0, 0, 0, 0)->modify('-1 second'),
+            (new DateTime())->setDate(1800, 5, 25)->setTime(0, 0, 0, 0)->modify('-1 second'),
             $spring->end()
         );
         $summer = new Semester(1800, 'summer');
         $this->assertEquals(
-            (new DateTime())->setDate(1800, 6, 1)->setTime(0, 0, 0, 0),
+            (new DateTime())->setDate(1800, 5, 25)->setTime(0, 0, 0, 0),
             $summer->start()
         );
         $this->assertEquals(
-            (new DateTime())->setDate(1800, 8, 15)->setTime(0, 0, 0, 0)->modify('-1 second'),
+            (new DateTime())->setDate(1800, 8, 8)->setTime(0, 0, 0, 0)->modify('-1 second'),
             $summer->end()
         );
         $fall = new Semester(1800, 'fall');
         $this->assertEquals(
-            (new DateTime())->setDate(1800, 8, 15)->setTime(0, 0, 0, 0),
+            (new DateTime())->setDate(1800, 8, 8)->setTime(0, 0, 0, 0),
             $fall->start()
         );
         $this->assertEquals(
-            (new DateTime())->setDate(1801, 1, 15)->setTime(0, 0, 0, 0)->modify('-1 second'),
+            (new DateTime())->setDate(1801, 1, 8)->setTime(0, 0, 0, 0)->modify('-1 second'),
             $fall->end()
         );
     }

@@ -2,6 +2,7 @@
 
 namespace DigraphCMS_Plugins\unmous\ous_digraph_module;
 
+use DateInterval;
 use DateTime;
 use DigraphCMS\Config;
 use DigraphCMS\UI\Format;
@@ -54,10 +55,11 @@ class Semesters
      */
     public static function fromDate($date): Semester
     {
-        $date = Format::parseDate($date)->getTimestamp();
-        $year = intval(date('Y', $date));
-        $month = intval(date('n', $date));
-        $day = intval(date('j', $date));
+        $date = Format::parseDate($date);
+        $date->add(static::prelaunchInterval());
+        $year = intval($date->format('Y'));
+        $month = intval($date->format('n'));
+        $day = intval($date->format('j'));
         if ($month < static::spring($year)[0] || ($month == static::spring($year)[0] && $day < static::spring($year)[1])) {
             // it is still the fall of the previous calendar year
             $year--;
@@ -73,6 +75,13 @@ class Semesters
             $semester = 'Fall';
         }
         return new Semester($year, $semester);
+    }
+
+    public static function prelaunchInterval(): DateInterval
+    {
+        static $interval;
+        return $interval
+            ?? $interval = new DateInterval(Config::get('unm.semester_prelaunch') ?? "P7D");
     }
 
     public static function spring($year): array

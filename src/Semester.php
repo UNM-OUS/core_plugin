@@ -2,6 +2,7 @@
 
 namespace DigraphCMS_Plugins\unmous\ous_digraph_module;
 
+use DateInterval;
 use DateTime;
 use DigraphCMS\Config;
 use Generator;
@@ -51,16 +52,19 @@ class Semester
 
     public function start(): DateTime
     {
-        return (DateTime::createFromFormat(
-            'Y-n-j',
-            sprintf(
-                '%s-%s-%s',
-                $this->year,
-                $this->month(),
-                $this->day()
+        return (
+            DateTime::createFromFormat(
+                'Y-n-j',
+                sprintf(
+                    '%s-%s-%s',
+                    $this->year,
+                    $this->month(),
+                    $this->day()
+                )
             )
         )
-        )->setTime(0, 0, 0, 0);
+            ->sub(Semesters::prelaunchInterval())
+            ->setTime(0, 0, 0, 0);
     }
 
     public function end(): DateTime
