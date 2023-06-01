@@ -108,8 +108,8 @@ themes:
           accent: "#a7a8aa"
           highlight: "#ba0c2f"
         cue:
-          information: "#be60ae"
-          safe: "#ced11f"
+          information: "#2ee0bf"
+          safe: "#aad11f"
           warning: "#ffc600"
           danger: "#ff990a"
       dark:
