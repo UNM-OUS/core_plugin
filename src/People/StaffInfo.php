@@ -2,6 +2,7 @@
 
 namespace DigraphCMS_Plugins\unmous\ous_digraph_module\People;
 
+use DigraphCMS\Config;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedDB;
 
 /**
@@ -37,5 +38,15 @@ class StaffInfo
         public readonly string $department,
         public readonly string $title
     ) {
+    }
+
+    public function hsc(): bool
+    {
+        return in_array($this->org, Config::get('unm.hsc_orgs'));
+    }
+
+    public function branch(): bool
+    {
+        return in_array($this->org, Config::get('unm.branch_orgs'));
     }
 }

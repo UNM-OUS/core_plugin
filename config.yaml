@@ -5,6 +5,21 @@ unm:
     dsn: null
     user: null
     pass: null
+  hsc_orgs:
+    - School of Medicine
+    - HS Library and Informatics Center
+    - College of Nursing
+    - College of Pharmacy
+    - College of Population Health
+    - VP HSC Administration
+    - HSC VP Research
+    - UNM HSC West Campus
+    - UNM Medical Group
+  branch_orgs:
+    - Gallup Branch
+    - Los Alamos Branch
+    - Taos Branch
+    - Valencia County Branch
   semester_prelaunch: P7D # give each semester a 7 day "buffer" where we switch before its official start
   semesters: # known start dates of semesters
     2033:

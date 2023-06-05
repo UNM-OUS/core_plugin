@@ -2,6 +2,8 @@
 
 namespace DigraphCMS_Plugins\unmous\ous_digraph_module\People;
 
+use DigraphCMS\Config;
+
 /**
  * Represents the information known about a single person's faculty appointment.
  */
@@ -38,5 +40,15 @@ class FacultyInfo
         public readonly string $title,
         public readonly bool $voting
     ) {
+    }
+
+    public function hsc(): bool
+    {
+        return in_array($this->org, Config::get('unm.hsc_orgs'));
+    }
+
+    public function branch(): bool
+    {
+        return in_array($this->org, Config::get('unm.branch_orgs'));
     }
 }
