@@ -63,7 +63,7 @@ if ($form->ready()) {
             $college = StringFixer::organization($row['org level 3 desc']);
             $department = StringFixer::department($row['org desc']);
             $title = StringFixer::jobTitle($row['job title']);
-            $academicTitle = StringFixer::academicTitle($row['academic title']);
+            $academicTitle = StringFixer::academicTitle($row['academic title']) ?? $title;
             $netID = strtolower($row['netid']);
             $email = strtolower($row['email']);
             // load name, allowing overrides from PersonInfo
