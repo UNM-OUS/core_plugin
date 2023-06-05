@@ -41,7 +41,8 @@ class StringFixer
 
     public static function runFixers(?string $input, array $categories): ?string
     {
-        $input = trim($input);
+        $input = trim($input ?? '');
+        $input = preg_replace('/ +/', ' ', $input);
         if (!$input) return null;
         foreach ($categories as $c) {
             if ($output = static::run($input, $c)) return $output;
