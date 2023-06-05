@@ -10,6 +10,7 @@ use DigraphCMS\URL\URL;
 use DigraphCMS\Users\Group;
 use DigraphCMS\Users\User;
 use DigraphCMS\Users\Users;
+use DigraphCMS_Plugins\unmous\ous_digraph_module\People\FacultyInfo;
 use Exception;
 use Spyc;
 
