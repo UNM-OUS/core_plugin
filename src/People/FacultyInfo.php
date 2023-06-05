@@ -22,6 +22,7 @@ class FacultyInfo
                 $result['org'],
                 $result['department'],
                 $result['title'],
+                $result['academic_title'],
                 $voting_only
                     ? true
                     : boolval(VotingFaculty::select()->where('netid', $netId)->count())
@@ -38,6 +39,7 @@ class FacultyInfo
         public readonly string $org,
         public readonly string $department,
         public readonly string $title,
+        public readonly string $academicTitle,
         public readonly bool $voting
     ) {
     }

@@ -16,6 +16,7 @@ $table = new PaginatedTable(
             $row['org'],
             $row['department'],
             $row['title'],
+            $row['academic_title'],
             $row['netid'],
             $row['email']
         ];
@@ -26,6 +27,7 @@ $table = new PaginatedTable(
         new ColumnStringFilteringHeader('School/college', 'org'),
         new ColumnStringFilteringHeader('Department', 'department'),
         new ColumnStringFilteringHeader('Title', 'title'),
+        new ColumnStringFilteringHeader('Academic title', 'academic_title'),
         new ColumnStringFilteringHeader('NetID', 'netid'),
         new ColumnStringFilteringHeader('Email', 'email'),
     ]
@@ -40,6 +42,7 @@ $table->download(
             $row['org'],
             $row['department'],
             $row['title'],
+            $row['academic_title'],
             $row['netid'],
             $row['email']
         ];
@@ -50,6 +53,7 @@ $table->download(
         'Level 3 org',
         'Department',
         'Title',
+        'Academic title',
         'NetID',
         'Email',
     ]

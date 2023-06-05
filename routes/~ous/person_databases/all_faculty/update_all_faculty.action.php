@@ -10,6 +10,7 @@
     <li>Org Level 3 Desc</li>
     <li>Org Desc</li>
     <li>Job Title</li>
+    <li>Academic Title</li>
 </ul>
 <?php
 
@@ -62,6 +63,7 @@ if ($form->ready()) {
             $college = StringFixer::organization($row['org level 3 desc']);
             $department = StringFixer::department($row['org desc']);
             $title = StringFixer::jobTitle($row['job title']);
+            $academicTitle = StringFixer::academicTitle($row['academic title']);
             $netID = strtolower($row['netid']);
             $email = strtolower($row['email']);
             // load name, allowing overrides from PersonInfo
@@ -85,6 +87,7 @@ if ($form->ready()) {
                         'org' => $college,
                         'department' => $department,
                         'title' => $title,
+                        'academic_title' => $academicTitle,
                     ]
                 )->execute();
             // update personinfo
@@ -100,6 +103,7 @@ if ($form->ready()) {
                             'org' => $college,
                             'department' => $department,
                             'title' => $title,
+                            'academic_title' => $academicTitle,
                         ],
                         'faculty' => [
                             'semester' => Semesters::current()->intVal(),
