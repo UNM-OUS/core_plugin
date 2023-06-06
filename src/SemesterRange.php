@@ -4,6 +4,7 @@ namespace DigraphCMS_Plugins\unmous\ous_digraph_module;
 
 class SemesterRange
 {
+    /** @var Semester|null */
     protected $start, $end;
 
     /**

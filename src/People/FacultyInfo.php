@@ -9,7 +9,7 @@ use DigraphCMS\Config;
  */
 class FacultyInfo
 {
-    public static function search(string|null $netId, bool $voting_only = false): ?static
+    public static function search(string|null $netId, bool $voting_only = false): ?FacultyInfo
     {
         $query = $voting_only ? VotingFaculty::select() : AllFaculty::select();
         $query->where('netid', $netId);

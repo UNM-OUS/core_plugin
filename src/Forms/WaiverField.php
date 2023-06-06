@@ -10,7 +10,10 @@ use DigraphCMS\UI\Templates;
 
 class WaiverField extends FIELDSET
 {
-    protected $checkbox, $waiverText;
+    /** @var CheckboxField */
+    protected $checkbox;
+    /** @var DIV */
+    protected $waiverText;
 
     public function __construct(string $label = 'Event waiver')
     {
@@ -24,19 +27,20 @@ class WaiverField extends FIELDSET
         $this->addChild($this->checkbox);
     }
 
-    public function addForm(FormWrapper $form): static {
+    public function addForm(FormWrapper $form): static
+    {
         $form->addChild($this);
         return $this;
     }
 
-    public function value(bool $useDefault = false)
+    public function value(bool $useDefault = false): bool|null
     {
-        return $this->checkbox->value($useDefault);
+        return $this->checkbox->input()->value($useDefault);
     }
 
-    public function default()
+    public function default(): bool|null
     {
-        return $this->checkbox->default();
+        return $this->checkbox->input()->default();
     }
 
     /**

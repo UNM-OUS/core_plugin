@@ -8,6 +8,7 @@ use DigraphCMS\ExceptionLog;
 
 class LoboAlerts
 {
+    /** @return LoboAlert[] */
     public static function alerts(): array
     {
         return Cache::get(
@@ -45,7 +46,7 @@ class LoboAlerts
                 // }
                 return $alerts;
             },
-            60
+            300
         );
     }
 }

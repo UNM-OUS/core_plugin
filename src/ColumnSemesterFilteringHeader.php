@@ -4,15 +4,18 @@ namespace DigraphCMS_Plugins\unmous\ous_digraph_module;
 
 use DigraphCMS\DB\AbstractMappedSelect;
 use DigraphCMS\HTML\Forms\Field;
+use DigraphCMS\HTML\Forms\FormWrapper;
 use DigraphCMS\HTML\Forms\SELECT;
 use DigraphCMS\HTTP\RedirectException;
-use DigraphCMS\UI\Format;
 use DigraphCMS\UI\Pagination\AbstractColumnFilteringHeader;
 use Envms\FluentPDO\Queries\Select as QueriesSelect;
 
 class ColumnSemesterFilteringHeader extends AbstractColumnFilteringHeader
 {
-    protected $summers, $startSemester, $endSemester;
+    /** @var bool */
+    protected $summers;
+    /** @var Semester */
+    protected $startSemester, $endSemester;
 
     /**
      * $offsetStart and $offsetEnd are ignored if a query can be retrieved from
@@ -36,6 +39,9 @@ class ColumnSemesterFilteringHeader extends AbstractColumnFilteringHeader
         parent::__construct($label, $column);
     }
 
+    /**
+     * @return FormWrapper
+     */
     public function toolbox()
     {
         $form = $this->form();
@@ -48,13 +54,17 @@ class ColumnSemesterFilteringHeader extends AbstractColumnFilteringHeader
             $lowest = clone $query;
             $lowest = @$lowest->limit(1)->offset(0)
                 ->select($this->column() . ' AS semfilter_column', true)
-                ->order(null)->order($this->column() . ' ASC')
+                // @phpstan-ignore-next-line
+                ->order(null)
+                ->order($this->column() . ' ASC')
                 ->fetchAll()[0]['semfilter_column'];
             $this->startSemester = $lowest ? Semester::fromCode($lowest) : $this->startSemester;
             $highest = clone $query;
             $highest = @$highest->limit(1)->offset(0)
                 ->select($this->column() . ' AS semfilter_column', true)
-                ->order(null)->order($this->column() . ' DESC')
+                // @phpstan-ignore-next-line
+                ->order(null)
+                ->order($this->column() . ' DESC')
                 ->fetchAll()[0]['semfilter_column'];
             $this->endSemester = $highest ? Semester::fromCode($highest) : $this->endSemester;
         }
@@ -105,6 +115,9 @@ class ColumnSemesterFilteringHeader extends AbstractColumnFilteringHeader
         return $form;
     }
 
+    /**
+     * @return array<mixed,string>
+     */
     public function getOrderClauses(): array
     {
         switch (@$this->config()['sort']) {
@@ -123,6 +136,9 @@ class ColumnSemesterFilteringHeader extends AbstractColumnFilteringHeader
         }
     }
 
+    /**
+     * @return array<mixed,array<int,string|mixed[]>>
+     */
     public function getWhereClauses(): array
     {
         $clauses = [];
@@ -131,11 +147,17 @@ class ColumnSemesterFilteringHeader extends AbstractColumnFilteringHeader
         return $clauses;
     }
 
+    /**
+     * @return array<mixed,string>
+     */
     public function getJoinClauses(): array
     {
         return [];
     }
 
+    /**
+     * @return array<mixed,array<int,string|mixed[]>>
+     */
     public function getLikeClauses(): array
     {
         return [];

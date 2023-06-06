@@ -2,11 +2,6 @@
 
 namespace DigraphCMS_Plugins\unmous\ous_digraph_module\LoboAlerts;
 
-use DigraphCMS\Cache\Cache;
-use DigraphCMS\Curl\CurlHelper;
-use DigraphCMS\Events\Dispatcher;
-use DigraphCMS\UI\Templates;
-
 class LoboAlert
 {
     /** @var string */

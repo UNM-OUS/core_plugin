@@ -14,7 +14,16 @@ use DigraphCMS\UI\Templates;
 
 class AccommodationsField extends FIELDSET
 {
-    protected $requested, $blurb, $needs, $extraRequest, $phone;
+    /** @var CheckboxField */
+    protected $requested;
+    /** @var DIV|null */
+    protected $blurb;
+    /** @var CheckboxListField */
+    protected $needs;
+    /** @var Field */
+    protected $extraRequest;
+    /** @var Field|null */
+    protected $phone;
 
     public function __construct(string $label = null, bool $phone = false, string $blurbTemplate = null)
     {
@@ -37,8 +46,8 @@ class AccommodationsField extends FIELDSET
         $this->extraRequest = new Field('Please specify any accommodations you require', new TEXTAREA);
         $this->phone = $phone
             ? (new Field('Phone number', new Phone))
-            ->addClass('accommodations-field__phone')
-            ->addTip('Used to contact you if necessary to coordinate accommodations')
+                ->addClass('accommodations-field__phone')
+                ->addTip('Used to contact you if necessary to coordinate accommodations')
             : null;
         // set up classes
         $this->requested->addClass('accommodations-field__requested');
@@ -50,7 +59,7 @@ class AccommodationsField extends FIELDSET
             return null;
         });
         $this->extraRequest->addValidator(function () {
-            if ($this->requested->value() && in_array('other', $this->needs->value()) && !$this->extraRequest->value()) return "Please indicate the accommodations you require";
+            if ($this->requested->value() && in_array('other', $this->needs->input()->value()) && !$this->extraRequest->value()) return "Please indicate the accommodations you require";
             return null;
         });
         if ($this->phone) {
@@ -61,7 +70,8 @@ class AccommodationsField extends FIELDSET
         }
     }
 
-    public function addForm(FormWrapper $form): static {
+    public function addForm(FormWrapper $form): static
+    {
         $form->addChild($this);
         return $this;
     }
@@ -70,7 +80,7 @@ class AccommodationsField extends FIELDSET
      * Set the default values using an array the same shape as what is returned
      * by value()
      *
-     * @param array|null $value
+     * @param array<string,mixed>|null $value
      * @return $this
      */
     public function setDefault(array $value = null)
@@ -83,7 +93,10 @@ class AccommodationsField extends FIELDSET
         return $this;
     }
 
-    public function value($useDefault = false): ?array
+    /**
+     * @return array<string,mixed>|null
+     */
+    public function value(bool $useDefault = false): ?array
     {
         if (!$this->requested->value($useDefault)) return null;
         return array_filter(
@@ -99,6 +112,9 @@ class AccommodationsField extends FIELDSET
         );
     }
 
+    /**
+     * @return string[]
+     */
     public function classes(): array
     {
         return array_merge(
@@ -109,6 +125,9 @@ class AccommodationsField extends FIELDSET
         );
     }
 
+    /**
+     * @return mixed[]
+     */
     public function children(): array
     {
         return array_merge(

@@ -39,6 +39,10 @@ class StringFixer
         return static::runFixers($name, ['major']);
     }
 
+    /**
+     * @param string|null $input
+     * @param string[] $categories
+     */
     public static function runFixers(?string $input, array $categories): ?string
     {
         $input = trim($input ?? '');

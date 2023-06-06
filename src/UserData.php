@@ -10,12 +10,12 @@ use DigraphCMS\URL\URL;
 use DigraphCMS\Users\Group;
 use DigraphCMS\Users\User;
 use DigraphCMS\Users\Users;
-use DigraphCMS_Plugins\unmous\ous_digraph_module\People\FacultyInfo;
 use Exception;
 use Spyc;
 
 class UserData
 {
+    /** @return Group[] */
     public static function userGroups(string $userID): array
     {
         $groups = [];
@@ -97,6 +97,7 @@ class UserData
         return $group ?? $group = new Group('staff', 'UNM Staff', new URL('/~ous/person_databases/all_staff/'));
     }
 
+    /** @return string[] */
     public static function netIDs(string $userID): array
     {
         static $cache = [];
@@ -112,6 +113,7 @@ class UserData
         else return null;
     }
 
+    /** @return string[] */
     protected static function userNetIDs(string $userID): array
     {
         $query = DB::query()->from('user_source')
@@ -125,8 +127,12 @@ class UserData
         );
     }
 
+    /**
+     * @return string[]
+     */
     public static function netIDGroups(string $netID): array
     {
+        // @phpstan-ignore-next-line
         return @static::data()[$netID]['groups'] ?? [];
     }
 
@@ -135,18 +141,26 @@ class UserData
         return @static::data()[$netID] !== null;
     }
 
-    public static function data($forceRefresh = false): array
+    /**
+     * @return array<string,array<string,string[]>>
+     */
+    public static function data(bool $forceRefresh = false): array
     {
         // return merged/filtered data from two sources
-        return array_filter(array_merge(
-            // get data from central config file
-            static::getData($forceRefresh),
-            // get data from local config
-            Config::get('unm.known_netids')
-        ));
+        return array_filter(
+            array_merge(
+                // get data from central config file
+                static::getData($forceRefresh),
+                // get data from local config
+                Config::get('unm.known_netids')
+            )
+        );
     }
 
-    public static function getData($forceRefresh = false): array
+    /**
+     * @return array<string,array<string,string[]>>
+     */
+    public static function getData(bool $forceRefresh = false): array
     {
         // use a static cache variable
         static $cache;

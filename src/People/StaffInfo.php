@@ -10,7 +10,7 @@ use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedDB;
  */
 class StaffInfo
 {
-    public static function search(string|null $netId): ?static
+    public static function search(string|null $netId): ?StaffInfo
     {
         $query = SharedDB::query()
             ->from('staff')

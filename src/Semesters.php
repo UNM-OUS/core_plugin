@@ -84,19 +84,28 @@ class Semesters
             ?? $interval = new DateInterval(Config::get('unm.semester_prelaunch') ?? "P7D");
     }
 
-    public static function spring($year): array
+    /**
+     * @return int[]
+     */
+    public static function spring(int|string $year): array
     {
         return Config::get('unm.semesters.' . $year . '.spring')
             ?? static::SPRING_DEFAULT;
     }
 
-    public static function summer($year): array
+    /**
+     * @return int[]
+     */
+    public static function summer(int|string $year): array
     {
         return Config::get('unm.semesters.' . $year . '.summer')
             ?? static::SUMMER_DEFAULT;
     }
 
-    public static function fall($year): array
+    /**
+     * @return int[]
+     */
+    public static function fall(int|string $year): array
     {
         return Config::get('unm.semesters.' . $year . '.fall')
             ?? static::FALL_DEFAULT;

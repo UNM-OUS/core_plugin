@@ -15,17 +15,17 @@ use DigraphCMS_Plugins\unmous\ous_digraph_module\Semester;
  */
 class SemesterField extends Field
 {
-    public function __construct(string $label, $startOffset = 0, $count = 10, $summers = false)
+    public function __construct(string $label, int $startOffset = 0, int $count = 10, bool $summers = false)
     {
         if ($summers) $first = Semesters::current();
         else $first = Semesters::latestFull();
         // use startOffset to move starting point forward/backward as needed
         if ($startOffset < 0) do {
-            $first = $summers ? $first->previous() : $first->previousFull();
-        } while (++$startOffset);
+                $first = $summers ? $first->previous() : $first->previousFull();
+            } while (++$startOffset);
         if ($startOffset > 0) do {
-            $first = $summers ? $first->next() : $first->nextFull();
-        } while (--$startOffset);
+                $first = $summers ? $first->next() : $first->nextFull();
+            } while (--$startOffset);
         // set up field with options
         $field = new SELECT();
         $field->setOption($first->intVal(), $first->__toString());
@@ -35,14 +35,14 @@ class SemesterField extends Field
         parent::__construct($label, $field);
     }
 
-    public function value($useDefault = false)
+    public function value(bool $useDefault = false): Semester|null
     {
         return ($value = parent::value($useDefault))
             ? Semester::fromCode($value)
             : null;
     }
 
-    public function default()
+    public function default(): Semester|null
     {
         return ($value = parent::default())
             ? Semester::fromCode($value)

@@ -7,9 +7,14 @@ use Flatrr\FlatArray;
 
 class PersonInfo extends FlatArray
 {
+    /** @var string */
     protected $identifier;
 
-    public static function setFor(?string $identifier, array $data)
+    /**
+     * @param string|null $identifier
+     * @param array<string,mixed> $data
+     */
+    public static function setFor(?string $identifier, array $data): void
     {
         if ($data && $person = static::fetch($identifier)) {
             $person->merge($data, null, true);
@@ -17,7 +22,11 @@ class PersonInfo extends FlatArray
         }
     }
 
-    public static function getFor(?string $identifier, $key)
+    /**
+     * @param string|null $identifier
+     * @param string|string[] $key if an array is given, the first matching key found will be returned
+     */
+    public static function getFor(?string $identifier, string|array $key): mixed
     {
         if ($person = static::fetch($identifier)) {
             if (!is_array($key)) $key = [$key];
@@ -64,6 +73,10 @@ class PersonInfo extends FlatArray
         else return new PersonInfo($identifier);
     }
 
+    /**
+     * @param string|null $identifier
+     * @param array<string,mixed> $data
+     */
     protected function __construct(?string $identifier, array $data = [])
     {
         $this->identifier = $identifier;
@@ -72,7 +85,7 @@ class PersonInfo extends FlatArray
 
     public function fullName(): ?string
     {
-        if ($this['fullname']) $output =  $this['fullname'];
+        if ($this['fullname']) $output = $this['fullname'];
         elseif ($this['firstname'] && $this['lastname']) $output = $this['firstname'] . ' ' . $this['lastname'];
         else $output = null;
         if ($output) $output = trim($output);

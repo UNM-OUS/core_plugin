@@ -26,7 +26,7 @@ class Semester
     {
         $string = trim($string);
         if (preg_match('/^(spring|summer|fall) ([0-9]{4})$/i', $string, $m)) {
-            return new Semester($m[2], $m[1]);
+            return new Semester(intval($m[2]), $m[1]);
         } else return null;
     }
 
@@ -39,10 +39,10 @@ class Semester
         return Semesters::fromDate($date);
     }
 
-    public static function fromCode($code): ?Semester
+    public static function fromCode(string|int $code): ?Semester
     {
         $code = intval($code);
-        $year = floor($code / 100);
+        $year = intval(floor($code / 100));
         if (!$year) return null;
         $semester = @array_flip(Semesters::SEMESTERS)[$code - $year * 100];
         if (!$semester) return null; // @phpstan-ignore-line

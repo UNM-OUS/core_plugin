@@ -24,8 +24,8 @@ class NetIDInput extends INPUT
         });
     }
 
-    public function value($useDefault = false)
+    public function value(bool $useDefault = false): string
     {
-        return strtolower(parent::value($useDefault) ?? '');
+        return preg_replace('/@unm\.edu$/', '', strtolower(parent::value($useDefault) ?? ''));
     }
 }

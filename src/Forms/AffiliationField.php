@@ -19,8 +19,11 @@ use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedDB;
 
 class AffiliationField extends FIELDSET
 {
+    /** @var string */
     protected $for;
+    /** @var bool */
     protected $required = false;
+    /** @var DIV|null */
     protected $interface;
 
     public function __construct(?string $label, string $for)
@@ -31,9 +34,9 @@ class AffiliationField extends FIELDSET
     }
 
     /**
-     * Undocumented function
+     * Setting default does nothing
      *
-     * @param array|null $data
+     * @param array<mixed,mixed>|null $data
      * @return $this
      */
     public function setDefault(array $data = null)
@@ -73,6 +76,9 @@ class AffiliationField extends FIELDSET
         }
     }
 
+    /**
+     * @return mixed[]
+     */
     public function children(): array
     {
         return array_merge(
@@ -207,7 +213,7 @@ class AffiliationField extends FIELDSET
         ));
     }
 
-    public function value()
+    public function value(): mixed
     {
         return PersonInfo::getFor($this->for, 'affiliation');
     }
