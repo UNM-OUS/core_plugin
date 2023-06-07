@@ -6,7 +6,10 @@ class StringFixer
 {
     public static function academicTitle(?string $name): ?string
     {
-        return static::runFixers($name, ['academic_title']);
+        $name = trim($name ?? '');
+        $name = preg_replace('/ +/', ' ', $name);
+        if ($name) return $name;
+        else return null;
     }
 
     public static function jobTitle(?string $name): ?string
