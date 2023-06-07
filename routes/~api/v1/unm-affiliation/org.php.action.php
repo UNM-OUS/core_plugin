@@ -27,6 +27,7 @@ $otherExists = false;
 $queryExists = false;
 
 $q = strtolower(Context::arg('query'));
+// @phpstan-ignore-next-line
 $results = array_filter($query->fetchAll(), function (array $row) use ($q): bool {
     return str_contains(strtolower($row['org']), $q);
 });

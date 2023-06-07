@@ -68,6 +68,7 @@ if ($form->ready()) {
             if ($lastNameFirst) {
                 $name = preg_replace('/^(.+?), (.+)$/', '$2 $1', $name);
             }
+            /** @var string[] */
             $name = preg_split('/ +/', $name);
             $lastName = array_pop($name);
             $lastName = PersonInfo::getLastNameFor($netID) ? PersonInfo::getLastNameFor($netID) : $lastName;
