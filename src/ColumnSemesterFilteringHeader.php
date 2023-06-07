@@ -52,6 +52,7 @@ class ColumnSemesterFilteringHeader extends AbstractColumnFilteringHeader
         if ($query instanceof QueriesSelect) {
             $query->asObject(false);
             $lowest = clone $query;
+            // @phpstan-ignore-next-line
             $lowest = @$lowest->limit(1)->offset(0)
                 ->select($this->column() . ' AS semfilter_column', true)
                 // @phpstan-ignore-next-line
@@ -60,6 +61,7 @@ class ColumnSemesterFilteringHeader extends AbstractColumnFilteringHeader
                 ->fetchAll()[0]['semfilter_column'];
             $this->startSemester = $lowest ? Semester::fromCode($lowest) : $this->startSemester;
             $highest = clone $query;
+            // @phpstan-ignore-next-line
             $highest = @$highest->limit(1)->offset(0)
                 ->select($this->column() . ' AS semfilter_column', true)
                 // @phpstan-ignore-next-line

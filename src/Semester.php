@@ -2,7 +2,6 @@
 
 namespace DigraphCMS_Plugins\unmous\ous_digraph_module;
 
-use DateInterval;
 use DateTime;
 use DigraphCMS\Config;
 use Generator;
@@ -52,6 +51,7 @@ class Semester
 
     public function start(): DateTime
     {
+        // @phpstan-ignore-next-line
         return (
             DateTime::createFromFormat(
                 'Y-n-j',

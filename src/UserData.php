@@ -15,7 +15,7 @@ use Spyc;
 
 class UserData
 {
-    /** @return Group[] */
+    /** @return array<int,Group|string> */
     public static function userGroups(string $userID): array
     {
         $groups = [];
@@ -123,6 +123,7 @@ class UserData
             function ($row) {
                 return $row['provider_id'];
             },
+            // @phpstan-ignore-next-line
             $query->fetchAll()
         );
     }
