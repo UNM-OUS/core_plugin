@@ -50,7 +50,7 @@ class FacultyRanks {
      * academic_title entry.
      */
     const RANK_REGEX = [
-        '/(clin(ician|cian|ical|ican)(\-| )ed(ucator)?( ?\- ?|\, ?| +)|visiting |adjunct |clinical |research )*(assist(ant)? |asst\.? |assoc(iate)? |distinguished )?prof(ess?or)?(of|in)?( |\,|\-|$)/',
+        '/(clin(ician|cian|ical|ican)(\-| )ed(ucator)?( ?\- ?|\, ?| +)|visiting |adjunct |clinical |research )*(assist(ant)? |asst\.? |assoc(iate)? |distinguished )?prof(ess?or|ession)?(of|in)?( |\,|\-|$)/',
         '/(clin(ician|cian|ical|ican)(\-| )ed(ucator)?( ?\- ?|\, ?| +)|visiting |adjunct |clinical )*(assist(ant)? |asst\.? )?instructor( |\,|\-|$)/',
         '/(adjunct |visiting |research )*(senior |principal )*lecturerr?( i{1,3}| l{1,3}| 1| 2| 3)?( |\,|\-|$)/',
         '/term teaching faculty/',
@@ -73,6 +73,7 @@ class FacultyRanks {
         'Profesor' => 'Professor',
         'Professorof' => 'Professor',
         'Professorin' => 'Professor',
+        'Profession' => 'Professor',
         '1' => 'I',
         '2' => 'II',
         '3' => 'III',

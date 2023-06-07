@@ -5,7 +5,7 @@ namespace DigraphCMS_Plugins\unmous\ous_digraph_module\People;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class FacultyInfoTest extends TestCase
+class FacultyRanksTest extends TestCase
 {
     #[DataProvider('parseRankFromTitleDataProvider')]
     public function testParseRankFromTitle(string $title, string|null $expected_rank): void
@@ -29,6 +29,7 @@ class FacultyInfoTest extends TestCase
     protected function parseRankFromTitleDataProvider(): array
     {
         return [
+            ["Profession of Sociology", "Professor"],
             ["Assist Professor of Internal Medicine", "Assistant Professor"],
             ["Assistant Professor of Internal Medicine", "Assistant Professor"],
             ["Assistant director of bands", null],
