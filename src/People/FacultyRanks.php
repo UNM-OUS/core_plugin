@@ -82,6 +82,14 @@ class FacultyRanks {
         'Scholor' => 'Scholar',
     ];
 
+    public static function cleanAcademicTitle(?string $name): ?string
+    {
+        $name = trim($name ?? '');
+        $name = preg_replace('/ +/', ' ', $name);
+        if ($name) return $name;
+        else return null;
+    }
+
     public static function commonRankFromTitle(string $title): ?string
     {
         $title = trim(strtolower($title));

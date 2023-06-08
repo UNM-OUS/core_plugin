@@ -4,14 +4,6 @@ namespace DigraphCMS_Plugins\unmous\ous_digraph_module;
 
 class StringFixer
 {
-    public static function academicTitle(?string $name): ?string
-    {
-        $name = trim($name ?? '');
-        $name = preg_replace('/ +/', ' ', $name);
-        if ($name) return $name;
-        else return null;
-    }
-
     public static function jobTitle(?string $name): ?string
     {
         return static::runFixers($name, ['job']);

@@ -23,6 +23,7 @@ use DigraphCMS\HTML\Forms\FormWrapper;
 use DigraphCMS\HTML\Forms\UploadSingle;
 use DigraphCMS\HTTP\RedirectException;
 use DigraphCMS\URL\URL;
+use DigraphCMS_Plugins\unmous\ous_digraph_module\People\FacultyRanks;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\PersonInfo;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\Semesters;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedDB;
@@ -63,7 +64,7 @@ if ($form->ready()) {
             $college = StringFixer::organization($row['org level 3 desc']);
             $department = StringFixer::department($row['org desc']);
             $title = StringFixer::jobTitle($row['job title']);
-            $academicTitle = StringFixer::academicTitle($row['academic title']) ?? '';
+            $academicTitle = FacultyRanks::cleanAcademicTitle($row['academic title']) ?? '';
             $netID = strtolower($row['netid']);
             $email = strtolower($row['email']);
             // load name, allowing overrides from PersonInfo
