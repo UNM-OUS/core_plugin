@@ -54,19 +54,19 @@ class ColumnSemesterFilteringHeader extends AbstractColumnFilteringHeader
             $lowest = clone $query;
             // @phpstan-ignore-next-line
             $lowest = @$lowest->limit(1)->offset(0)
-                ->select($this->column() . ' AS semfilter_column', true)
+                ->select(AbstractMappedSelect::parseJsonRefs($this->column()) . ' AS semfilter_column', true)
                 // @phpstan-ignore-next-line
                 ->order(null)
-                ->order($this->column() . ' ASC')
+                ->order(AbstractMappedSelect::parseJsonRefs($this->column()) . ' ASC')
                 ->fetchAll()[0]['semfilter_column'];
             $this->startSemester = $lowest ? Semester::fromCode($lowest) : $this->startSemester;
             $highest = clone $query;
             // @phpstan-ignore-next-line
             $highest = @$highest->limit(1)->offset(0)
-                ->select($this->column() . ' AS semfilter_column', true)
+                ->select(AbstractMappedSelect::parseJsonRefs($this->column()) . ' AS semfilter_column', true)
                 // @phpstan-ignore-next-line
                 ->order(null)
-                ->order($this->column() . ' DESC')
+                ->order(AbstractMappedSelect::parseJsonRefs($this->column()) . ' DESC')
                 ->fetchAll()[0]['semfilter_column'];
             $this->endSemester = $highest ? Semester::fromCode($highest) : $this->endSemester;
         }
@@ -98,9 +98,9 @@ class ColumnSemesterFilteringHeader extends AbstractColumnFilteringHeader
         });
 
         $sort = (new Field('Sorting', new SELECT([
-            false => 'None',
-            'ASC' => 'Oldest first',
-            'DESC' => 'Newest first'
+        false => 'None',
+        'ASC' => 'Oldest first',
+        'DESC' => 'Newest first'
         ])))
             ->setID('sort')
             ->setDefault(@$this->config()['sort'])
