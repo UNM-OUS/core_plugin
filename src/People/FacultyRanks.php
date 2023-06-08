@@ -24,6 +24,7 @@ class FacultyRanks {
         "Principal Lecturer III",
         "Professor of Practice",
         "Professor",
+        "Project Assistant",
         "Research Assistant Professor",
         "Research Associate Professor",
         "Research Lecturer II",
@@ -43,7 +44,6 @@ class FacultyRanks {
         "Visiting Professor",
         "Visiting Research Assistant Professor",
         "Visiting Scholar",
-        "Project Assistant",
     ];
     /**
      * More complex regexes for attempting to infer a rank from a less structured
@@ -61,24 +61,24 @@ class FacultyRanks {
         '/visiting scholar/'
     ];
     const RANK_WORD_CORRECTIONS = [
-        'Ii' => 'II',
-        'Iii' => 'III',
-        'L' => 'I',
-        'Ll' => 'II',
-        'Lll' => 'III',
-        'Prof' => 'Professor',
-        'Asst' => 'Assistant',
-        'Asst.' => 'Assistant',
-        'Assist' => 'Assistant',
-        'Profesor' => 'Professor',
-        'Professorof' => 'Professor',
-        'Professorin' => 'Professor',
-        'Profession' => 'Professor',
         '1' => 'I',
         '2' => 'II',
         '3' => 'III',
-        'Lecturerr' => 'Lecturer',
+        'Assist' => 'Assistant',
         'Assoc' => 'Associate',
+        'Asst.' => 'Assistant',
+        'Asst' => 'Assistant',
+        'Ii' => 'II',
+        'Iii' => 'III',
+        'L' => 'I',
+        'Lecturerr' => 'Lecturer',
+        'Ll' => 'II',
+        'Lll' => 'III',
+        'Prof' => 'Professor',
+        'Profesor' => 'Professor',
+        'Profession' => 'Professor',
+        'Professorin' => 'Professor',
+        'Professorof' => 'Professor',
         'Scholor' => 'Scholar',
     ];
 
