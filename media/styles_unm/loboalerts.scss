@@ -48,7 +48,7 @@
     .loboalert__title {
         &:before {
             @include material-icon;
-            content: '\e9d2';
+            content: '\e8dc';
             display: inline;
             margin-right: $grid/2;
         }
