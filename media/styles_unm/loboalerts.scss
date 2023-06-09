@@ -19,3 +19,38 @@
         }
     }
 }
+
+.loboalert--info,
+.loboalert--information,
+.loboalert--notice {
+    background-color: var(--cue-information);
+    color: var(--cue-information-inv);
+    border-bottom: 1px solid var(--cue-information-dark);
+    border-top: 1px solid var(--cue-information-light);
+
+    .loboalert__title {
+        &:before {
+            @include material-icon;
+            content: '\e0f0';
+            display: inline;
+            margin-right: $grid/2;
+        }
+    }
+}
+
+.loboalert--safe,
+.loboalert--confirmation {
+    background-color: var(--cue-safe);
+    color: var(--cue-safe-inv);
+    border-bottom: 1px solid var(--cue-safe-dark);
+    border-top: 1px solid var(--cue-safe-light);
+
+    .loboalert__title {
+        &:before {
+            @include material-icon;
+            content: '\e9d2';
+            display: inline;
+            margin-right: $grid/2;
+        }
+    }
+}

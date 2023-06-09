@@ -123,10 +123,10 @@ themes:
           accent: "#a7a8aa"
           highlight: "#ba0c2f"
         cue:
-          information: "#1ec8a9"
-          safe: "#aad11f"
-          warning: "#ffc600"
-          danger: "#ff990a"
+          information: "#19a98e"
+          safe: "#7f9b17"
+          warning: "#e68a00"
+          danger: "#db005f"
       dark:
         shadow: 0 calc(var(--grid)/4) var(--grid) rgba(0,0,0,0.3)
         shadow-inset: inset 0 -calc(var(--grid)/4) var(--grid) rgba(0,0,0,0.3)
