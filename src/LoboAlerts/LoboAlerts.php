@@ -4,6 +4,7 @@ namespace DigraphCMS_Plugins\unmous\ous_digraph_module\LoboAlerts;
 
 use DigraphCMS\Cache\Cache;
 use DigraphCMS\Curl\CurlHelper;
+use DigraphCMS\Events\Dispatcher;
 use DigraphCMS\ExceptionLog;
 
 class LoboAlerts
@@ -32,18 +33,8 @@ class LoboAlerts
                 } catch (\Throwable $th) {
                     ExceptionLog::log($th);
                 }
-                // get COVID alert, either from OUS site or from main site
-                // $covidBanner = CurlHelper::get('https://www.unm.edu/includes/temp-alert.html');
-                // if ($covidBanner) {
-                //     $covidBanner = trim(preg_replace('/<!-- [^\-]+? -->/', '', $covidBanner));
-                //     do {
-                //         $previous = $covidBanner;
-                //         $covidBanner = trim(preg_replace('/^<div[^>]*>(.+)<\/div>$/is', '$1', $covidBanner));
-                //     } while ($previous != $covidBanner);
-                //     if ($covidBanner = LoboAlert::parse($covidBanner, 'covid')) {
-                //         $alerts[] = $covidBanner;
-                //     }
-                // }
+                // use dispatcher to append more alerts
+                Dispatcher::dispatchEvent('onLoboAlerts', [&$alerts]);
                 return $alerts;
             },
             300
