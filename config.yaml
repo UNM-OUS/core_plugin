@@ -124,7 +124,7 @@ themes:
           highlight: "#ba0c2f"
         cue:
           information: "#19a98e"
-          safe: "#7f9b17"
+          safe: "#6b9216"
           warning: "#e68a00"
           danger: "#db005f"
       dark:
