@@ -42,14 +42,14 @@ class SemesterField extends Field
             : null;
     }
 
-    public function default(): mixed
+    public function default(): ?Semester
     {
         return ($value = parent::default())
             ? Semester::fromCode($value)
             : null;
     }
 
-    public function setDefault($default)
+    public function setDefault(mixed $default): static
     {
         parent::setDefault($default ? $default->intVal() : null);
         return $this;
