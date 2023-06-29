@@ -15,7 +15,7 @@ use DigraphCMS\URL\URL;
                     <a class="unm-menuitem" href="http://directory.unm.edu" title="Directory">Directory</a>
                 </div>
                 <!-- search form -->
-                <form action="<?php echo new URL('/~search/'); ?>" id="unm_search_form" method="get">
+                <form action="<?php echo new URL('/search/'); ?>" id="unm_search_form" method="get">
                     <div class="input-append search-query">
                         <input accesskey="4" id="unm_search_form_q" maxlength="255" name="q" placeholder="Search this site" title="input search query here" type="text">
                         <button accesskey="s" class="btn" id="unm_search_for_submit" title="submit search" type="submit">
