@@ -33,24 +33,24 @@ class SemesterTest extends TestCase
     {
         $this->assertEquals(
             new Semester(2000, 'spring'),
-            Semester::fromString('spring 2000')
+            Semesters::fromString('spring 2000')
         );
         $this->assertEquals(
             new Semester(2001, 'summer'),
-            Semester::fromString('summer 2001')
+            Semesters::fromString('summer 2001')
         );
         $this->assertEquals(
             new Semester(2002, 'fall'),
-            Semester::fromString('fall 2002')
+            Semesters::fromString('fall 2002')
         );
         $this->assertNull(
-            Semester::fromString('derp 2001')
+            Semesters::fromString('derp 2001')
         );
         $this->assertNull(
-            Semester::fromString('spring 999')
+            Semesters::fromString('spring 999')
         );
         $this->assertNull(
-            Semester::fromString('spring 10000')
+            Semesters::fromString('spring 10000')
         );
     }
 
@@ -65,33 +65,33 @@ class SemesterTest extends TestCase
     {
         $this->assertEquals(
             new Semester(2000, 'spring'),
-            Semester::fromCode('200010')
+            Semesters::fromCode('200010')
         );
         $this->assertEquals(
             new Semester(2001, 'summer'),
-            Semester::fromCode('200160')
+            Semesters::fromCode('200160')
         );
         $this->assertEquals(
             new Semester(2002, 'fall'),
-            Semester::fromCode('200280')
+            Semesters::fromCode('200280')
         );
         $this->assertNull(
-            Semester::fromCode('200100')
+            Semesters::fromCode('200100')
         );
         $this->assertEquals(
             new Semester(2000, 'spring'),
-            Semester::fromCode(200010)
+            Semesters::fromCode(200010)
         );
         $this->assertEquals(
             new Semester(2001, 'summer'),
-            Semester::fromCode(200160)
+            Semesters::fromCode(200160)
         );
         $this->assertEquals(
             new Semester(2002, 'fall'),
-            Semester::fromCode(200280)
+            Semesters::fromCode(200280)
         );
         $this->assertNull(
-            Semester::fromCode(200100)
+            Semesters::fromCode(200100)
         );
     }
 

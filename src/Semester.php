@@ -21,32 +21,34 @@ class Semester
         $this->semester = Semesters::SEMESTERS[$semester];
     }
 
-    public static function fromString(string $string): ?Semester
+    /**
+     * @deprecated use Semesters::fromCode()
+     * @param string|int|null $code 
+     * @return null|Semester 
+     */
+    public static function fromCode(string|int|null $code): ?Semester
     {
-        $string = trim($string);
-        if (preg_match('/^(spring|summer|fall) ([0-9]{4})$/i', $string, $m)) {
-            return new Semester(intval($m[2]), $m[1]);
-        } else return null;
+        return Semesters::fromCode($code);
     }
 
     /**
+     * @deprecated use Semesters::fromString()
+     * @param string|null $string 
+     * @return null|Semester 
+     */
+    public static function fromString(string|null $string): ?Semester
+    {
+        return Semesters::fromString($string);
+    }
+
+    /**
+     * @deprecated use Semesters::fromDate()
      * @param string|int|DateTime $date
      * @return Semester
      */
     public static function fromDate($date): Semester
     {
         return Semesters::fromDate($date);
-    }
-
-    public static function fromCode(string|int $code): ?Semester
-    {
-        $code = intval($code);
-        $year = intval(floor($code / 100));
-        if (!$year) return null;
-        $semester = @array_flip(Semesters::SEMESTERS)[$code - $year * 100];
-        if (!$semester) return null; // @phpstan-ignore-line
-        if ($year < 1000 || $year > 9999) return null;
-        else return new Semester($year, $semester);
     }
 
     public function start(): DateTime

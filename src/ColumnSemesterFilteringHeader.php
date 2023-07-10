@@ -59,7 +59,7 @@ class ColumnSemesterFilteringHeader extends AbstractColumnFilteringHeader
                 ->order(null)
                 ->order(AbstractMappedSelect::parseJsonRefs($this->column()) . ' ASC')
                 ->fetchAll()[0]['semfilter_column'];
-            $this->startSemester = $lowest ? Semester::fromCode($lowest) : $this->startSemester;
+            $this->startSemester = $lowest ? Semesters::fromCode($lowest) : $this->startSemester;
             $highest = clone $query;
             // @phpstan-ignore-next-line
             $highest = @$highest->limit(1)->offset(0)
@@ -68,7 +68,7 @@ class ColumnSemesterFilteringHeader extends AbstractColumnFilteringHeader
                 ->order(null)
                 ->order(AbstractMappedSelect::parseJsonRefs($this->column()) . ' DESC')
                 ->fetchAll()[0]['semfilter_column'];
-            $this->endSemester = $highest ? Semester::fromCode($highest) : $this->endSemester;
+            $this->endSemester = $highest ? Semesters::fromCode($highest) : $this->endSemester;
         }
 
         // build up options list

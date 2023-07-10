@@ -38,14 +38,14 @@ class SemesterField extends Field
     public function value(bool $useDefault = false): mixed
     {
         return ($value = parent::value($useDefault))
-            ? Semester::fromCode($value)
+            ? Semesters::fromCode($value)
             : null;
     }
 
     public function default(): ?Semester
     {
         return ($value = parent::default())
-            ? Semester::fromCode($value)
+            ? Semesters::fromCode($value)
             : null;
     }
 

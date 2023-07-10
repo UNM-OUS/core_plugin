@@ -50,6 +50,35 @@ class Semesters
     }
 
     /**
+     * @param string|int|null $code 
+     * @return null|Semester 
+     */
+    public static function fromCode(string|int|null $code): ?Semester
+    {
+        if (!$code) return null;
+        $code = intval($code);
+        $year = intval(floor($code / 100));
+        if (!$year) return null;
+        $semester = @array_flip(Semesters::SEMESTERS)[$code - $year * 100];
+        if (!$semester) return null; // @phpstan-ignore-line
+        if ($year < 1000 || $year > 9999) return null;
+        else return new Semester($year, $semester);
+    }
+
+    /**
+     * @param string|null $string 
+     * @return null|Semester 
+     */
+    public static function fromString(string|null $string): ?Semester
+    {
+        if (!$string) return null;
+        $string = trim($string);
+        if (preg_match('/^(spring|summer|fall) ([0-9]{4})$/i', $string, $m)) {
+            return new Semester(intval($m[2]), $m[1]);
+        } else return null;
+    }
+
+    /**
      * @param string|int|DateTime $date
      * @return Semester
      */
