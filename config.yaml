@@ -21,7 +21,7 @@ unm:
     - Taos Branch
     - Valencia County Branch
   semester_prelaunch: P7D # give each semester a 7 day "buffer" where we switch before its official start
-  semesters: # known start dates of semesters
+  semesters: # known start dates of semesters, to update check https://registrar.unm.edu/academic-calendar/ten-year-semester-dates-calendar.html
     2033:
       spring: [1, 17]
       summer: [6, 6]
