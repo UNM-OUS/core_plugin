@@ -32,12 +32,12 @@ class BillingIndexInput extends INPUT
         /** @var string */
         $value = strtoupper(parent::value($useDefault) ?? '');
         $value = preg_replace('/[^0-9A-Z]/', '', $value) ?? '';
+        // append default account code if it is enabled and set
+        if ($this->accountCodeEnabled() && $this->defaultAccountCode()) {
+            $value .= $this->defaultAccountCode();
+        }
         // format properly if account code is enabled
         if ($this->accountCodeEnabled() && strlen($value) == 10) {
-            // append default account code if it is enabled and set
-            if ($this->defaultAccountCode()) {
-                $value .= $this->defaultAccountCode();
-            }
             // return formatted value
             return sprintf(
                 '%s-%s',
