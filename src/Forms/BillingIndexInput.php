@@ -33,7 +33,7 @@ class BillingIndexInput extends INPUT
         $value = strtoupper(parent::value($useDefault) ?? '');
         $value = preg_replace('/[^0-9A-Z]/', '', $value) ?? '';
         // append default account code if it is enabled and set
-        if ($this->accountCodeEnabled() && $this->defaultAccountCode()) {
+        if ($this->accountCodeEnabled() && strlen($value) == 6 && $this->defaultAccountCode()) {
             $value .= $this->defaultAccountCode();
         }
         // format properly if account code is enabled
