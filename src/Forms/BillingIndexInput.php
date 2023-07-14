@@ -9,7 +9,7 @@ class BillingIndexInput extends INPUT
     public function __construct(
         string $id = null,
         protected bool $accountCodeEnabled = false,
-        protected string $defaultAccountCode = null,
+        protected ?string $defaultAccountCode = null,
     ) {
         parent::__construct($id);
         $this->addValidator(function () {
@@ -65,7 +65,7 @@ class BillingIndexInput extends INPUT
         return $this->defaultAccountCode;
     }
 
-    public function setDefaultAccountCode(string $defaultAccountCode): static
+    public function setDefaultAccountCode(?string $defaultAccountCode): static
     {
         $this->defaultAccountCode = $defaultAccountCode;
         return $this;
