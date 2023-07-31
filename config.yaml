@@ -104,9 +104,9 @@ themes:
         shadow: 0 calc(var(--grid)/4) var(--grid) rgba(0,0,0,0.15)
         shadow-inset: inset 0 calc(var(--grid)/4) var(--grid) rgba(0,0,0,0.05)
         font:
-          content: '"Gotham A","Gotham B","Gotham Pro","Gotham","Helvetica Neue",Helvetica,Seravek,"Gill Sans Nova",Ubuntu,Calibri,"DejaVu Sans",source-sans-pro,sans-serif'
+          content: '"Gotham A","Gotham B","Gotham Pro","Gotham","Helvetica Neue",Helvetica,Seravek,"Gill Sans Nova",Calibri,"DejaVu Sans",source-sans-pro,sans-serif'
           header: '"Vitesse A","Vitesse B","Vitesse",Rockwell,"Rockwell Nova","Roboto Slab","DejaVu Serif","Sitka Small",serif;'
-          ui: "Seravek,'Gill Sans Nova',Ubuntu,Calibri,'DejaVu Sans',source-sans-pro,sans-serif"
+          ui: "Seravek,'Gill Sans Nova',Calibri,'DejaVu Sans',source-sans-pro,sans-serif"
         unm:
           cherry: "#ba0c2f"
           turquoise: "#007a86"
