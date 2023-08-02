@@ -57,7 +57,6 @@ use DigraphCMS\UI\UserMenu;
     </main>
     <?php
     echo Templates::render('sections/footer.php');
-    echo Cron::renderPoorMansCron();
     ?>
 </body>
 
