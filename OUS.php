@@ -19,6 +19,43 @@ use Thunder\Shortcode\Shortcode\ShortcodeInterface;
 
 class OUS extends AbstractPlugin
 {
+    public static function userFromNetId(string $netId, bool $create = false): ?User
+    {
+        static $cache = [];
+        $netId = strtolower(trim($netId));
+        if (!isset($cache[$netId])) {
+            $existing = DB::query()->from('user_source')
+                ->where('provider_id', $netId)
+                ->where('source = "cas" AND provider = "netid"')
+                ->fetch();
+            if ($existing) {
+                // existing user found, return them
+                $cache[$netId] = Users::get($existing['user_uuid']);
+            } elseif ($create) {
+                // no existing user found, but we've been tasked with creating them
+                $user = new User();
+                $user->addEmail(
+                    $netId . '@unm.edu',
+                    'Added from NetID',
+                    true
+                );
+                $user->name($netId);
+                // try to set name
+                $name = PersonInfo::getFullNameFor($netId)
+                    ?? PersonInfo::getFirstNameFor($netId);
+                if ($name) {
+                    $user->name($name);
+                    $user['name_explicitly_set'] = true;
+                }
+                // insert and return
+                $user->insert();
+                $cache[$netId] = $user;
+            } else {
+                $cache[$netId] = null;
+            }
+        }
+        return $cache[$netId];
+    }
 
     /**
      * as maintenance pull fresh permissions from user source. Cache them for
