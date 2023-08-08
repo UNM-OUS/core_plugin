@@ -47,8 +47,19 @@ class OUS extends AbstractPlugin
                     $user->name($name);
                     $user['name_explicitly_set'] = true;
                 }
-                // insert and return
+                // insert user
+                DB::beginTransaction();
                 $user->insert();
+                // insert authentication method
+                DB::query()->insertInto('user_source', [
+                    'user_uuid' => $user->uuid(),
+                    'provider_id' => $netId,
+                    'source' => 'cas',
+                    'provider' => 'netid',
+                    'created' => time(),
+                ])->execute();
+                DB::commit();
+                // cache and return
                 $cache[$netId] = $user;
             } else {
                 $cache[$netId] = null;
