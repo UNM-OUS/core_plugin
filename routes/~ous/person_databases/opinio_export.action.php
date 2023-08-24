@@ -128,6 +128,11 @@ if ($type->value()) {
             $department?->value(),
         ]
     );
+    printf(
+        '<a href="%s" class="button button--inverted">%s</a>',
+        $file->url(),
+        $file->filename(),
+    );
 }
 
 echo '</div>';
