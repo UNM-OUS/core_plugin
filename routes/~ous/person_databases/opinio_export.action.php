@@ -92,7 +92,6 @@ if ($type->value()) {
     $file = new DeferredFile(
         sprintf(
             'Opinio invites - %s - %s.csv',
-            // @phpstan-ignore-next-line
             implode(
                 ' - ',
                 array_filter(
