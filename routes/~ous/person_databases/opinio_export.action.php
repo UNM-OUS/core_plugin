@@ -24,7 +24,7 @@ $form = new FormWrapper();
 $form->button()->setText('Continue');
 $form->setData('target', 'opinio-export-interface');
 
-$type = (new Field('Primary affiliation', new SELECT([
+$type = (new Field('Affiliation', new SELECT([
 'voting_faculty' => 'Voting faculty',
 'all_faculty' => 'All faculty',
 'staff' => 'Staff',
