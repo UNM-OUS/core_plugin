@@ -9,11 +9,11 @@ class LoboAlert
     /** @var string */
     protected $content;
     /** @var string|null */
-    protected $identifier;
+    protected $uuid;
     /** @var string */
     protected $class;
 
-    public static function parse(string $html, string $class = 'warning', string $identifier = null): ?LoboAlert
+    public static function parse(string $html, string $class = 'warning', string $uuid = null): ?LoboAlert
     {
         $html = trim($html);
         $parsed = preg_match('/^<h[1-6].+?>(.+?)<\/h[1-6]>(.+)$/is', $html, $matches);
@@ -24,16 +24,35 @@ class LoboAlert
             $title,
             $content,
             $class,
-            $identifier
+            $uuid
         );
     }
 
-    public function __construct(string $title, string $content, string $class = 'warning', string $identifier = null)
+    public function __construct(string $title, string $content, string $class = 'warning', string $uuid = null)
     {
         $this->title = $title;
         $this->content = $content;
-        $this->identifier = $identifier;
+        $this->uuid = $uuid;
         $this->class = $class;
+    }
+
+    public function render(): string
+    {
+        return sprintf(
+            implode(PHP_EOL, [
+                '<div class="loboalert loboalert--%s" id="%s">',
+                '<div class="loboalert__title">%s</div>',
+                '<a class="loboalert__expand" href="#%s">-- read more --</a>',
+                '<div class="loboalert__content">%s</div>',
+                '<a class="loboalert__collapse" href="#">-- collapse --</a>',
+                '</div>',
+            ]),
+            $this->class(),
+            $this->id(),
+            $this->title(),
+            $this->id(),
+            $this->content(),
+        );
     }
 
     public function title(): string
@@ -46,20 +65,20 @@ class LoboAlert
         return $this->content;
     }
 
-    public function identifier(): string
+    public function uuid(): string
     {
-        return  md5(
-            $this->identifier
-                ?? serialize([$this->title, $this->content, $this->class])
+        return md5(
+            $this->uuid
+            ?? serialize([$this->title, $this->content, $this->class])
         );
     }
 
     public function id(): string
     {
-        return 'loboalert-' . $this->identifier();
+        return 'alert-' . $this->uuid();
     }
 
-    public function class(): string
+    public function class (): string
     {
         return $this->class;
     }
