@@ -91,7 +91,7 @@ echo $form;
 if ($type->value()) {
     $file = new DeferredFile(
         sprintf(
-            'Opinio invite - %s - %s.csv',
+            'Opinio invites - %s - %s.csv',
             // @phpstan-ignore-next-line
             implode(
                 ' - ',
@@ -101,14 +101,14 @@ if ($type->value()) {
                         $org->value(),
                         $department?->value(),
                     ],
-                    fn($e) => empty($e)
+                    fn($e) => !empty($e)
                 )
             ),
             date('YmdGi')
         ),
         function (DeferredFile $file) use ($type, $org, $department): void {
             $query = SharedDB::query()->from($type->value());
-            $query->select('CONCAT(firstname," ",lastname) as Name');
+            $query->select('CONCAT(firstname," ",lastname) as Name', true);
             $query->select('email as Email');
             $query->select('netid as NetID');
             $query->select('org, department, title');
@@ -129,7 +129,7 @@ if ($type->value()) {
         ]
     );
     printf(
-        '<a href="%s" class="button button--inverted">%s</a>',
+        '<p>Download: <a href="%s" class="button button--inverted" target="_blank">%s</a></p>',
         $file->url(),
         $file->filename(),
     );
