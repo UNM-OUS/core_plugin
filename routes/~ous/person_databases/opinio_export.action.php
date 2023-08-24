@@ -1,0 +1,133 @@
+<h1>Export faculty/staff for Opinio invites</h1>
+<p>
+    This tool exports faculty or staff lists, optionally filtered by school/college and department name, in the format
+    that Opino likes.
+    The files exported here are not actually standard CSV files, because Opinio is actually very picky about its CSV
+    file format.
+</p>
+<?php
+
+use DigraphCMS\FS;
+use DigraphCMS\HTML\Forms\Field;
+use DigraphCMS\HTML\Forms\Fields\Autocomplete\AutocompleteField;
+use DigraphCMS\HTML\Forms\Fields\Autocomplete\AutocompleteInput;
+use DigraphCMS\HTML\Forms\FormWrapper;
+use DigraphCMS\HTML\Forms\SELECT;
+use DigraphCMS\Media\DeferredFile;
+use DigraphCMS\URL\URL;
+use DigraphCMS\Users\Permissions;
+use DigraphCMS_Plugins\unmous\ous_digraph_module\OpinioExporter;
+use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedDB;
+
+echo '<div class="navigation-frame navigation-frame--stateless" id="opinio-export-interface">';
+$form = new FormWrapper();
+$form->button()->setText('Continue');
+$form->setData('target', 'opinio-export-interface');
+
+$type = (new Field('Primary affiliation', new SELECT([
+'voting_faculty' => 'Voting faculty',
+'all_faculty' => 'All faculty',
+'staff' => 'Staff',
+])))
+    ->addForm($form);
+
+if ($type->value()) {
+    $org = (
+        new AutocompleteField(
+        'School/College/Organization',
+            (
+                new AutocompleteInput(
+                null,
+                    new URL('/~api/v1/unm-affiliation/org.php'),
+                function ($value) use ($type) {
+                    if (!$value) return null;
+                    if ($value != 'Other' && !Permissions::inMetaGroup('unmaffiliation__edit')) {
+                        $query = SharedDB::query()->from($type->value())
+                            ->where('org', $value);
+                        if (!$query->count()) return null;
+                    }
+                    return [
+                    'html' => $value,
+                    'value' => $value
+                    ];
+                }
+                )
+            )->addClass('autocomplete-input--autopopulate')
+        )
+    )
+        ->addForm($form);
+} else $org = null;
+
+if (isset($org) && $org->value() && !in_array($org->value(), ['Other'])) {
+    $department = (
+        new AutocompleteField(
+        'Department',
+            (
+                new AutocompleteInput(
+                null,
+                    new URL('/~api/v1/unm-affiliation/department.php?org=' . $org->value()),
+                function ($value) use ($type, $org) {
+                    if (!$value) return null;
+                    if (!Permissions::inMetaGroup('unmaffiliation__edit')) {
+                        $query = SharedDB::query()->from($type->value())
+                            ->where('org', $org->value())
+                            ->where('department', $value);
+                        if (!$query->count()) return null;
+                    }
+                    return [
+                    'html' => $value,
+                    'value' => $value
+                    ];
+                }
+                )
+            )->addClass('autocomplete-input--autopopulate')
+        )
+    )
+        ->addForm($form);
+} else $department = null;
+
+echo $form;
+
+if ($type->value()) {
+    $file = new DeferredFile(
+        sprintf(
+            'Opinio invite - %s - %s.csv',
+            // @phpstan-ignore-next-line
+            implode(
+                ' - ',
+                array_filter(
+                    [
+                        $type->value(),
+                        $org->value(),
+                        $department?->value(),
+                    ],
+                    fn($e) => empty($e)
+                )
+            ),
+            date('YmdGi')
+        ),
+        function (DeferredFile $file) use ($type, $org, $department): void {
+            $query = SharedDB::query()->from($type->value());
+            $query->select('CONCAT(firstname," ",lastname) as Name');
+            $query->select('email as Email');
+            $query->select('netid as NetID');
+            $query->select('org, department, title');
+            if ($org->value()) $query->where('org', $org->value());
+            if ($department?->value()) $query->where('department', $department->value());
+            FS::touch($file->path());
+            file_put_contents(
+                $file->path(),
+                // @phpstan-ignore-next-line
+                OpinioExporter::array($query->fetchAll(), true)
+            );
+        },
+        [
+            'opinio export',
+            $type->value(),
+            $org->value(),
+            $department?->value(),
+        ]
+    );
+}
+
+echo '</div>';
