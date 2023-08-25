@@ -75,12 +75,12 @@ class OUS extends AbstractPlugin
      *
      * @return void
      */
-    public static function cronJob_maintenance()
+    public static function cronJob_maintenance(): void
     {
         UserData::data(true);
     }
 
-    public static function cronJob_maintenance_heavy()
+    public static function cronJob_maintenance_heavy(): void
     {
         SharedDB::query()->deleteFrom('person_info')
             ->where('updated < ?', strtotime('2 years ago'))
@@ -99,22 +99,23 @@ class OUS extends AbstractPlugin
         return $semester->__toString();
     }
 
-    public static function onStaticUrlPermissions_ous(URL $url)
+    public static function onStaticUrlPermissions_ous(URL $url): bool
     {
         return Permissions::inMetaGroup('ous__edit');
     }
 
-    public static function onStaticUrlName_ous(URL $url)
+    public static function onStaticUrlName_ous(URL $url): string|null
     {
         if ($url->action() == 'index') return "OUS";
         else return null;
     }
 
-    public static function onUserMenu_user(UserMenu $menu)
+    public static function onUserMenu_user(UserMenu $menu): void
     {
         if (Permissions::inMetaGroup('ous__edit')) $menu->addURL(new URL('/~ous/'));
     }
 
+    /** @return string[] */
     public static function userNetIDs(string $userID = null): array
     {
         $userID = $userID ?? Session::uuid();
@@ -122,6 +123,7 @@ class OUS extends AbstractPlugin
             function ($row) {
                 return $row['provider_id'];
             },
+            // @phpstan-ignore-next-line
             DB::query()->from('user_source')
                 ->where('user_uuid = ?', [$userID])
                 ->where('source = "cas" AND provider = "netid"')
@@ -139,7 +141,12 @@ class OUS extends AbstractPlugin
         return array_values($netIDs);
     }
 
-    public static function onUserGroups(string $userID, array &$groups)
+    /**
+     * @param string $userID
+     * @param Group[] $groups
+     * @return void
+     */
+    public static function onUserGroups(string $userID, array &$groups): void
     {
         foreach (UserData::userGroups($userID) as $group) {
             if ($group instanceof Group || $group = Users::group($group)) {
@@ -157,7 +164,7 @@ class OUS extends AbstractPlugin
      * @param string $netID
      * @return void
      */
-    public static function onCreateUser_cas_netid(User $user, string $source, string $provider, string $netID)
+    public static function onCreateUser_cas_netid(User $user, string $source, string $provider, string $netID): void
     {
         if (Config::get('unm.block_unknown_netids')) {
             if (!UserData::known($netID)) {
@@ -173,7 +180,7 @@ class OUS extends AbstractPlugin
         $user->addEmail($netID . '@unm.edu', 'Main campus NetID', true);
     }
 
-    public static function onAuthentication(Authentication $auth)
+    public static function onAuthentication(Authentication $auth): void
     {
         $user = $auth->user();
         if ($user['name_explicitly_set']) return;

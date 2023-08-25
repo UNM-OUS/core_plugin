@@ -1,4 +1,9 @@
-.loboalert--covid {
+.loboalert--medical {
+    background-color: #007a86;
+    color: #fff;
+    border-bottom: 1px solid #00555d;
+    border-top: 1px solid #00a2b1;
+
     .loboalert__title {
         &:before {
             @include icofont;
@@ -10,6 +15,22 @@
 }
 
 .loboalert--warning {
+    .loboalert__title {
+        &:before {
+            @include material-icon;
+            content: '\e002';
+            display: inline;
+            margin-right: $grid/2;
+        }
+    }
+}
+
+.loboalert--danger {
+    background-color: var(--cue-danger);
+    color: var(--cue-danger-inv);
+    border-bottom: 1px solid var(--cue-danger-dark);
+    border-top: 1px solid var(--cue-danger-light);
+
     .loboalert__title {
         &:before {
             @include material-icon;
