@@ -12,8 +12,8 @@ echo new PaginatedTable(
         ->order('end_time asc'),
     function (SiteAlert $alert): array {
         return [
-            Format::datetime($alert->start()),
-            Format::datetime($alert->end()),
+            $alert->start() ? Format::datetime($alert->start()) : '',
+            $alert->end() ? Format::datetime($alert->end()) : '',
             $alert->render(),
             sprintf('<a href="%s" class="button button--small button--inverted">edit</a>', $alert->editUrl()),
         ];
@@ -33,8 +33,8 @@ echo new PaginatedTable(
         ->order('start_time asc'),
     function (SiteAlert $alert): array {
         return [
-            Format::datetime($alert->start()),
-            Format::datetime($alert->end()),
+            $alert->start() ? Format::datetime($alert->start()) : '',
+            $alert->end() ? Format::datetime($alert->end()) : '',
             $alert->render(),
             sprintf('<a href="%s" class="button button--small button--inverted">edit</a>', $alert->editUrl()),
         ];
@@ -54,8 +54,8 @@ echo new PaginatedTable(
         ->order('end_time desc'),
     function (SiteAlert $alert): array {
         return [
-            Format::datetime($alert->start()),
-            Format::datetime($alert->end()),
+            $alert->start() ? Format::datetime($alert->start()) : '',
+            $alert->end() ? Format::datetime($alert->end()) : '',
             $alert->render(),
             sprintf('<a href="%s" class="button button--small button--inverted">edit</a>', $alert->editUrl()),
         ];
