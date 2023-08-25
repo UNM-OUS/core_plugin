@@ -8,12 +8,13 @@ use DigraphCMS\DB\DB;
 class SiteAlerts extends AbstractMappedSelect
 {
     const DB_CLASS = DB::class;
+    const DB_TABLE = 'site_alerts';
     protected $returnObjectClass = SiteAlert::class;
 
     public static function new(): SiteAlerts
     {
         return new SiteAlerts(
-            static::DB_CLASS::query()->from('ous_alerts')
+            static::DB_CLASS::query()->from(static::DB_TABLE)
         );
     }
 
@@ -47,7 +48,7 @@ class SiteAlerts extends AbstractMappedSelect
     public static function update(SiteAlert $alert): void
     {
         static::DB_CLASS::query()->update(
-            'ous_alerts',
+            static::DB_TABLE,
             [
                 'title' => $alert->title(),
                 'content' => $alert->contentSource(),
@@ -63,7 +64,7 @@ class SiteAlerts extends AbstractMappedSelect
     public static function create(SiteAlert $alert): void
     {
         static::DB_CLASS::query()->insertInto(
-            'ous_alerts',
+            static::DB_TABLE,
             [
                 'uuid' => $alert->uuid(),
                 'title' => $alert->title(),
@@ -78,7 +79,7 @@ class SiteAlerts extends AbstractMappedSelect
 
     public static function delete(SiteAlert $alert): void
     {
-        static::DB_CLASS::query()->delete('ous_alerts')
+        static::DB_CLASS::query()->delete(static::DB_TABLE)
             ->where('uuid', $alert->uuid())
             ->execute();
     }
