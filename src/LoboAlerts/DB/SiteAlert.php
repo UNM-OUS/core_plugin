@@ -34,6 +34,11 @@ class SiteAlert extends LoboAlert
         if ($end) $this->setEnd($end);
     }
 
+    public function uuid(): string
+    {
+        return $this->uuid;
+    }
+
     public function setTitle(string $title): static
     {
         $this->title = $title;
