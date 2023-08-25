@@ -2,7 +2,7 @@
 
 namespace DigraphCMS_Plugins\unmous\ous_digraph_module\LoboAlerts;
 
-class LoboAlert
+class AlertBanner
 {
     /** @var string */
     protected $title;
@@ -13,14 +13,14 @@ class LoboAlert
     /** @var string */
     protected $class;
 
-    public static function parse(string $html, string $class = 'warning', string $uuid = null): ?LoboAlert
+    public static function parse(string $html, string $class = 'warning', string $uuid = null): ?AlertBanner
     {
         $html = trim($html);
         $parsed = preg_match('/^<h[1-6].+?>(.+?)<\/h[1-6]>(.+)$/is', $html, $matches);
         if ($parsed === false) return null;
         $title = trim(strip_tags(html_entity_decode(@$matches[1] ? $matches[1] : '')), '\t\n\r\0\x0B ');
         $content = trim(@$matches[2] ? $matches[2] : '');
-        return new LoboAlert(
+        return new AlertBanner(
             $title,
             $content,
             $class,

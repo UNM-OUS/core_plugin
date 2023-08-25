@@ -6,9 +6,9 @@ use DateTime;
 use DigraphCMS\RichContent\RichContent;
 use DigraphCMS\UI\Format;
 use DigraphCMS\URL\URL;
-use DigraphCMS_Plugins\unmous\ous_digraph_module\LoboAlerts\LoboAlert;
+use DigraphCMS_Plugins\unmous\ous_digraph_module\LoboAlerts\AlertBanner;
 
-class SiteAlert extends LoboAlert
+class SiteAlert extends AlertBanner
 {
     const HELPER_CLASS = SiteAlerts::class;
 
@@ -21,7 +21,7 @@ class SiteAlert extends LoboAlert
     public function __construct(
         string $title = null,
         string $content = null,
-        string $class = 'warning',
+        string $class = null,
         string $uuid = null,
         int|string|DateTime|null $start = null,
         int|string|DateTime|null $end = null,

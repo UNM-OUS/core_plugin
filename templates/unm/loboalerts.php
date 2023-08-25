@@ -1,13 +1,13 @@
 <?php
 
-use DigraphCMS_Plugins\unmous\ous_digraph_module\LoboAlerts\LoboAlert;
-use DigraphCMS_Plugins\unmous\ous_digraph_module\LoboAlerts\LoboAlerts;
+use DigraphCMS_Plugins\unmous\ous_digraph_module\LoboAlerts\AlertBanner;
+use DigraphCMS_Plugins\unmous\ous_digraph_module\LoboAlerts\AlertBanners;
 
-$alerts = LoboAlerts::alerts();
+$alerts = AlertBanners::alerts();
 
 if ($alerts) {
     echo '<div id="loboalerts">';
-    /** @var LoboAlert $alert */
+    /** @var AlertBanner $alert */
     foreach ($alerts as $alert) {
         echo $alert->render();
     }

@@ -14,7 +14,7 @@ use DigraphCMS\UI\Notifications;
 use DigraphCMS\URL\URL;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\LoboAlerts\DB\SiteAlerts;
 
-$alert = SiteAlerts::get(Context::arg('uuid'));
+$alert = SiteAlerts::get(Context::url()->actionSuffix());
 if (!$alert) throw new HttpError(404, 'Alert not found');
 
 $form = new FormWrapper();
@@ -24,7 +24,7 @@ $title = (new Field('Banner title'))
     ->setDefault($alert->title())
     ->addForm($form);
 
-$content = (new RichContentField("", Context::arg('uuid')))
+$content = (new RichContentField("", Context::url()->actionSuffix()))
     ->setRequired(true)
     ->setDefault($alert->contentSource())
     ->addForm($form);

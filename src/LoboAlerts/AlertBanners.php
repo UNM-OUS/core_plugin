@@ -9,22 +9,22 @@ use DigraphCMS\ExceptionLog;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\LoboAlerts\DB\SiteAlert;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\LoboAlerts\DB\SiteAlerts;
 
-class LoboAlerts
+class AlertBanners
 {
-    /** @return LoboAlert[] */
+    /** @return AlertBanner[] */
     public static function alerts(): array
     {
         return Cache::get(
             'unm/loboalerts',
             function (): array {
-                /** @var array<int,LoboAlert> */
+                /** @var array<int,AlertBanner> */
                 $alerts = [];
                 // get alerts from main source
                 $loboAlert = CurlHelper::get('https://webcore.unm.edu/v2/loboalerts.json');
                 try {
                     if ($loboAlert && $loboAlert = json_decode($loboAlert, true, 512, JSON_THROW_ON_ERROR)) {
                         if ($loboAlert['alert'] != 'none') {
-                            $alerts[] = new LoboAlert(
+                            $alerts[] = new AlertBanner(
                                 $loboAlert['alert'] ?? 'LoboAlert',
                                 str_replace('&#xA;', '', @$loboAlert['details'] ?? ''),
                                 'warning',
