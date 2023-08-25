@@ -3,6 +3,7 @@
 namespace DigraphCMS_Plugins\unmous\ous_digraph_module\LoboAlerts\DB;
 
 use DateTime;
+use DigraphCMS\Digraph;
 use DigraphCMS\RichContent\RichContent;
 use DigraphCMS\UI\Format;
 use DigraphCMS\URL\URL;
@@ -18,16 +19,19 @@ class SiteAlert extends LoboAlert
     protected $end_time;
 
     public function __construct(
-        string $title,
-        string $content,
+        string $title = null,
+        string $content = null,
         string $class = 'warning',
         string $uuid = null,
         int|string|DateTime|null $start = null,
         int|string|DateTime|null $end = null
     ) {
-        parent::__construct($title, $content, $class, $uuid);
-        $this->setStart($start);
-        $this->setEnd($end);
+        if ($title) $this->title = $title;
+        if ($content) $this->content = $content;
+        if ($class) $this->class = $class;
+        if ($uuid) $this->uuid = $uuid;
+        if ($start) $this->setStart($start);
+        if ($end) $this->setEnd($end);
     }
 
     public function editUrl(): URL
