@@ -127,8 +127,10 @@ if ($type->value()) {
             $department?->value(),
         ]
     );
+
+    echo '<h2>Download current selections</h2>';
     printf(
-        '<p>Download: <a href="%s" class="button button--inverted" target="_blank">%s</a></p>',
+        '<p><a href="%s" class="button button--inverted" target="_blank">%s</a></p>',
         $file->url(),
         $file->filename(),
     );
