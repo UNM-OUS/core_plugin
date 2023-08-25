@@ -1,4 +1,4 @@
-<h1>Add site-wide banner</h1>
+<h1>Edit site-wide banner</h1>
 <?php
 use DigraphCMS\Context;
 use DigraphCMS\HTML\Forms\Field;
