@@ -3,6 +3,7 @@
 
 use DigraphCMS\UI\Pagination\ColumnStringFilteringHeader;
 use DigraphCMS\UI\Pagination\PaginatedTable;
+use DigraphCMS_Plugins\unmous\ous_digraph_module\People\FacultyInfo;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedDB;
 
 $query = SharedDB::query()->from('voting_faculty');
@@ -17,6 +18,7 @@ $table = new PaginatedTable(
             $row['department'],
             $row['title'],
             $row['academic_title'],
+            FacultyInfo::search($row['netid'])?->rank(),
             $row['netid'],
             $row['email']
         ];
@@ -28,6 +30,7 @@ $table = new PaginatedTable(
         new ColumnStringFilteringHeader('Department', 'department'),
         new ColumnStringFilteringHeader('Title', 'title'),
         new ColumnStringFilteringHeader('Academic title', 'academic_title'),
+        'Rank (computed)',
         new ColumnStringFilteringHeader('NetID', 'netid'),
         new ColumnStringFilteringHeader('Email', 'email'),
     ]
