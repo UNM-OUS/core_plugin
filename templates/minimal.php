@@ -29,6 +29,7 @@ use DigraphCMS\UI\Theme;
 
 <body class='template-minimal no-js <?php echo implode(' ', Theme::bodyClasses()); ?>'>
     <?php
+    echo Templates::render('unm/loboalerts.php');
     echo Templates::render('sections/navbar.php');
     ?>
     <main id="page-wrapper">
