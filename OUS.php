@@ -4,6 +4,7 @@ namespace DigraphCMS_Plugins\unmous\ous_digraph_module;
 
 use DigraphCMS\Config;
 use DigraphCMS\DB\DB;
+use DigraphCMS\Events\Dispatcher;
 use DigraphCMS\ExceptionLog;
 use DigraphCMS\HTTP\AccessDeniedError;
 use DigraphCMS\Plugins\AbstractPlugin;
@@ -15,7 +16,11 @@ use DigraphCMS\Users\Group;
 use DigraphCMS\Users\Permissions;
 use DigraphCMS\Users\User;
 use DigraphCMS\Users\Users;
+use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\BulkMail;
 use Thunder\Shortcode\Shortcode\ShortcodeInterface;
+
+// register BulkMail with dispatcher
+Dispatcher::addSubscriber(BulkMail::class);
 
 class OUS extends AbstractPlugin
 {

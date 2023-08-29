@@ -82,9 +82,6 @@ theme:
   active_themes: [unm]
   timezone: America/Denver
 
-email:
-  from: univsec@unm.edu
-
 themes:
   unm_dev:
     internal_css:
@@ -143,3 +140,27 @@ user_sources:
         context: cas
         setnocasservervalidation: true
         fixhttpsproblems: true
+
+bulk_mail:
+  default_from: ${email.from}
+  categories:
+    site-announcement:
+      enabled: true
+    site-promotion:
+      enabled: true
+  sources:
+    all_users:
+      enabled: true
+      class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\AllUsers
+
+email:
+  from: univsec@unm.edu
+  service_categories:
+    site-announcement: true
+  categories:
+    site-announcement:
+      label: Site announcement
+      description: Important announcements regarding this site
+    site-promotion:
+      label: Site promotion
+      description: Promotional announcements regarding this site
