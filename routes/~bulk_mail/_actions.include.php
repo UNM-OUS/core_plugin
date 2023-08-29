@@ -14,9 +14,11 @@ if ($mailing->sent()) {
 } else {
     // mailing has not been sent
     ActionMenu::addContextAction($mailing->editUrl(), 'edit mailing');
-    ActionMenu::addContextAction($mailing->previewUrl(), 'preview mailing');
-    ActionMenu::addContextAction($mailing->recipientsUrl(), 'mailing recipients');
-    ActionMenu::addContextAction($mailing->sendUrl(), 'send mailing');
+    if ($mailing->body()) {
+        ActionMenu::addContextAction($mailing->previewUrl(), 'preview mailing');
+        ActionMenu::addContextAction($mailing->recipientsUrl(), 'mailing recipients');
+    }
+    if ($mailing->messageCount()) {
+        ActionMenu::addContextAction($mailing->sendUrl(), 'send mailing');
+    }
 }
-
-ActionMenu::addContextAction($mailing->copyUrl(), 'copy mailing');

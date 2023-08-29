@@ -15,7 +15,7 @@ echo new PaginatedTable(
     function (Mailing $mailing): array {
         return [
             $mailing->editUrl()->html(),
-            $mailing->body() ? sprintf('<a href="%s" target="_blank">preview</a>', $mailing->previewUrl()) : '',
+            $mailing->body() ? sprintf('<a href="%s">preview</a>', $mailing->previewUrl()) : '',
             $mailing->body() ? sprintf('<a href="%s">recipients (%s)</a>', $mailing->recipientsUrl(), $mailing->messageCount()) : '',
             $mailing->messageCount() ? sprintf('<a href="%s">send</a>', $mailing->sendUrl()) : '',
             Format::date($mailing->created()),

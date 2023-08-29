@@ -9,8 +9,6 @@ use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\BulkMail;
 
 $mailing = BulkMail::mailing(intval(Context::url()->actionSuffix()));
 
-Context::response()->template('null.php');
-
 printf('<h1>Preview: %s</h1>', $mailing->name());
 
 // begin a new context with mock bulk_mail field so that tags will render
