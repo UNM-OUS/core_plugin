@@ -35,6 +35,6 @@ $file = new File(
         $mailing->id(),
     ]
 );
-printf('<iframe src="%s" style="border:0;width:100%;" class="autosized-frame"></iframe>', $file->url());
+printf('<iframe src="%s" style="border:0;width:100%%;" class="autosized-frame"></iframe>', $file->url());
 
 Context::end();

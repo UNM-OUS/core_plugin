@@ -77,7 +77,7 @@ echo new PaginatedTable(
 Sidebar::add(function () {
     $relevant = BulkMail::mailings();
     $last_year_start = (new DateTime())
-        ->sub(new DateInterval('P1W1Y'));
+        ->sub(new DateInterval('P1Y1W'));
     $last_year_end = (new DateTime())
         ->sub(new DateInterval('P1Y'))
         ->add(new DateInterval('P2W'));
