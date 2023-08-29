@@ -21,6 +21,7 @@ use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\Recipient;
 
 $mailing = BulkMail::mailing(intval(Context::url()->actionSuffix()));
 if (!$mailing || $mailing->sent()) throw new HttpError(404);
+include __DIR__ . '/_action.include.php';
 
 printf('<h1>Select recipients: %s</h1>', $mailing->name());
 Breadcrumb::setTopName($mailing->name());

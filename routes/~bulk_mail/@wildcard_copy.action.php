@@ -11,6 +11,7 @@ use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\BulkMail;
 
 $mailing = BulkMail::mailing(intval(Context::url()->actionSuffix()));
 if (!$mailing) throw new HttpError(404);
+include __DIR__ . '/_action.include.php';
 
 DB::query()->insertInto(
     'bulk_mail',

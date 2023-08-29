@@ -213,6 +213,12 @@ class Mailing
             ->setName('Messages: ' . $this->name());
     }
 
+    public function sourceUrl(): URL
+    {
+        return (new URL('/bulk_mail/source:' . $this->id))
+            ->setName('Source: ' . $this->name());
+    }
+
     public function copyUrl(): URL
     {
         return (new URL('/bulk_mail/copy:' . $this->id))

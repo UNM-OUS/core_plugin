@@ -46,6 +46,7 @@ echo new PaginatedTable(
         return [
             $mailing->previewUrl()->html(),
             sprintf('<a href="%s">messages (%s)</a>', $mailing->messagesUrl(), $mailing->messageCount()),
+            sprintf('<a href="%s">source</a>', $mailing->sourceUrl()),
             sprintf('<a href="%s">copy</a>', $mailing->copyUrl()),
             Format::date($mailing->created()),
             $mailing->createdBy(),
