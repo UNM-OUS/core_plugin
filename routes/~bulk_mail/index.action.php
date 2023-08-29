@@ -3,6 +3,7 @@
 
 use DigraphCMS\UI\Format;
 use DigraphCMS\UI\Pagination\PaginatedTable;
+use DigraphCMS\UI\Sidebar\Sidebar;
 use DigraphCMS\URL\URL;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\BulkMail;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Mailing;
@@ -72,9 +73,35 @@ echo new PaginatedTable(
 
 // look for and surface relevant past mailings from this time last year/semester
 
-$relevant = BulkMail::mailings();
-$last_year_start = (new DateTime())
-    ->sub(new DateInterval('P1W1Y'));
-$last_year_end = (new DateTime())
-    ->sub(new DateInterval('P1Y'))
-    ->add(new DateInterval('P2W'));
+// this time last year
+Sidebar::add(function () {
+    $relevant = BulkMail::mailings();
+    $last_year_start = (new DateTime())
+        ->sub(new DateInterval('P1W1Y'));
+    $last_year_end = (new DateTime())
+        ->sub(new DateInterval('P1Y'))
+        ->add(new DateInterval('P2W'));
+    $relevant
+        ->where(
+            'sent > ?',
+            $last_year_start->getTimestamp()
+        )->where(
+            'sent < ?',
+            $last_year_end->getTimestamp()
+        );
+    if ($relevant->count() == 0) return null;
+    return sprintf(
+        '<h1>This time last year</h1>%s',
+        new PaginatedTable(
+            $relevant,
+            function (Mailing $mailing): array {
+                return [
+                    $mailing->previewUrl()->html(),
+                    sprintf('<a href="%s">copy</a>', $mailing->copyUrl()),
+                ];
+            }
+        )
+    );
+});
+
+// TODO this time last main semester
