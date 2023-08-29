@@ -63,6 +63,7 @@ echo new PaginatedTable(
         'Mailing',
         '',
         '',
+        '',
         'Created',
         'By',
         'Updated',
