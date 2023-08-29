@@ -30,6 +30,7 @@ echo new PaginatedTable(
         '',
         '',
         '',
+        '',
         'Created',
         'By',
         'Updated',
@@ -68,3 +69,12 @@ echo new PaginatedTable(
         'By'
     ]
 );
+
+// look for and surface relevant past mailings from this time last year/semester
+
+$relevant = BulkMail::mailings();
+$last_year_start = (new DateTime())
+    ->sub(new DateInterval('P1W1Y'));
+$last_year_end = (new DateTime())
+    ->sub(new DateInterval('P1Y'))
+    ->add(new DateInterval('P2W'));
