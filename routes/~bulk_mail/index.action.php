@@ -7,6 +7,7 @@ use DigraphCMS\UI\Sidebar\Sidebar;
 use DigraphCMS\URL\URL;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\BulkMail;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Mailing;
+use DigraphCMS_Plugins\unmous\ous_digraph_module\Semesters;
 
 echo "<h2>Drafts</h2>";
 printf('<a href="%s" class="button">Create blank bulk mailing</a>', new URL('_create.html'));
@@ -73,25 +74,29 @@ echo new PaginatedTable(
 
 // look for and surface relevant past mailings from this time last year/semester
 
-// this time last year
-Sidebar::add(function () {
+// this time last equivalent semester
+Sidebar::add(function (): string|null {
+    $last_semester = Semesters::currentFull()->previous(3);
     $relevant = BulkMail::mailings();
-    $last_year_start = (new DateTime())
-        ->sub(new DateInterval('P1Y1W'));
-    $last_year_end = (new DateTime())
-        ->sub(new DateInterval('P1Y'))
-        ->add(new DateInterval('P2W'));
+    $other_day = $start = Semesters::transferTime(
+        time(),
+        $last_semester,
+        Semesters::current(),
+    );
+    $start = $other_day->sub(new DateInterval('P1W'));
+    $end = $other_day->add(new DateInterval('P2W'));
     $relevant
         ->where(
             'sent > ?',
-            $last_year_start->getTimestamp()
+            $start->getTimestamp()
         )->where(
             'sent < ?',
-            $last_year_end->getTimestamp()
+            $end->getTimestamp()
         );
     if ($relevant->count() == 0) return null;
     return sprintf(
-        '<h1>This time last year</h1>%s',
+        '<h1>This time %s</h1>%s',
+        $last_semester,
         new PaginatedTable(
             $relevant,
             function (Mailing $mailing): array {
@@ -104,4 +109,38 @@ Sidebar::add(function () {
     );
 });
 
-// TODO this time last main semester
+// this time last main semester
+Sidebar::add(function (): string|null {
+    if (Semesters::current()->semester() == "Summer") return null;
+    $last_semester = Semesters::currentFull()->previousFull();
+    $relevant = BulkMail::mailings();
+    $other_day = $start = Semesters::transferTime(
+        time(),
+        $last_semester,
+        Semesters::current(),
+    );
+    $start = $other_day->sub(new DateInterval('P1W'));
+    $end = $other_day->add(new DateInterval('P2W'));
+    $relevant
+        ->where(
+            'sent > ?',
+            $start->getTimestamp()
+        )->where(
+            'sent < ?',
+            $end->getTimestamp()
+        );
+    if ($relevant->count() == 0) return null;
+    return sprintf(
+        '<h1>This time %s</h1>%s',
+        $last_semester,
+        new PaginatedTable(
+            $relevant,
+            function (Mailing $mailing): array {
+                return [
+                    $mailing->previewUrl()->html(),
+                    sprintf('<a href="%s">copy</a>', $mailing->copyUrl()),
+                ];
+            }
+        )
+    );
+});

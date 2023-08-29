@@ -3,11 +3,14 @@
 use DigraphCMS\Context;
 use DigraphCMS\Email\Email;
 use DigraphCMS\Email\Emails;
+use DigraphCMS\HTTP\HttpError;
 use DigraphCMS\Media\File;
 use DigraphCMS\RichContent\RichContent;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\BulkMail;
 
 $mailing = BulkMail::mailing(intval(Context::url()->actionSuffix()));
+if (!$mailing) throw new HttpError(404);
+include __DIR__ . '/_actions.include.php';
 
 printf('<h1>Preview: %s</h1>', $mailing->name());
 

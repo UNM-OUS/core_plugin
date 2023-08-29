@@ -18,6 +18,13 @@ class Semesters
         'Fall' => 80
     ];
 
+    public static function transferTime(DateTime|int|string $from_time, Semester $to_semester, Semester|null $from_semester = null): DateTime
+    {
+        $from_time = Format::parseDate($from_time);
+        $from_semester = $from_semester ?? static::fromDate($from_time);
+        return OUS::transferTime($from_time, $from_semester->start(), $to_semester->start());
+    }
+
     /**
      * Return the "latest" full semester. In the Summer this is previous Spring.
      *

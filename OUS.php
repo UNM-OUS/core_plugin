@@ -2,6 +2,7 @@
 
 namespace DigraphCMS_Plugins\unmous\ous_digraph_module;
 
+use DateTime;
 use DigraphCMS\Config;
 use DigraphCMS\DB\DB;
 use DigraphCMS\Events\Dispatcher;
@@ -10,6 +11,7 @@ use DigraphCMS\HTTP\AccessDeniedError;
 use DigraphCMS\Plugins\AbstractPlugin;
 use DigraphCMS\Session\Authentication;
 use DigraphCMS\Session\Session;
+use DigraphCMS\UI\Format;
 use DigraphCMS\UI\UserMenu;
 use DigraphCMS\URL\URL;
 use DigraphCMS\Users\Group;
@@ -24,6 +26,22 @@ Dispatcher::addSubscriber(BulkMail::class);
 
 class OUS extends AbstractPlugin
 {
+
+    public static function transferTime(DateTime|int|string $original_time, DateTime $original_reference, DateTime $new_reference): DateTime
+    {
+        $original_time = Format::parseDate($original_time);
+        // create a new time that is the same amount of time from $new_reference
+        $interval = $original_reference->diff($original_time);
+        $new_time = $new_reference->add($interval);
+        // manually set the time to be exactly the same, to correctly handle time changes (mostly)
+        $new_time->setTime(
+            intval($original_time->format('G')),
+            intval($original_time->format('i')),
+            intval($original_time->format('s')),
+        );
+        return $new_time;
+    }
+
     public static function userFromNetId(string $netId, bool $create = false): ?User
     {
         static $cache = [];
