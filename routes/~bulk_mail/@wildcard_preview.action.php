@@ -3,7 +3,6 @@
 use DigraphCMS\Context;
 use DigraphCMS\Email\Email;
 use DigraphCMS\Email\Emails;
-use DigraphCMS\Media\DeferredFile;
 use DigraphCMS\Media\File;
 use DigraphCMS\RichContent\RichContent;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\BulkMail;
@@ -11,6 +10,8 @@ use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\BulkMail;
 $mailing = BulkMail::mailing(intval(Context::url()->actionSuffix()));
 
 Context::response()->template('null.php');
+
+printf('<h1>Preview: %s</h1>', $mailing->name());
 
 // begin a new context with mock bulk_mail field so that tags will render
 Context::beginEmail();
