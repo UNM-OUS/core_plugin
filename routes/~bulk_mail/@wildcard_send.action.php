@@ -23,7 +23,7 @@ if (!$mailing || $mailing->sent()) throw new HttpError(404);
 
 printf('<h1>Send: %s</h1>', $mailing->name());
 Breadcrumb::setTopName($mailing->name());
-include __DIR__ . '/_action.include.php';
+include __DIR__ . '/_actions.include.php';
 
 echo (new CallbackLink(function () use ($mailing) {
     DB::query()->update('bulk_mail', [

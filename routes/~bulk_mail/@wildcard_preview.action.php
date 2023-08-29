@@ -3,6 +3,8 @@
 use DigraphCMS\Context;
 use DigraphCMS\Email\Email;
 use DigraphCMS\Email\Emails;
+use DigraphCMS\Media\DeferredFile;
+use DigraphCMS\Media\File;
 use DigraphCMS\RichContent\RichContent;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\BulkMail;
 
@@ -25,6 +27,15 @@ $email = new Email(
     $mailing->from(),
     new RichContent($mailing->body())
 );
-echo Emails::prepareBody_html($email);
+
+$file = new File(
+    'preview.html',
+    Emails::prepareBody_html($email),
+    [
+        'bulk_mail_preview',
+        $mailing->id(),
+    ]
+);
+printf('<iframe src="%s" class="autosized_frame"></iframe>', $file->url());
 
 Context::end();
