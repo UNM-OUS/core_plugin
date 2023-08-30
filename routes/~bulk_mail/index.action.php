@@ -84,8 +84,8 @@ Sidebar::add(function (): string|null {
         $last_semester,
         Semesters::current(),
     );
-    $start = $other_day->sub(new DateInterval('P1W'));
-    $end = $other_day->add(new DateInterval('P2W'));
+    $start = (clone $other_day)->sub(new DateInterval('P1W'));
+    $end = (clone $other_day)->add(new DateInterval('P2W'));
     $relevant
         ->where(
             'sent > ?',
@@ -122,8 +122,8 @@ Sidebar::add(function (): string|null {
         $last_semester,
         Semesters::current(),
     );
-    $start = $other_day->sub(new DateInterval('P1W'));
-    $end = $other_day->add(new DateInterval('P2W'));
+    $start = (clone $other_day)->sub(new DateInterval('P1W'));
+    $end = (clone $other_day)->add(new DateInterval('P2W'));
     $relevant
         ->where(
             'sent > ?',
