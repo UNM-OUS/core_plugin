@@ -151,34 +151,34 @@ bulk_mail:
     site-promotion:
       enabled: true
   sources:
-    votingfaculty:
-      enabled: true
-      class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\VotingFaculty
-    votingfaculty/central:
-      enabled: true
-      class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\VotingFaculty_central
-    votingfaculty/north:
-      enabled: true
-      class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\VotingFaculty_north
-    votingfaculty/hsc:
-      enabled: true
-      class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\VotingFaculty_hsc
-    votingfaculty/branch:
-      enabled: true
-      class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\VotingFaculty_branch
-    allfaculty:
+    faculty:
       enabled: true
       class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\AllFaculty
-    allfaculty/central:
+    faculty/voting:
+      enabled: true
+      class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\VotingFaculty
+    faculty/voting/central:
+      enabled: true
+      class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\VotingFaculty_central
+    faculty/voting/north:
+      enabled: true
+      class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\VotingFaculty_north
+    faculty/voting/hsc:
+      enabled: true
+      class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\VotingFaculty_hsc
+    faculty/voting/branch:
+      enabled: true
+      class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\VotingFaculty_branch
+    faculty/central:
       enabled: true
       class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\AllFaculty_central
-    allfaculty/north:
+    faculty/north:
       enabled: true
       class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\AllFaculty_north
-    allfaculty/hsc:
+    faculty/hsc:
       enabled: true
       class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\AllFaculty_hsc
-    allfaculty/branch:
+    faculty/branch:
       enabled: true
       class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\AllFaculty_branch
     staff:
