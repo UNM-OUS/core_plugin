@@ -36,7 +36,7 @@ final class MainBulkTables extends AbstractMigration
             ->addColumn('email', 'string', ['length' => 250, 'null' => false])
             ->addColumn('user', 'uuid', ['null' => true])
             ->addColumn('sent', 'integer', ['null' => true])
-            ->addForeignKey(['bulk_mail_id'], 'bulk_mail')
+            ->addForeignKey(['bulk_mail_id'], 'bulk_mail', ['id'])
             ->addForeignKey(['user'], 'user', ['uuid'])
             ->addIndex('email')
             ->addIndex('sent')

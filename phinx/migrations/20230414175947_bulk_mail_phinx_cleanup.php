@@ -23,7 +23,8 @@ final class BulkMailPhinxCleanup extends AbstractMigration
         }
         // update all the primary key id columns
         $primary_keys = [
-            'bulk_mail', 'bulk_mail_message'
+            'bulk_mail',
+            'bulk_mail_message'
         ];
         foreach ($primary_keys as $table) {
             $this->table($table)
@@ -35,7 +36,7 @@ final class BulkMailPhinxCleanup extends AbstractMigration
         foreach ($foreign_keys as $table => $key) {
             $this->table($table)
                 ->changeColumn($key['column'], 'integer', ['null' => false, 'signed' => false])
-                ->addForeignKey($key['column'], $key['table'])
+                ->addForeignKey($key['column'], $key['table'], ['id'])
                 ->save();
         }
     }
