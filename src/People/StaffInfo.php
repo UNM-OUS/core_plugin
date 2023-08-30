@@ -12,8 +12,7 @@ class StaffInfo
 {
     public static function search(string|null $netId): ?StaffInfo
     {
-        $query = SharedDB::query()
-            ->from('staff')
+        $query = Staff::select()
             ->where('netid', $netId);
         if ($result = $query->fetch()) {
             return new StaffInfo(

@@ -151,21 +151,51 @@ bulk_mail:
     site-promotion:
       enabled: true
   sources:
+    votingfaculty:
+      enabled: true
+      class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\VotingFaculty
+    votingfaculty/central:
+      enabled: true
+      class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\VotingFaculty_central
+    votingfaculty/north:
+      enabled: true
+      class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\VotingFaculty_north
+    votingfaculty/hsc:
+      enabled: true
+      class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\VotingFaculty_hsc
+    votingfaculty/branch:
+      enabled: true
+      class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\VotingFaculty_branch
     allfaculty:
       enabled: true
       class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\AllFaculty
+    allfaculty/central:
+      enabled: true
+      class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\AllFaculty_central
     allfaculty/north:
       enabled: true
       class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\AllFaculty_north
     allfaculty/hsc:
       enabled: true
       class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\AllFaculty_hsc
-    allfaculty/central:
-      enabled: true
-      class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\AllFaculty_north
     allfaculty/branch:
       enabled: true
       class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\AllFaculty_branch
+    staff:
+      enabled: true
+      class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\Staff
+    staff/central:
+      enabled: true
+      class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\Staff_central
+    staff/north:
+      enabled: true
+      class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\Staff_north
+    staff/hsc:
+      enabled: true
+      class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\Staff_hsc
+    staff/branch:
+      enabled: true
+      class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\Staff_branch
 
 email:
   from: univsec@unm.edu
