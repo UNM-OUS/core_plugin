@@ -94,10 +94,12 @@ Sidebar::add(function (): string|null {
             'sent < ?',
             $end->getTimestamp()
         );
-    if ($relevant->count() == 0) return null;
+    // if ($relevant->count() == 0) return null;
     return sprintf(
-        '<h1>This time %s</h1>%s',
+        '<h1>This time %s</h1><div class="small">%s to %s</div>%s',
         $last_semester,
+        Format::date($start),
+        Format::date($end),
         new PaginatedTable(
             $relevant,
             function (Mailing $mailing): array {
@@ -130,10 +132,12 @@ Sidebar::add(function (): string|null {
             'sent < ?',
             $end->getTimestamp()
         );
-    if ($relevant->count() == 0) return null;
+    // if ($relevant->count() == 0) return null;
     return sprintf(
-        '<h1>This time %s</h1>%s',
+        '<h1>This time %s</h1><div class="small">%s to %s</div>%s',
         $last_semester,
+        Format::date($start),
+        Format::date($end),
         new PaginatedTable(
             $relevant,
             function (Mailing $mailing): array {
