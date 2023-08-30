@@ -56,6 +56,11 @@ class FacultyInfo
         return in_array($this->org, Config::get('unm.branch_orgs'));
     }
 
+    public function north(): bool
+    {
+        return $this->hsc() || in_array($this->org, Config::get('unm.north_orgs'));
+    }
+
     public function rank(): string
     {
         static $rank = false;

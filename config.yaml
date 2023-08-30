@@ -20,6 +20,8 @@ unm:
     - Los Alamos Branch
     - Taos Branch
     - Valencia County Branch
+  north_orgs: # note that this is only orgs that are north BEYOND the HSC orgs above
+    - School of Law
   semester_prelaunch: P7D # give each semester a 7 day "buffer" where we switch before its official start
   semesters: # known start dates of semesters, to update check https://registrar.unm.edu/academic-calendar/ten-year-semester-dates-calendar.html
     2033:
@@ -149,9 +151,21 @@ bulk_mail:
     site-promotion:
       enabled: true
   sources:
-    all_users:
+    allfaculty:
       enabled: true
-      class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\AllUsers
+      class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\AllFaculty
+    allfaculty/north:
+      enabled: true
+      class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\AllFaculty_north
+    allfaculty/hsc:
+      enabled: true
+      class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\AllFaculty_hsc
+    allfaculty/central:
+      enabled: true
+      class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\AllFaculty_north
+    allfaculty/branch:
+      enabled: true
+      class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\AllFaculty_branch
 
 email:
   from: univsec@unm.edu
