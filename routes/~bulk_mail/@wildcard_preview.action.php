@@ -36,6 +36,7 @@ $file = new File(
     [
         'bulk_mail_preview',
         $mailing->id(),
+        $mailing->updated()->getTimestamp(),
     ]
 );
 printf('<iframe src="%s" style="border:0;width:100%%;" class="autosized-frame"></iframe>', $file->url());
