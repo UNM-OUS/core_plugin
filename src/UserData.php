@@ -6,6 +6,7 @@ use DigraphCMS\Cache\Cache;
 use DigraphCMS\Curl\CurlHelper;
 use DigraphCMS\Config;
 use DigraphCMS\DB\DB;
+use DigraphCMS\HTTP\HttpError;
 use DigraphCMS\URL\URL;
 use DigraphCMS\Users\Group;
 use DigraphCMS\Users\User;
@@ -169,7 +170,7 @@ class UserData
         // if force refresh is true or stored cache isn't set or is expired, run job to get data
         if ($forceRefresh || !Cache::exists('unm/userdata') || Cache::expired('unm/userdata')) {
             $data = CurlHelper::get(Config::get('unm.user_source'));
-            if ($data === null) throw new Exception('UNM user source failed to load: ' . CurlHelper::error());
+            if ($data === null) throw new HttpError(503, 'User data failed to load, this is a rare and usually a temporary error. Please try again in a few minutes.');
             if ($data = Spyc::YAMLLoadString($data)) Cache::set('unm/userdata', $data, -1);
             else throw new Exception('UNM user source failed to parse');
             return $cache = $data;
