@@ -25,9 +25,13 @@ if ($form->ready()) {
     $user = OUS::userFromNetId($netid->value(), true);
     $source = Session::authenticate(
         $user->uuid(),
-        sprintf('Login system bypassed by administrative user %s', Users::current()->name())
+        sprintf(
+            'Login system bypassed by administrative user %s (%s)',
+            Users::current()->uuid(),
+            Users::current()->name()
+        )
     );
-    Notifications::flashConfirmation('You are now signed in as '.$user->name());
+    Notifications::flashConfirmation('You are now signed in as ' . $user->name());
     throw new RedirectException(new URL('/'));
 }
 
