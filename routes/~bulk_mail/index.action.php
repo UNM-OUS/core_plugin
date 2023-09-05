@@ -59,7 +59,7 @@ echo new PaginatedTable(
 // look for and surface relevant past mailings from this time last year/semester
 
 // this time last equivalent semester
-Sidebar::add(function (): string|null {
+Sidebar::add(function (): string {
     $last_semester = Semesters::currentFull()->previous(3);
     $relevant = BulkMail::mailings();
     $other_day = $start = Semesters::transferTime(

@@ -3,3 +3,4 @@ parameters:
   paths:
     - src
     - routes
+    - OUS.php
