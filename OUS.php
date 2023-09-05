@@ -30,6 +30,9 @@ class OUS extends AbstractPlugin
     public static function transferTime(DateTime|int|string $original_time, DateTime $original_reference, DateTime $new_reference): DateTime
     {
         $original_time = Format::parseDate($original_time);
+        // normalize time of references
+        $original_reference = (clone $original_reference)->setTime(0, 0, 0);
+        $new_reference = (clone $new_reference)->setTime(0, 0, 0);
         // create a new time that is the same amount of time from $new_reference
         $interval = $original_reference->diff($original_time);
         $new_time = $new_reference->add($interval);
