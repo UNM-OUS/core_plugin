@@ -142,8 +142,9 @@ class OUS extends AbstractPlugin
     }
 
     /** @return string[] */
-    public static function userNetIDs(string $userID = null): array
+    public static function userNetIDs(string|User $userID = null): array
     {
+        if ($userID instanceof User) $userID = $user->uuid();
         $userID = $userID ?? Session::uuid();
         $netIDs = array_map(
             function ($row) {
