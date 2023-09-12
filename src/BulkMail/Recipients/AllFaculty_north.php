@@ -18,7 +18,7 @@ class AllFaculty_north extends AllFaculty
         $query = parent::query()
             ->where(
                 'org',
-                array_merge(Config::get('unm.hsc_orgs'), Config::get('unm.north_orgs'))
+                Config::get('unm.north_orgs')
             );
         return $query;
     }

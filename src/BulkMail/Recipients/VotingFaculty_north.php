@@ -9,7 +9,7 @@ class VotingFaculty_north extends VotingFaculty
 {
     public function label(): string
     {
-        return "North Campus Voting Faculty";
+        return "North Campus Voting Faculty (non-HSC)";
     }
 
     protected function query(): Select
@@ -18,7 +18,7 @@ class VotingFaculty_north extends VotingFaculty
         $query = parent::query()
             ->where(
                 'org',
-                array_merge(Config::get('unm.hsc_orgs'), Config::get('unm.north_orgs'))
+                Config::get('unm.north_orgs')
             );
         return $query;
     }

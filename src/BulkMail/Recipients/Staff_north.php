@@ -9,7 +9,7 @@ class Staff_north extends Staff
 {
     public function label(): string
     {
-        return "North Campus Staff";
+        return "North Campus Staff (non-HSC)";
     }
 
     protected function query(): Select
@@ -18,7 +18,7 @@ class Staff_north extends Staff
         $query = parent::query()
             ->where(
                 'org',
-                array_merge(Config::get('unm.hsc_orgs'), Config::get('unm.north_orgs'))
+                Config::get('unm.north_orgs')
             );
         return $query;
     }

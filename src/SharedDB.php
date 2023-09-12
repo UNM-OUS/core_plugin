@@ -9,7 +9,7 @@ use PDO;
 
 abstract class SharedDB
 {
-    protected static function pdo(): PDO
+    public static function pdo(): PDO
     {
         static $pdo;
         if (!$pdo) {

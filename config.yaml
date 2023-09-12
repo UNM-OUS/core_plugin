@@ -15,13 +15,13 @@ unm:
     - HSC VP Research
     - UNM HSC West Campus
     - UNM Medical Group
+  north_orgs: # note that this is only orgs that are north BEYOND the HSC orgs above
+    - School of Law
   branch_orgs:
     - Gallup Branch
     - Los Alamos Branch
     - Taos Branch
     - Valencia County Branch
-  north_orgs: # note that this is only orgs that are north BEYOND the HSC orgs above
-    - School of Law
   semester_prelaunch: P7D # give each semester a 7 day "buffer" where we switch before its official start
   semesters: # known start dates of semesters, to update check https://registrar.unm.edu/academic-calendar/ten-year-semester-dates-calendar.html
     2033:
@@ -158,43 +158,43 @@ bulk_mail:
       enabled: true
       class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\VotingFaculty
     faculty/voting/central:
-      enabled: true
+      enabled: false
       class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\VotingFaculty_central
     faculty/voting/north:
-      enabled: true
+      enabled: false
       class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\VotingFaculty_north
     faculty/voting/hsc:
-      enabled: true
+      enabled: false
       class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\VotingFaculty_hsc
     faculty/voting/branch:
-      enabled: true
+      enabled: false
       class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\VotingFaculty_branch
     faculty/central:
-      enabled: true
+      enabled: false
       class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\AllFaculty_central
     faculty/north:
-      enabled: true
+      enabled: false
       class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\AllFaculty_north
     faculty/hsc:
-      enabled: true
+      enabled: false
       class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\AllFaculty_hsc
     faculty/branch:
-      enabled: true
+      enabled: false
       class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\AllFaculty_branch
     staff:
       enabled: true
       class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\Staff
     staff/central:
-      enabled: true
+      enabled: false
       class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\Staff_central
     staff/north:
-      enabled: true
+      enabled: false
       class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\Staff_north
     staff/hsc:
-      enabled: true
+      enabled: false
       class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\Staff_hsc
     staff/branch:
-      enabled: true
+      enabled: false
       class: \DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\Staff_branch
 
 email:
