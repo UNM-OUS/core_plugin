@@ -21,6 +21,16 @@
   max-width: $line-length;
   padding: $grid 0;
   display: none;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-size: 1em;
+    margin: $grid 0;
+  }
 }
 
 .loboalert__expand,
