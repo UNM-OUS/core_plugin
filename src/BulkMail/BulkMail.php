@@ -20,6 +20,8 @@ class BulkMail
     const ADMIN_ACTIONS = [];
     const ADMIN_ACTION_PREFIXES = ['send'];
 
+    // TODO: maintenance event listener to send scheduled mailings
+
     public static function mailings(): MailingSelect
     {
         return (new MailingSelect)
@@ -31,7 +33,15 @@ class BulkMail
     {
         return (new MailingSelect)
             ->where('sent is null')
+            ->where('scheduled is null')
             ->order('updated DESC');
+    }
+
+    public static function scheduled(): MailingSelect
+    {
+        return (new MailingSelect)
+            ->where('sent is null')
+            ->order('scheduled is not null');
     }
 
     public static function mailing(int $id, bool $bust_cache = false): ?Mailing

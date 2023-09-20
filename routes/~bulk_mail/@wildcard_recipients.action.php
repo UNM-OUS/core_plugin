@@ -11,13 +11,10 @@ use DigraphCMS\HTTP\RefreshException;
 use DigraphCMS\Session\Session;
 use DigraphCMS\UI\Breadcrumb;
 use DigraphCMS\UI\CallbackLink;
-use DigraphCMS\UI\Pagination\ColumnStringFilteringHeader;
-use DigraphCMS\UI\Pagination\ColumnUserFilteringHeader;
+use DigraphCMS\UI\Notifications;
 use DigraphCMS\UI\Pagination\PaginatedTable;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\BulkMail;
-use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Message;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\AbstractRecipientSource;
-use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\Recipient;
 
 $mailing = BulkMail::mailing(intval(Context::url()->actionSuffix()));
 if (!$mailing || $mailing->sent()) throw new HttpError(404);
@@ -25,6 +22,8 @@ include __DIR__ . '/_actions.include.php';
 
 printf('<h1>Select recipients: %s</h1>', $mailing->name());
 Breadcrumb::setTopName($mailing->name());
+
+if ($mailing->scheduled()) Notifications::printWarning("This message is scheduled to send. Its recipient list will be rebuilt automatically before sending.");
 
 echo "<h2>Select recipient sources</h2>";
 
@@ -123,42 +122,4 @@ if ($form->ready()) {
     throw new RefreshException();
 }
 echo $form;
-echo "</div>";
-
-// display of and recalculation tools for final list
-echo "<h2>Generate recipient list</h2>";
-echo "<div class='navigation-frame navigation-frame--stateless' id='final-recipient-list'>";
-echo (new CallbackLink(function () use ($mailing) {
-    // clear messages
-    DB::query()->delete('bulk_mail_message')
-        ->where('bulk_mail_id', $mailing->id())
-        ->where('sent is null')
-        ->execute();
-    // add messages from sources
-    foreach ($mailing->sources() as $source) {
-        foreach ($source->recipients() as $recipient) {
-            $mailing->addRecipient($recipient);
-        }
-    }
-    // add messages from extra recipients
-    foreach ($mailing->extraRecipientAddresses() as $email) {
-        $mailing->addRecipient(new Recipient($email));
-    }
-}))
-    ->setData('target', '_frame')
-    ->addClass('button')
-    ->addChild('Rebuild recipient list');
-echo new PaginatedTable(
-    $mailing->messages(),
-    function (Message $message): array {
-        return [
-            $message->email(),
-            $message->user()
-        ];
-    },
-    [
-        new ColumnStringFilteringHeader('Email', 'email'),
-        new ColumnUserFilteringHeader('Account', 'user')
-    ]
-);
 echo "</div>";

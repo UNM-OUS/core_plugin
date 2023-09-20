@@ -1,7 +1,7 @@
 <?php
+
 use DigraphCMS\Context;
 use DigraphCMS\UI\ActionMenu;
-use DigraphCMS\URL\URL;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\BulkMail;
 
 $id = Context::url()->actionSuffix();
@@ -18,7 +18,7 @@ if ($mailing->sent()) {
         ActionMenu::addContextAction($mailing->previewUrl(), 'preview mailing');
         ActionMenu::addContextAction($mailing->recipientsUrl(), 'mailing recipients');
     }
-    if ($mailing->messageCount()) {
+    if ($mailing->extraRecipientAddresses() || $mailing->sources()) {
         ActionMenu::addContextAction($mailing->sendUrl(), 'send mailing');
     }
 }

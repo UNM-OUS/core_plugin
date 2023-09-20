@@ -34,8 +34,31 @@ echo new PaginatedTable(
     ]
 );
 
-echo "<h2>Sent mailings</h2>";
+echo "<h2>Scheduled</h2>";
+echo new PaginatedTable(
+    BulkMail::scheduled()
+        ->order('scheduled asc'),
+    function (Mailing $mailing): array {
+        return [
+            $mailing->editUrl()->html(),
+            $mailing->body() ? sprintf('<a href="%s">preview</a>', $mailing->previewUrl()) : '',
+            $mailing->body() ? sprintf('<a href="%s">recipients (%s)</a>', $mailing->recipientsUrl(), $mailing->messageCount()) : '',
+            $mailing->messageCount() ? sprintf('<a href="%s">schedule</a>', $mailing->sendUrl()) : '',
+            $mailing->scheduled() ? Format::date($mailing->scheduled()) : '',
+            sprintf('<a href="%s">delete</a>', $mailing->deleteUrl())
+        ];
+    },
+    [
+        'Mailing',
+        '',
+        '',
+        '',
+        'Scheduled',
+        ''
+    ]
+);
 
+echo "<h2>Sent</h2>";
 echo new PaginatedTable(
     BulkMail::mailings(),
     function (Mailing $mailing): array {
