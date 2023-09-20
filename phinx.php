@@ -8,34 +8,28 @@ use DigraphCMS\DB\DB;
 require_once __DIR__ . '/vendor/autoload.php';
 
 // run initial configuration
+DB::addPhinxPath(realpath(__DIR__ . '/phinx'));
 CachedInitializer::run(
     'initialization',
     function (CacheableState $state) {
-        $state->config('paths.base', __DIR__);
-        $state->config('paths.web', __DIR__);
+        $state->mergeConfig(Config::parseJsonFile(__DIR__ . '/env.json'), true);
+        $state->config('paths.base', __DIR__ . '/demo');
+        $state->config('paths.web', __DIR__ . '/demo');
     }
 );
 
-// set up module-development-specific phinx config, such as using in-memory sqlite
-// this file would not work for a whole site, as it won't actually persist data
 return
     [
         'paths' => [
-            'migrations' => array_merge(
-                [__DIR__ . '/phinx/migrations'],
-                DB::migrationPaths()
-            ),
-            'seeds' => array_merge(
-                [__DIR__ . '/phinx/seeds'],
-                DB::seedPaths()
-            ),
+            'migrations' => DB::migrationPaths(),
+            'seeds' => DB::seedPaths(),
         ],
         'environments' => [
             'default_migration_table' => 'phinxlog',
             'default_environment' => 'current',
             'current' => [
                 'name' => 'Current environment',
-                'connection' => new PDO('sqlite::memory:')
+                'connection' => DB::pdo()
             ]
         ],
         'version_order' => 'creation',

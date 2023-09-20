@@ -16,5 +16,13 @@
         "psr-4": {
             "DigraphCMS_Plugins\\unmous\\ous_digraph_module\\": "src/"
         }
+    },
+    "scripts": {
+        "migrate": [
+            "phinx migrate"
+        ],
+        "seed": [
+            "phinx seed:run"
+        ]
     }
 }

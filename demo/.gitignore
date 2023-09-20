@@ -1,0 +1,6 @@
+/storage/*
+/cache/*
+/files/*
+!/files/.htaccess
+# !/storage/shared.sqlite
+cron_error.log
