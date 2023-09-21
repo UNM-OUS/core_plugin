@@ -17,9 +17,9 @@ echo new PaginatedTable(
     function (Mailing $mailing): array {
         return [
             $mailing->editUrl()->html(),
-            $mailing->body() ? sprintf('<a href="%s">preview</a>', $mailing->previewUrl()) : '',
-            $mailing->body() ? sprintf('<a href="%s">recipients (%s)</a>', $mailing->recipientsUrl(), $mailing->messageCount()) : '',
-            $mailing->messageCount() ? sprintf('<a href="%s">send</a>', $mailing->sendUrl()) : '',
+            sprintf('<a href="%s">preview</a>', $mailing->previewUrl()),
+            sprintf('<a href="%s">recipients</a>', $mailing->recipientsUrl()),
+            sprintf('<a href="%s">schedule</a>', $mailing->sendUrl()),
             Format::date($mailing->updated()),
             sprintf('<a href="%s">delete</a>', $mailing->deleteUrl())
         ];
@@ -41,9 +41,9 @@ echo new PaginatedTable(
     function (Mailing $mailing): array {
         return [
             $mailing->editUrl()->html(),
-            $mailing->body() ? sprintf('<a href="%s">preview</a>', $mailing->previewUrl()) : '',
-            $mailing->body() ? sprintf('<a href="%s">recipients (%s)</a>', $mailing->recipientsUrl(), $mailing->messageCount()) : '',
-            $mailing->messageCount() ? sprintf('<a href="%s">schedule</a>', $mailing->sendUrl()) : '',
+            sprintf('<a href="%s">preview</a>', $mailing->previewUrl()),
+            sprintf('<a href="%s">recipients</a>', $mailing->recipientsUrl()),
+            sprintf('<a href="%s">schedule</a>', $mailing->sendUrl()),
             $mailing->scheduled() ? Format::date($mailing->scheduled()) : '',
             sprintf('<a href="%s">delete</a>', $mailing->deleteUrl())
         ];
