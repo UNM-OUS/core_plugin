@@ -20,3 +20,4 @@ RUN sed -i 's,^upload_max_filesize =.*$,upload_max_filesize = 300M,' /etc/php/8.
 # copy shared data from workspace
 COPY shared.sqlite /workspace/core_plugin/demo/storage/
 COPY global.yaml /workspace/core_plugin/demo/storage/
+RUN chmod 0777 -R /workspace/core_plugin/demo/storage
