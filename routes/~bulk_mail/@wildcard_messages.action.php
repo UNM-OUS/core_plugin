@@ -28,34 +28,36 @@ if ($job = Context::arg('job')) {
 }
 
 // display of and recalculation tools for final list
-echo "<h2>Final recipient list</h2>";
-echo new PaginatedTable(
-    $mailing->messages(),
-    function (Message $message): array {
-        $email = $message->emailMessage();
-        if (!$email) $status = '';
-        elseif ($email->error()) $status = '<span class="notification notification--error">error</span>';
-        elseif ($email->sent()) $status = '<span class="notification notification--confirmation">sent ' . Format::date($email->sent()) . '</span>';
-        else $status = '<span class="notification notification--notice">queued</span>';
-        return [
-            $message->email(),
-            $message->user(),
-            $message->sent() ? Format::date($message->sent()) : '',
-            $email ? sprintf('<a href="%s">%s</a>', $email->url_adminInfo(), $email->uuid()) : '',
-            $status
-        ];
-    },
-    [
-        new ColumnStringFilteringHeader('Email', 'email'),
-        new ColumnUserFilteringHeader('Account', 'user'),
-        'Built',
-        'Email ID',
-        'Status',
-    ]
-);
+$messages = $mailing->messages();
+if ($messages->count()) {
+    echo "<h2>Final message list</h2>";
+    echo new PaginatedTable(
+        $messages,
+        function (Message $message): array {
+            $email = $message->emailMessage();
+            if (!$email) $status = '';
+            elseif ($email->error()) $status = '<span class="notification notification--error">error</span>';
+            elseif ($email->sent()) $status = '<span class="notification notification--confirmation">sent ' . Format::date($email->sent()) . '</span>';
+            else $status = '<span class="notification notification--notice">queued</span>';
+            return [
+                $message->email(),
+                $message->user(),
+                $message->sent() ? Format::date($message->sent()) : '',
+                $email ? sprintf('<a href="%s">%s</a>', $email->url_adminInfo(), $email->uuid()) : '',
+                $status
+            ];
+        },
+        [
+            new ColumnStringFilteringHeader('Email', 'email'),
+            new ColumnUserFilteringHeader('Account', 'user'),
+            'Built',
+            'Email ID',
+            'Status',
+        ]
+    );
+}
 
 echo "<h2>Recipient sources</h2>";
-
 // display selected sources
 echo new PaginatedTable(
     $mailing->sources(),

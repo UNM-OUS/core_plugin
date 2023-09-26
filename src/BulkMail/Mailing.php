@@ -50,6 +50,13 @@ class Mailing
     /** @var int|null */
     protected $scheduled;
 
+    /**
+     * Spawn a job to send a bulk mailing, which will rebuild recipients and
+     * then queue all messages. If mailing has already been sent, it does
+     * nothing and returns null.
+     *
+     * @return DeferredJob|null
+     */
     public function send(): DeferredJob|null
     {
         if ($this->sent()) return null;
@@ -282,22 +289,10 @@ class Mailing
         return (new DateTime)->setTimestamp($this->updated);
     }
 
-    public function setScheduled(DateTime|int|null $scheduled): static
-    {
-
-        if (is_null($scheduled)) {
-            $this->scheduled = null;
-            return $this;
-        }
-        if (!($scheduled instanceof DateTime)) $scheduled = Format::parseDate($scheduled);
-        $this->scheduled = $scheduled->getTimestamp();
-        return $this;
-    }
-
     public function scheduled(): DateTime|null
     {
         if (is_null($this->scheduled)) return null;
-        else return (new DateTime)->setTimestamp($this->created);
+        else return (new DateTime)->setTimestamp($this->scheduled);
     }
 
     public function sent(): ?DateTime

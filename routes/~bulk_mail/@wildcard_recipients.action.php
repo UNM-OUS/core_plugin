@@ -37,7 +37,7 @@ echo count($mailing->sources()) ? new PaginatedTable(
         return [
             '<span class="notification notification--confirmation">' . $source->name() . '</span>',
             '<span class="notification notification--confirmation">' . $source->label() . '</span>',
-            number_format($source->count()),
+            '~' . number_format($source->count()),
             (new CallbackLink(function () use ($source, $mailing) {
                 $sources = array_filter($mailing->sourceNames(), function ($s) use ($source) {
                     return !($s == $source->name() || str_starts_with($source->name(), "$s/"));

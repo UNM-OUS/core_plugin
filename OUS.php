@@ -20,12 +20,23 @@ use DigraphCMS\Users\User;
 use DigraphCMS\Users\Users;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\BulkMail;
 use Thunder\Shortcode\Shortcode\ShortcodeInterface;
+use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Mailing;
 
 // register BulkMail with dispatcher
 Dispatcher::addSubscriber(BulkMail::class);
 
 class OUS extends AbstractPlugin
 {
+
+    public static function cronJob_frequent(): void
+    {
+        // get mailings that are scheduled for now or earlier and not sent
+        $mailings = BulkMail::scheduled()->where('scheduled <= ?', time());
+        /** @var Mailing $mailing */
+        foreach ($mailings as $mailing) {
+            $mailing->send();
+        }
+    }
 
     public static function transferTime(DateTime|int|string $original_time, DateTime $original_reference, DateTime $new_reference): DateTime
     {
@@ -151,9 +162,11 @@ class OUS extends AbstractPlugin
                 return $row['provider_id'];
             },
             // @phpstan-ignore-next-line
-            DB::query()->from('user_source')
-                ->where('user_uuid = ?', [$userID])
-                ->where('source = "cas" AND provider = "netid"')
+            DB::query()
+                ->from('user_source')
+                ->where('user_uuid ', $userID)
+                ->where('source', 'cas')
+                ->where('provider', 'netid')
                 ->fetchAll()
         );
         $netIDs = array_filter($netIDs, function ($e): bool {
@@ -201,8 +214,8 @@ class OUS extends AbstractPlugin
         }
         $user->name(
             PersonInfo::getFullNameFor($netID)
-            ?? PersonInfo::getFirstNameFor($netID)
-            ?? $netID
+                ?? PersonInfo::getFirstNameFor($netID)
+                ?? $netID
         );
         $user->addEmail($netID . '@unm.edu', 'Main campus NetID', true);
     }
