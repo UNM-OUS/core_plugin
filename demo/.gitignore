@@ -2,5 +2,4 @@
 /cache/*
 /files/*
 !/files/.htaccess
-# !/storage/shared.sqlite
-cron_error.log
+/cron_error.log
