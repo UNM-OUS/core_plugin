@@ -19,10 +19,8 @@ class Validation
                 if (preg_match('/@.+\.unm\.edu$/', $input->value(), $matches)) {
                     return "Anyone associated with UNM should be referenced by their main campus NetID, not their <em>" . $matches[0] . "</em> email address. This is in many cases important for data consistency and login system integrations.";
                 }
-            } else {
-                // validate as NetID
-                return static::netID()($input);
             }
+            return static::netID()($input);
         };
     }
 
