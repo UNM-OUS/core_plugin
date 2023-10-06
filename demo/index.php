@@ -52,6 +52,9 @@ CachedInitializer::config(
     }
 );
 
+// load composer plugins
+Plugins::loadFromComposer(__DIR__ . '/../composer.lock');
+
 // load main repo as a plugin
 Plugins::load(realpath(__DIR__ . '/..'), false);
 DB::addPhinxPath(realpath(__DIR__ . '/../phinx'));
