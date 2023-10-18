@@ -137,7 +137,8 @@ user_sources:
         name: UNM NetID
         active: true
         version: CAS_VERSION_3_0
-        server: casprod.unm.edu # formerly login.unm.edu
+        # server: casprod.unm.edu # this server is being deprecated, but login.unm.edu gives UUIDs instead of NetIDs ... sometimes
+        server: login.unm.edu
         port: 443
         context: cas
         setnocasservervalidation: true
