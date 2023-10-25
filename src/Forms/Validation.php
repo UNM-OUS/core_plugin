@@ -9,9 +9,11 @@ class Validation
     public static function netIDorEmail(): callable
     {
         return function (InputInterface $input): string|null {
-            if (!$input->value()) return null;
+            if (!$input->value())
+                return null;
             if (strpos($input->value(), '@') !== false) {
                 // validate as email
+                // make sure it's a valid email address
                 if (!filter_var($input->value(), FILTER_VALIDATE_EMAIL)) {
                     return "Please enter a valid email address or NetID";
                 }
@@ -19,15 +21,19 @@ class Validation
                 if (preg_match('/@.+\.unm\.edu$/', $input->value(), $matches)) {
                     return "Anyone associated with UNM should be referenced by their main campus NetID, not their <em>" . $matches[0] . "</em> email address. This is in many cases important for data consistency and login system integrations.";
                 }
+                // return null
+                return null;
+            } else {
+                return static::netID()($input);
             }
-            return static::netID()($input);
         };
     }
 
     public static function netID(): callable
     {
         return function (InputInterface $input): string|null {
-            if (!$input->value()) return null;
+            if (!$input->value())
+                return null;
             // validate as NetID
             if (preg_match('/^[0-9]{9}$/', $input->value())) {
                 return "Please enter a NetID username, not a Banner ID number";
@@ -45,9 +51,12 @@ class Validation
     public static function notUglyCase(): callable
     {
         return function (InputInterface $input): string|null {
-            if (!$input->value()) return null;
-            if ($input->value() == strtoupper($input->value())) return 'Please do not enter a value in all upper case';
-            if ($input->value() == strtolower($input->value())) return 'Please do not enter a value in all lower case';
+            if (!$input->value())
+                return null;
+            if ($input->value() == strtoupper($input->value()))
+                return 'Please do not enter a value in all upper case';
+            if ($input->value() == strtolower($input->value()))
+                return 'Please do not enter a value in all lower case';
             return null;
         };
     }
@@ -66,9 +75,11 @@ class Validation
     public static function integerMin(int $min): callable
     {
         return function (InputInterface $input) use ($min): string|null {
-            if ($input->value() == '') return null;
+            if ($input->value() == '')
+                return null;
             $value = intval($input->value());
-            if ($value < $min) return 'Must be at least ' . number_format($min);
+            if ($value < $min)
+                return 'Must be at least ' . number_format($min);
             return null;
         };
     }
@@ -76,9 +87,11 @@ class Validation
     public static function integerMax(int $max): callable
     {
         return function (InputInterface $input) use ($max): string|null {
-            if ($input->value() == '') return null;
+            if ($input->value() == '')
+                return null;
             $value = intval($input->value());
-            if ($value > $max) return 'Cannot be more than ' . number_format($max);
+            if ($value > $max)
+                return 'Cannot be more than ' . number_format($max);
             return null;
         };
     }
