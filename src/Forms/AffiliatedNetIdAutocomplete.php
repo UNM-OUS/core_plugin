@@ -119,7 +119,7 @@ class AffiliatedNetIdAutocomplete extends AutocompleteInput
             ];
         } else {
             return [
-                'html' => '<div class="title">NetID: <code>' . $netId . '</code></div>',
+                'html' => '<div class="title">NetID: <kbd>' . $netId . '</kbd></div>',
                 'value' => $netId,
                 'class' => 'user'
             ];
