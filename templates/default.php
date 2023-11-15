@@ -6,6 +6,7 @@ are not some sort of error or special case.
 
 use DigraphCMS\Context;
 use DigraphCMS\Cron\Cron;
+use DigraphCMS\Media\Media;
 use DigraphCMS\Session\Cookies;
 use DigraphCMS\UI\ActionMenu;
 use DigraphCMS\UI\Breadcrumb;
@@ -28,6 +29,7 @@ use DigraphCMS\UI\UserMenu;
         <?php echo Context::fields()['page.name'] ?? 'Untitled'; ?>
         :: <?php echo Context::fields()['site.name']; ?>
     </title>
+    <link rel="preload" href="<?php echo Media::get('/hero.jpg')->url(); ?>" as="image" type="image/jpeg" />
     <?php echo Theme::head(); ?>
 </head>
 
