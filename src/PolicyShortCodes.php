@@ -7,7 +7,7 @@ use Thunder\Shortcode\Shortcode\ShortcodeInterface;
 
 class PolicyShortCodes
 {
-    public function onShortCode_rpm(ShortcodeInterface $s): ?string
+    public static function onShortCode_rpm(ShortcodeInterface $s): ?string
     {
         $url = null;
         $title = 'RPM Policy';
@@ -56,7 +56,7 @@ class PolicyShortCodes
             ->setAttribute('title', $title);
     }
 
-    public function onShortCode_uap(ShortcodeInterface $s): ?string
+    public static function onShortCode_uap(ShortcodeInterface $s): ?string
     {
         $url = null;
         $title = 'UAP Policy';
@@ -84,7 +84,7 @@ class PolicyShortCodes
             ->setAttribute('title', $title);
     }
 
-    public function onShortCode_fhb(ShortcodeInterface $s): ?string
+    public static function onShortCode_fhb(ShortcodeInterface $s): ?string
     {
         $url = null;
         $title = 'Faculty Handbook Policy';
