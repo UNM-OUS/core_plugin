@@ -42,10 +42,10 @@ footer#footer .unm-links .social-icon-link {
         content: "\ed46";
     }
     .fa-twitter:after {
-        content: "\ed7a";
+        content: "\f03d";
     }
     .fa-youtube:after {
-        content: "\e95f";
+        content: "\ed8b";
     }
 }
 
@@ -60,8 +60,8 @@ footer#footer .unm-links .social-icon-link {
 }
 
 footer#footer {
-    background: #5e5d60;
-    color: #fff;
+    background: var(--unm-cherry) url(https://webcore.unm.edu/v2/images/mesa-mountain-red.png) bottom right no-repeat;
+    color: var(--unm-cherry-inv);
     margin-bottom: 0;
 }
 
