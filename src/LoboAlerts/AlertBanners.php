@@ -45,6 +45,7 @@ class AlertBanners
         );
     }
 
+    // @phpstan-ignore-next-line we don't have a type for this yet
     public static function globalAlerts(): array
     {
         // TODO global alerts once site-level alerts are worked out
