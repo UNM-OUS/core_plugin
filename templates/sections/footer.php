@@ -10,7 +10,9 @@ $logo = Media::get('/unm-footer-logo.png');
 <footer id="footer">
     <div class="unm-info">
         <h1>
-            <a href="http://www.unm.edu/"><img src="<?php echo $logo->url(); ?>" alt="The University of New Mexico"></a>
+            <a href="http://www.unm.edu/">
+                <img src="<?= $logo->url() ?>" height="60" width="300" alt="The University of New Mexico">
+            </a>
         </h1>
         <p>
             &copy; The University of New Mexico
