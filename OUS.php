@@ -22,8 +22,9 @@ use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\BulkMail;
 use Thunder\Shortcode\Shortcode\ShortcodeInterface;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Mailing;
 
-// register BulkMail with dispatcher
+// register additional event subscribers for this plugin
 Dispatcher::addSubscriber(BulkMail::class);
+Dispatcher::addSubscriber(PolicyShortCodes::class);
 
 class OUS extends AbstractPlugin
 {
