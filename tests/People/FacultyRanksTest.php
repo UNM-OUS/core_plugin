@@ -29,6 +29,7 @@ class FacultyRanksTest extends TestCase
     protected function parseRankFromTitleDataProvider(): array
     {
         return [
+            ["Executive Vice President for Health Sciences Center", null],
             ["Profession of Sociology", "Professor"],
             ["Assist Professor of Internal Medicine", "Assistant Professor"],
             ["Assistant Professor of Internal Medicine", "Assistant Professor"],

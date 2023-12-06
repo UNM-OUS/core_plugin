@@ -11,6 +11,8 @@ use Exception;
  */
 class FacultyInfo
 {
+    protected string|bool $rank = false;
+
     public static function search(string|null $netId, bool $voting_only = false): ?FacultyInfo
     {
         $query = $voting_only ? VotingFaculty::select() : AllFaculty::select();
@@ -63,17 +65,16 @@ class FacultyInfo
 
     public function rank(): string
     {
-        static $rank = false;
-        if ($rank === false) {
-            $rank =
+        if (!is_string($this->rank)) {
+            $this->rank =
                 FacultyRanks::commonRankFromTitle($this->title)
                 ?? FacultyRanks::inferRankFromTitle($this->academicTitle);
-            if (!$rank) {
-                ExceptionLog::log(new Exception('Couldn\'t parse faculty rank: ' . $rank));
-                $rank = 'Unknown Rank';
+            if (!$this->rank) {
+                ExceptionLog::log(new Exception('Couldn\'t parse faculty rank'));
+                $this->rank = 'Unknown Rank';
             }
         }
-        return $rank;
+        return $this->rank;
     }
 
     public function isClinicianEducator(): bool
