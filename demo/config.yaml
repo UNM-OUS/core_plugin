@@ -11,7 +11,7 @@ unm:
   # share a local shared DB for ous module
   user_source: https://secretary.unm.edu/shared_permissions/known_netids.yaml
   shared_db:
-    dsn: "sqlite:${paths.storage}/shared.sqlite"
+    dsn: "sqlite:${paths.base}/../shared.sqlite"
 
 # show sign in
 usermenu:
