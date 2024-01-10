@@ -5,7 +5,7 @@ namespace DigraphCMS_Plugins\unmous\ous_digraph_module;
 use DigraphCMS\HTML\A;
 use Thunder\Shortcode\Shortcode\ShortcodeInterface;
 
-class PolicyShortCodes
+class ShortCodeLinks
 {
     public static function onShortCode_rpm(ShortcodeInterface $s): ?string
     {

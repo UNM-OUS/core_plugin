@@ -24,7 +24,7 @@ use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Mailing;
 
 // register additional event subscribers for this plugin
 Dispatcher::addSubscriber(BulkMail::class);
-Dispatcher::addSubscriber(PolicyShortCodes::class);
+Dispatcher::addSubscriber(ShortCodeLinks::class);
 
 class OUS extends AbstractPlugin
 {
