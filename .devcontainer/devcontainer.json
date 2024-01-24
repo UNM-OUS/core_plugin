@@ -9,18 +9,21 @@
 		"--dns=8.8.8.8" // for some reason DNS doesn't work right unless we explicitly name a DNS server
 	],
 	// mount entire sites_v2 directory, so we can access global config and shared DB
-	"workspaceMount": "source=${localWorkspaceFolder}/..,target=/workspace,type=bind,consistency=cached",
+	"workspaceMount": "source=${localWorkspaceFolder},target=/workspace/${localWorkspaceFolderBasename},type=bind",
 	"workspaceFolder": "/workspace/${localWorkspaceFolderBasename}",
 	// post-install commands
 	"postCreateCommand": {
 		"composer": "composer install && composer run migrate",
 		"cronSetup": "crontab -l | { cat; echo \"*/10 * * * * /usr/bin/php /workspace/${localWorkspaceFolderBasename}/demo/scripts/cron-run.php\"; } | crontab -"
 	},
+	"postStartCommand": "cron",
 	// volumes
 	"mounts": [
-		"source=${localWorkspaceFolderBasename}-demo-files,target=${containerWorkspaceFolder}/demo/files,type=volume",
-		"source=${localWorkspaceFolderBasename}-demo-storage,target=${containerWorkspaceFolder}/demo/storage,type=volume",
-		"source=${localWorkspaceFolderBasename}-vendor,target=${containerWorkspaceFolder}/vendor,type=volume"
+		"source=${localWorkspaceFolderBasename}-vendor,target=${containerWorkspaceFolder}/vendor,type=volume",
+		"source=${localWorkspaceFolderBasename}-cache,target=${containerWorkspaceFolder}/demo/cache,type=volume",
+		"source=${localWorkspaceFolderBasename}-files,target=${containerWorkspaceFolder}/demo/files,type=volume",
+		"source=${localWorkspaceFolderBasename}-storage,target=${containerWorkspaceFolder}/demo/storage,type=volume",
+		"source=${localWorkspaceFolder}/../global,target=/workspace/global,type=bind"
 	],
 	// specify extensions that we want
 	"customizations": {

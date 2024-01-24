@@ -17,7 +17,5 @@ COPY --from=composer:latest /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca
 RUN sed -i 's,^post_max_size =.*$,post_max_size = 300M,' /etc/php/8.1/cli/php.ini
 RUN sed -i 's,^upload_max_filesize =.*$,upload_max_filesize = 300M,' /etc/php/8.1/cli/php.ini
 
-# copy shared data from workspace
-COPY shared.sqlite /workspace/core_plugin/demo/storage/
-COPY global.yaml /workspace/core_plugin/demo/storage/
-RUN chmod 0777 -R /workspace/core_plugin/demo/storage
+# copy global config
+COPY global/global.yaml /workspace/
