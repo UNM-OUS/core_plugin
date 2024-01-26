@@ -15,6 +15,7 @@
 <?php
 
 use DigraphCMS\Context;
+use DigraphCMS\Cron\DeferredJob;
 use DigraphCMS\Cron\DeferredProgressBar;
 use DigraphCMS\Cron\SpreadsheetJob;
 use DigraphCMS\HTML\Forms\Field;
@@ -59,7 +60,7 @@ if ($form->ready()) {
     // begin spreadsheet job
     $job = new SpreadsheetJob(
         $f['tmp_name'],
-        function (array $row) use ($lastNameFirst) {
+        function (array $row, DeferredJob $job) use ($lastNameFirst) {
             // process things that need string fixing
             $college = StringFixer::organization($row['org level 3 desc']);
             $department = StringFixer::department($row['org desc']);
@@ -77,67 +78,72 @@ if ($form->ready()) {
             $lastName = array_pop($name);
             $lastName = PersonInfo::getLastNameFor($netID) ? PersonInfo::getLastNameFor($netID) : $lastName;
             $firstName = PersonInfo::getFirstNameFor($netID) ? PersonInfo::getFirstNameFor($netID) : implode(' ', $name);
-            // update voting_faculty
-            SharedDB::query()
-                ->insertInto(
-                    'voting_faculty',
-                    [
-                        'netid' => $netID,
-                        'email' => $email,
-                        'firstname' => $firstName,
-                        'lastname' => $lastName,
-                        'org' => $college,
-                        'department' => $department,
-                        'title' => $title,
-                        'academic_title' => $academicTitle,
-                    ]
-                )->execute();
-            // update personinfo
-            if (in_array(PersonInfo::getFor($netID, 'affiliation.type'), ['Upper administration', 'Regent'])) {
-                // this person is or has been important, don't update their personinfo
-            } elseif (trim(PersonInfo::getFullNameFor($netID))) {
-                // this person is in the system, do a lighter update
-                PersonInfo::setFor(
-                    $netID,
-                    [
-                        'affiliation' => [
-                            'type' => 'Faculty',
+            // spawn job to update voting_faculty
+            $job->spawn(function () use ($netID, $email, $firstName, $lastName, $college, $department, $title, $academicTitle) {
+                SharedDB::query()
+                    ->insertInto(
+                        'voting_faculty',
+                        [
+                            'netid' => $netID,
+                            'email' => $email,
+                            'firstname' => $firstName,
+                            'lastname' => $lastName,
                             'org' => $college,
                             'department' => $department,
                             'title' => $title,
                             'academic_title' => $academicTitle,
-                        ],
-                        'faculty' => [
-                            'voting' => Semesters::current()->intVal(),
-                            'semester' => Semesters::current()->intVal(),
                         ]
-                    ]
-                );
-            } else {
-                // this is a new person, update everything
-                PersonInfo::setFor(
-                    $netID,
-                    [
-                        'email' => $email,
-                        'firstname' => $firstName,
-                        'lastname' => $lastName,
-                        'fullname' => trim(preg_replace('/^(.+?), (.+)$/', '$2 $1', $row['full name'])),
-                        'affiliation' => [
-                            'type' => 'Faculty',
-                            'org' => $college,
-                            'department' => $department,
-                            'title' => $title,
-                            'academic_title' => $academicTitle,
-                        ],
-                        'faculty' => [
-                            'voting' => Semesters::current()->intVal(),
-                            'semester' => Semesters::current()->intVal(),
+                    )->execute();
+                return "Updated voting_faculty: $firstName $lastName";
+            });
+            // spawn job to update personinfo
+            $job->spawn(function () use ($netID, $email, $firstName, $lastName, $college, $department, $title, $academicTitle) {
+                if (in_array(PersonInfo::getFor($netID, 'affiliation.type'), ['Upper administration', 'Regent'])) {
+                    // this person is or has been important, don't update their personinfo
+                } elseif (trim(PersonInfo::getFullNameFor($netID))) {
+                    // this person is in the system, do a lighter update
+                    PersonInfo::setFor(
+                        $netID,
+                        [
+                            'affiliation' => [
+                                'type' => 'Faculty',
+                                'org' => $college,
+                                'department' => $department,
+                                'title' => $title,
+                                'academic_title' => $academicTitle,
+                            ],
+                            'faculty' => [
+                                'voting' => Semesters::current()->intVal(),
+                                'semester' => Semesters::current()->intVal(),
+                            ]
                         ]
-                    ]
-                );
-            }
+                    );
+                } else {
+                    // this is a new person, update everything
+                    PersonInfo::setFor(
+                        $netID,
+                        [
+                            'email' => $email,
+                            'firstname' => $firstName,
+                            'lastname' => $lastName,
+                            'affiliation' => [
+                                'type' => 'Faculty',
+                                'org' => $college,
+                                'department' => $department,
+                                'title' => $title,
+                                'academic_title' => $academicTitle,
+                            ],
+                            'faculty' => [
+                                'voting' => Semesters::current()->intVal(),
+                                'semester' => Semesters::current()->intVal(),
+                            ]
+                        ]
+                    );
+                }
+                return "Updated personinfo: $firstName $lastName";
+            });
             // return status
-            return "Updated voting faculty: $firstName $lastName";
+            return "Spawned jobs for: $firstName $lastName";
         },
         null,
         null,

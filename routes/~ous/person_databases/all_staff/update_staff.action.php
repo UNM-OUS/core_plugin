@@ -14,6 +14,7 @@
 <?php
 
 use DigraphCMS\Context;
+use DigraphCMS\Cron\DeferredJob;
 use DigraphCMS\Cron\DeferredProgressBar;
 use DigraphCMS\Cron\SpreadsheetJob;
 use DigraphCMS\HTML\Forms\Field;
@@ -56,7 +57,7 @@ if ($form->ready()) {
     // begin spreadsheet job
     $job = new SpreadsheetJob(
         $f['tmp_name'],
-        function (array $row) use ($lastNameFirst) {
+        function (array $row, DeferredJob $job) use ($lastNameFirst) {
             // process things that need string fixing
             $organization = StringFixer::organization($row['org level 3 desc']);
             $department = StringFixer::department($row['org desc']);
@@ -73,60 +74,65 @@ if ($form->ready()) {
             $lastName = array_pop($name);
             $lastName = PersonInfo::getLastNameFor($netID) ? PersonInfo::getLastNameFor($netID) : $lastName;
             $firstName = PersonInfo::getFirstNameFor($netID) ? PersonInfo::getFirstNameFor($netID) : implode(' ', $name);
-            // update staff
-            SharedDB::query()
-                ->insertInto(
-                    'staff',
-                    [
-                        'netid' => $netID,
-                        'email' => $email,
-                        'firstname' => $firstName,
-                        'lastname' => $lastName,
-                        'org' => $organization,
-                        'department' => $department,
-                        'title' => $title,
-                    ]
-                )->execute();
-            // update personinfo
-            if (in_array(PersonInfo::getFor($netID, 'affiliation.type'), ['Upper administration', 'Regent'])) {
-                // this person is or has been important, don't update their personinfo
-            } elseif (PersonInfo::getFirstNameFor($netID) && PersonInfo::getLastNameFor($netID)) {
-                // this person is in the system, do a lighter update to just their affiliation
-                PersonInfo::setFor(
-                    $netID,
-                    [
-                        'affiliation' => [
-                            'type' => PersonInfo::getFor($netID, 'affiliation.type') != 'Staff'
-                                ? 'Staff'
-                                : PersonInfo::getFor($netID, 'affiliation.type'),
+            // spawn job to update staff
+            $job->spawn(function () use ($netID, $email, $firstName, $lastName, $organization, $department, $title) {
+                SharedDB::query()
+                    ->insertInto(
+                        'staff',
+                        [
+                            'netid' => $netID,
+                            'email' => $email,
+                            'firstname' => $firstName,
+                            'lastname' => $lastName,
                             'org' => $organization,
                             'department' => $department,
                             'title' => $title,
-                        ],
-                        'staff' => Semesters::current()->intVal()
-                    ]
-                );
-            } else {
-                // this is a new person, update everything
-                PersonInfo::setFor(
-                    $netID,
-                    [
-                        'email' => $email,
-                        'firstname' => $firstName,
-                        'lastname' => $lastName,
-                        'fullname' => trim("$firstName $lastName"),
-                        'affiliation' => [
-                            'type' => 'Staff',
-                            'org' => $organization,
-                            'department' => $department,
-                            'title' => $title,
-                        ],
-                        'staff' => Semesters::current()->intVal()
-                    ]
-                );
-            }
+                        ]
+                    )->execute();
+                return "Updated staff: $firstName $lastName";
+            });
+            // spawn job to update personinfo
+            $job->spawn(function () use ($netID, $email, $firstName, $lastName, $organization, $department, $title) {
+                if (in_array(PersonInfo::getFor($netID, 'affiliation.type'), ['Upper administration', 'Regent'])) {
+                    // this person is or has been important, don't update their personinfo
+                } elseif (PersonInfo::getFirstNameFor($netID) && PersonInfo::getLastNameFor($netID)) {
+                    // this person is in the system, do a lighter update to just their affiliation
+                    PersonInfo::setFor(
+                        $netID,
+                        [
+                            'affiliation' => [
+                                'type' => PersonInfo::getFor($netID, 'affiliation.type') != 'Staff'
+                                    ? 'Staff'
+                                    : PersonInfo::getFor($netID, 'affiliation.type'),
+                                'org' => $organization,
+                                'department' => $department,
+                                'title' => $title,
+                            ],
+                            'staff' => Semesters::current()->intVal()
+                        ]
+                    );
+                } else {
+                    // this is a new person, update everything
+                    PersonInfo::setFor(
+                        $netID,
+                        [
+                            'email' => $email,
+                            'firstname' => $firstName,
+                            'lastname' => $lastName,
+                            'affiliation' => [
+                                'type' => 'Staff',
+                                'org' => $organization,
+                                'department' => $department,
+                                'title' => $title,
+                            ],
+                            'staff' => Semesters::current()->intVal()
+                        ]
+                    );
+                }
+                return "Updated personinfo: $firstName $lastName";
+            });
             // return status
-            return "Updated staff: $firstName $lastName";
+            return "Spawned jobs for: $firstName $lastName";
         },
         null,
         null,
