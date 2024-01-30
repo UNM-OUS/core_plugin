@@ -68,7 +68,8 @@ class FacultyInfo
         if (!is_string($this->rank)) {
             $this->rank =
                 FacultyRanks::commonRankFromTitle($this->title)
-                ?? FacultyRanks::inferRankFromTitle($this->academicTitle);
+                ?? FacultyRanks::inferRankFromTitle($this->academicTitle)
+                ?? false;
             if (!$this->rank) {
                 ExceptionLog::log(new Exception('Couldn\'t parse faculty rank'));
                 $this->rank = 'Unknown Rank';
