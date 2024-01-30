@@ -28,8 +28,8 @@ class FacultyInfo
                 $result['title'],
                 $result['academic_title'],
                 $voting_only
-                ? true
-                : boolval(VotingFaculty::select()->where('netid', $netId)->count())
+                    ? true
+                    : boolval(VotingFaculty::select()->where('netid', $netId)->count())
             );
         }
         return null;
@@ -71,7 +71,7 @@ class FacultyInfo
                 ?? FacultyRanks::inferRankFromTitle($this->academicTitle)
                 ?? false;
             if (!$this->rank) {
-                ExceptionLog::log(new Exception('Couldn\'t parse faculty rank'));
+                ExceptionLog::log(new Exception('Faculty rank parsing failed: ' . $this->netId));
                 $this->rank = 'Unknown Rank';
             }
         }
