@@ -8,7 +8,7 @@
         &:before {
             @include icofont;
             content: '\ec26';
-            display: inline;
+            display: inline-block;
             margin-right: $grid/2;
         }
     }
@@ -19,7 +19,7 @@
         &:before {
             @include material-icon;
             content: '\e002';
-            display: inline;
+            display: inline-block;
             margin-right: $grid/2;
         }
     }
@@ -35,7 +35,7 @@
         &:before {
             @include material-icon;
             content: '\e002';
-            display: inline;
+            display: inline-block;
             margin-right: $grid/2;
         }
     }
@@ -53,7 +53,7 @@
         &:before {
             @include material-icon;
             content: '\e0f0';
-            display: inline;
+            display: inline-block;
             margin-right: $grid/2;
             transform: translateY(0.125em);
         }
@@ -71,7 +71,7 @@
         &:before {
             @include material-icon;
             content: '\e8dc';
-            display: inline;
+            display: inline-block;
             margin-right: $grid/2;
             transform: translateY(0.125em);
         }
