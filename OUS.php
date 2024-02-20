@@ -21,10 +21,11 @@ use DigraphCMS\Users\Users;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\BulkMail;
 use Thunder\Shortcode\Shortcode\ShortcodeInterface;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Mailing;
+use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedBookmarks\SharedBookmarksEvents;
 
 // register additional event subscribers for this plugin
 Dispatcher::addSubscriber(BulkMail::class);
-Dispatcher::addSubscriber(ShortCodeLinks::class);
+Dispatcher::addSubscriber(SharedBookmarksEvents::class);
 
 class OUS extends AbstractPlugin
 {
