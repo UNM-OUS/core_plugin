@@ -38,11 +38,11 @@ $form->button()->setText('Upload');
 if ($form->ready()) {
     // spawn deferred job and redirect to status display
     $job = new SpreadsheetJob(
-        $upload->file(),
+        $upload->value()['tmp_name'],
         function (array $row) {
             SharedBookmarks::set(
                 $row['category'],
-                $row['name'],
+                $row['name'] ?: "",
                 $row['title'],
                 $row['url']
             );

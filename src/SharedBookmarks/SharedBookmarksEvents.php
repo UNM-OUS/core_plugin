@@ -24,7 +24,8 @@ class SharedBookmarksEvents
         return $a;
     }
 
-    public static function cronJob_maintenance_heavy() {
+    public static function cronJob_maintenance_heavy(): void
+    {
         // TODO regenerate bookmarks for RPM and UAP
     }
 }

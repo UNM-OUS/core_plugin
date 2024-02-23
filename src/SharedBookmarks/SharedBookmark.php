@@ -4,14 +4,11 @@ namespace DigraphCMS_Plugins\unmous\ous_digraph_module\SharedBookmarks;
 
 class SharedBookmark
 {
-    public function __construct(
-        protected int $id,
-        protected string $category,
-        protected string $name,
-        protected string $title,
-        protected string $url,
-    ) {
-    }
+    protected int $id;
+    protected string $category;
+    protected string $name;
+    protected string $title;
+    protected string $url;
 
     public function id(): int
     {
