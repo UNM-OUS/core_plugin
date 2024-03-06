@@ -18,8 +18,8 @@ class SharedBookmarks
     public static function get(string $category, string $name): ?SharedBookmark
     {
         return self::select()
-            ->where('category', $category)
-            ->where('name', $name)
+            ->where('category', strtolower($category))
+            ->where('name', strtolower($name))
             ->fetch() ?: null;
     }
 
