@@ -12,7 +12,7 @@ use DigraphCMS\Users\Group;
 use DigraphCMS\Users\User;
 use DigraphCMS\Users\Users;
 use Exception;
-use Spyc;
+use Symfony\Component\Yaml\Yaml;
 
 class UserData
 {
@@ -171,7 +171,7 @@ class UserData
         if ($forceRefresh || !Cache::exists('unm/userdata') || Cache::expired('unm/userdata')) {
             $data = CurlHelper::get(Config::get('unm.user_source'));
             if ($data === null) throw new HttpError(503, 'User data failed to load, this is a rare and usually a temporary error. Please try again in a few minutes.');
-            if ($data = Spyc::YAMLLoadString($data)) Cache::set('unm/userdata', $data, -1);
+            if ($data = Yaml::parse($data)) Cache::set('unm/userdata', $data, -1);
             else throw new Exception('UNM user source failed to parse');
             return $cache = $data;
         }
