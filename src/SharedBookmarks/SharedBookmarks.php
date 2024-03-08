@@ -45,6 +45,10 @@ class SharedBookmarks
 
     public static function set(string $category, string $name, string $title, string $url): SharedBookmark
     {
+        $category = strtolower(trim($category));
+        $name = strtolower(trim($name));
+        $title = trim($title);
+        $url = trim($url);
         $existing = self::get($category, $name);
         if ($existing) {
             SharedDB::query()
