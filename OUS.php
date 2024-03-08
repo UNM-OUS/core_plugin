@@ -109,20 +109,12 @@ class OUS extends AbstractPlugin
         return $cache[$netId];
     }
 
-    /**
-     * as maintenance pull fresh permissions from user source. Cache them for
-     * up to 24 hours, in case they disappear from the source or it becomes
-     * unreachable for some reason.
-     *
-     * @return void
-     */
     public static function cronJob_maintenance(): void
     {
+        // pull fresh permissions from the user source.
+        // cache them for up to 24 hours, in case they disappear from the source
+        // or it becomes unreachable for some reason.
         UserData::data(true);
-    }
-
-    public static function cronJob_maintenance_heavy(): void
-    {
         // generate shared bookmarks for all of this site's pages
         new DeferredJob(
             function (DeferredJob $job) {
@@ -148,6 +140,10 @@ class OUS extends AbstractPlugin
             },
             'update_shared_bookmarks'
         );
+    }
+
+    public static function cronJob_maintenance_heavy(): void
+    {
         // delete old person_info records
         SharedDB::query()->deleteFrom('person_info')
             ->where('updated < ?', strtotime('2 years ago'))
