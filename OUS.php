@@ -123,32 +123,35 @@ class OUS extends AbstractPlugin
 
     public static function cronJob_maintenance_heavy(): void
     {
+        // generate shared bookmarks for all of this site's pages
+        new DeferredJob(
+            function (DeferredJob $job) {
+                $uuids = Pages::select()
+                    ->order('updated asc')
+                    ->query()
+                    ->select('uuid', true);
+                foreach ($uuids as $uuid) {
+                    $uuid = $uuid['uuid'];
+                    $job->spawn(function () use ($uuid) {
+                        $page = Pages::get($uuid);
+                        if (!$page) return "Page $uuid not found";
+                        SharedBookmarks::set(
+                            'link',
+                            $page->uuid(),
+                            $page->name(),
+                            $page->url(),
+                        );
+                        return "Updated shared bookmark for $uuid";
+                    });
+                }
+                return "Spawned shared bookmark link update jobs";
+            },
+            'update_shared_bookmarks'
+        );
         // delete old person_info records
         SharedDB::query()->deleteFrom('person_info')
             ->where('updated < ?', strtotime('2 years ago'))
             ->execute();
-        // generate shared bookmarks for all of this site's pages
-        $uuids = Pages::select()
-            ->order('updated asc')
-            ->query()
-            ->select('uuid', true);
-        foreach ($uuids as $uuid) {
-            $uuid = $uuid['uuid'];
-            new DeferredJob(
-                function () use ($uuid) {
-                    $page = Pages::get($uuid);
-                    if (!$page) return "Page $uuid not found";
-                    SharedBookmarks::set(
-                        'link',
-                        $page->uuid(),
-                        $page->name(),
-                        $page->url(),
-                    );
-                    return "Updated shared bookmark for $uuid";
-                },
-                'update_shared_bookmark'
-            );
-        }
     }
 
     public static function onShortCode(ShortcodeInterface $s): ?string
