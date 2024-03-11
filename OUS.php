@@ -127,11 +127,13 @@ class OUS extends AbstractPlugin
                     $job->spawn(function () use ($uuid) {
                         $page = Pages::get($uuid);
                         if (!$page) return "Page $uuid not found";
+                        $url = $page->url();
+                        if (!Permissions::url($url, Users::guest())) return "Page $uuid not publicly visible";
                         SharedBookmarks::set(
                             'link',
                             $page->uuid(),
                             $page->name(),
-                            $page->url(),
+                            $url,
                         );
                         return "Updated shared bookmark for $uuid";
                     });

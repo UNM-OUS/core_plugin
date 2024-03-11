@@ -47,7 +47,7 @@ class SharedBookmarks
     {
         $category = strtolower(trim($category));
         $name = strtolower(trim($name));
-        $title = trim($title);
+        $title = substr(trim($title), 0, 255);
         $url = trim($url);
         $existing = self::get($category, $name);
         if ($existing) {
