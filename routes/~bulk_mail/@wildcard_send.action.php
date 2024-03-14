@@ -64,6 +64,12 @@ $tabs->addTab('schedule', 'Schedule sending', function () use ($mailing) {
     $datetime = (new DatetimeField('Scheduled time'))
         ->setDefault($mailing->scheduled())
         ->setRequired(true)
+        ->addValidator(function (DatetimeField $field): ?string {
+            if ($field->value()->getTimestamp() < time()) {
+                return 'Scheduled time must be in the future';
+            }
+            return null;
+        })
         ->addForm($form);
     if ($form->ready()) {
         DB::query()->update(
