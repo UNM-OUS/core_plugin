@@ -18,12 +18,16 @@ $bookmarks = [];
 
 // get relatively strict name matches
 $query = SharedBookmarks::select()
-    // ->where('searchable', true)
+    ->where('searchable', true)
     ->limit(100);
+$where_queries = [];
+$where_args = [];
 /** @var string $word */
 foreach (preg_split('/ +/', Context::arg('query')) ?: [] as $word) {
-    $query->whereOr('title LIKE ?', AbstractMappedSelect::prepareLikePattern($word, true, true));
+    $where_queries[] = 'title LIKE ?';
+    $where_args[] = AbstractMappedSelect::prepareLikePattern($word, true, true);
 }
+$query->where('(' . implode(' OR ', $where_queries) . ')', $where_args);
 $bookmarks = array_merge(
     $bookmarks,
     $query->fetchAll() // @phpstan-ignore-line
