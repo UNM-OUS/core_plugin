@@ -19,7 +19,6 @@ echo $wrapper;
         var ac = document.getElementById('<?php echo $wrapper->id(); ?>');
         // select value and reset toolbar
         ac.addEventListener('autocomplete-select', (e) => {
-            console.log(e);
             ac.dispatchEvent(Digraph.RichContent.insertTagEvent(e.autocompleteExtra.category, {
                 _: e.autocompleteValue
             }));
