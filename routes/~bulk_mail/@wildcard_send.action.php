@@ -2,6 +2,7 @@
 
 use DigraphCMS\Context;
 use DigraphCMS\DB\DB;
+use DigraphCMS\HTML\Forms\DateTimeInput;
 use DigraphCMS\HTML\Forms\Fields\DatetimeField;
 use DigraphCMS\HTML\Forms\FormWrapper;
 use DigraphCMS\HTTP\HttpError;
@@ -64,7 +65,7 @@ $tabs->addTab('schedule', 'Schedule sending', function () use ($mailing) {
     $datetime = (new DatetimeField('Scheduled time'))
         ->setDefault($mailing->scheduled())
         ->setRequired(true)
-        ->addValidator(function (DatetimeField $field): ?string {
+        ->addValidator(function (DateTimeInput $field): ?string {
             if ($field->value()->getTimestamp() < time()) {
                 return 'Scheduled time must be in the future';
             }
