@@ -15,6 +15,9 @@ use DigraphCMS\Plugins\AbstractPlugin;
 use DigraphCMS\Session\Authentication;
 use DigraphCMS\Session\Session;
 use DigraphCMS\UI\Format;
+use DigraphCMS\UI\Toolbars\ToolbarLink;
+use DigraphCMS\UI\Toolbars\ToolbarSeparator;
+use DigraphCMS\UI\Toolbars\ToolbarSpacer;
 use DigraphCMS\UI\UserMenu;
 use DigraphCMS\URL\URL;
 use DigraphCMS\Users\Group;
@@ -31,6 +34,20 @@ Dispatcher::addSubscriber(BulkMail::class);
 
 class OUS extends AbstractPlugin
 {
+
+    /**
+     * @param array<string,array<string,ToolbarLink|ToolbarSeparator|ToolbarSpacer>> $buttons
+     */
+    public function onRichMediaToolbar(array &$buttons): void
+    {
+        // override the built-in page link button with one that uses shared bookmarks
+        $buttons['insert']['link'] = (new ToolbarLink(
+            'Link to a bookmark',
+            'pages',
+            null,
+            new URL('&action=shared_bookmark')
+        ))->setShortcut('Ctrl+K');
+    }
 
     public static function cronJob_frequent(): void
     {
@@ -116,6 +133,11 @@ class OUS extends AbstractPlugin
         // or it becomes unreachable for some reason.
         UserData::data(true);
         // generate shared bookmarks for all of this site's pages
+        if (Config::get('unm.update_shared_bookmarks')) static::updateSharedBookmarks();
+    }
+
+    protected static function updateSharedBookmarks(): void
+    {
         new DeferredJob(
             function (DeferredJob $job) {
                 $uuids = Pages::select()
@@ -134,6 +156,7 @@ class OUS extends AbstractPlugin
                             $page->uuid(),
                             $page->name(),
                             $url,
+                            true,
                         );
                         return "Updated shared bookmark for $uuid";
                     });

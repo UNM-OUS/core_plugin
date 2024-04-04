@@ -6,6 +6,7 @@
 </p>
 <?php
 
+use DigraphCMS\UI\Pagination\ColumnBooleanFilteringHeader;
 use DigraphCMS\UI\Pagination\ColumnStringFilteringHeader;
 use DigraphCMS\UI\Pagination\PaginatedTable;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedBookmarks\SharedBookmark;
@@ -23,6 +24,7 @@ $table = new PaginatedTable(
             $bookmark->name(),
             $bookmark->title(),
             $bookmark->url(),
+            $bookmark->searchable() ? 'Yes' : 'No',
             sprintf('<code>%s</code>', $bookmark->tag()),
         ];
     },
@@ -31,6 +33,7 @@ $table = new PaginatedTable(
         new ColumnStringFilteringHeader('Name', 'name'),
         new ColumnStringFilteringHeader('Title', 'title'),
         new ColumnStringFilteringHeader('URL', 'url'),
+        new ColumnBooleanFilteringHeader('Searchable', 'searchable', 'Yes', 'No'),
         'Example Shortcode',
     ]
 );
@@ -42,14 +45,16 @@ $table->download(
             $bookmark->category(),
             $bookmark->name(),
             $bookmark->title(),
-            $bookmark->url()
+            $bookmark->url(),
+            $bookmark->searchable() ? 'Yes' : 'No',
         ];
     },
     [
         'Category',
         'Name',
         'Title',
-        'URL'
+        'URL',
+        'Searchable'
     ]
 );
 

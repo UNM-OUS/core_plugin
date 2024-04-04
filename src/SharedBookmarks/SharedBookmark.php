@@ -9,6 +9,7 @@ class SharedBookmark
     protected string $name;
     protected string $title;
     protected string $url;
+    protected bool $searchable;
 
     public function id(): int
     {
@@ -33,6 +34,11 @@ class SharedBookmark
     public function url(): string
     {
         return $this->url;
+    }
+
+    public function searchable(): bool
+    {
+        return $this->searchable;
     }
 
     public function tag(string|null $title = null): string

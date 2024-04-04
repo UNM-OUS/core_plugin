@@ -12,6 +12,9 @@ class Validation
         return static::domainUrl(['unm.edu', 'office.com'], 'Only UNM websites are allowed in this field');
     }
 
+    /**
+     * @param string|string[] $domain 
+     */
     public static function domainUrl(string|array $domain, string|null $message = null): callable
     {
         $domain = (array)$domain;

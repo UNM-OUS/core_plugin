@@ -43,7 +43,7 @@ class SharedBookmarks
         );
     }
 
-    public static function set(string $category, string $name, string $title, string $url): SharedBookmark
+    public static function set(string $category, string $name, string $title, string $url, bool $searchable): SharedBookmark
     {
         $category = strtolower(trim($category));
         $name = strtolower(trim($name));
@@ -56,6 +56,7 @@ class SharedBookmarks
                 ->set([
                     'title' => $title,
                     'url' => $url,
+                    'searchable' => $searchable ? '1' : '0'
                 ])
                 ->where('id', $existing->id())
                 ->execute();
@@ -67,9 +68,25 @@ class SharedBookmarks
                     'name' => $name,
                     'title' => $title,
                     'url' => $url,
+                    'searchable' => $searchable ? '1' : '0'
                 ])
                 ->execute();
         }
         return self::get($category, $name);
+    }
+
+    /**
+     * Score how well a bookmark matches a given query.
+     */
+    public static function scoreSearchResult(SharedBookmark $bookmark, string $query): int
+    {
+        $query = strtolower($query);
+        $score = 0;
+        if ($bookmark->name() == $query || $bookmark->title() == $query) {
+            $score += 100;
+        }
+        $score += similar_text(metaphone($query), metaphone($bookmark->title()));
+        $score += similar_text(metaphone($query), metaphone($bookmark->category() . ' ' . $bookmark->name()));
+        return $score;
     }
 }

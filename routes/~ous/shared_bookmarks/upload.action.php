@@ -1,7 +1,7 @@
 <h1>Upload shared bookmarks</h1>
 <p>
     Expects a spreadsheet in the format provided by the download link on the shared bookmarks list page.
-    The spreadsheet should have columns for category, name, title, and URL.
+    The spreadsheet should have columns for category, name, title, URL, and "searchable" to indicate if it should appear in searches.
     This tool will replace existing bookmarks if they are in the file, but does not delete bookmarks that are not included.
 </p>
 <?php
@@ -44,7 +44,8 @@ if ($form->ready()) {
                 $row['category'],
                 $row['name'] ?: "",
                 $row['title'],
-                $row['url']
+                $row['url'],
+                !!$row['searchable'],
             );
             return sprintf(
                 'Imported %s/%s',
