@@ -1,4 +1,7 @@
 unm:
+  shared_bookmarks:
+    update: true
+    searchable: true
   block_unknown_netids: false
   known_netids: []
   shared_db:

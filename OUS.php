@@ -133,7 +133,7 @@ class OUS extends AbstractPlugin
         // or it becomes unreachable for some reason.
         UserData::data(true);
         // generate shared bookmarks for all of this site's pages
-        if (Config::get('unm.update_shared_bookmarks')) static::updateSharedBookmarks();
+        if (Config::get('unm.shared_bookmarks.update')) static::updateSharedBookmarks();
     }
 
     protected static function updateSharedBookmarks(): void
@@ -156,7 +156,7 @@ class OUS extends AbstractPlugin
                             $page->uuid(),
                             $page->name(),
                             $url,
-                            true,
+                            !!Config::get('unm.shared_bookmarks.searchable'),
                         );
                         return "Updated shared bookmark for $uuid";
                     });
