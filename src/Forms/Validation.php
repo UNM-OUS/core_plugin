@@ -6,6 +6,32 @@ use DigraphCMS\HTML\Forms\InputInterface;
 
 class Validation
 {
+
+    public static function unmUrl(): callable
+    {
+        return static::domainUrl(['unm.edu', 'office.com'], 'Only UNM websites are allowed in this field');
+    }
+
+    public static function domainUrl(string|array $domain, string|null $message = null): callable
+    {
+        $domain = (array)$domain;
+        return function (InputInterface $input) use ($domain, $message): string|null {
+            if (!$input->value())
+                return null;
+            $url = parse_url($input->value(), PHP_URL_HOST);
+            if (!$url) return "Please enter a valid URL";
+            $url = strtolower($url);
+            foreach ($domain as $d) {
+                if ($url == $d) return null;
+                if (preg_match('/\.' . preg_quote($d) . '$/', $url)) return null;
+            }
+            if ($message) return $message;
+            $list = implode(', ', $domain);
+            $list = preg_replace('/, ([^,]+)$/', ', and $1', $list);
+            return "Only URLs from $list and their subdomains are allowed in this field";
+        };
+    }
+
     public static function netIDorEmail(): callable
     {
         return function (InputInterface $input): string|null {
