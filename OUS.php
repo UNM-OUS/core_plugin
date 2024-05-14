@@ -27,6 +27,7 @@ use DigraphCMS\Users\Users;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\BulkMail;
 use Thunder\Shortcode\Shortcode\ShortcodeInterface;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Mailing;
+use DigraphCMS_Plugins\unmous\ous_digraph_module\People\FacultyInfo;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedBookmarks\SharedBookmarks;
 
 // register additional event subscribers for this plugin
@@ -34,6 +35,29 @@ Dispatcher::addSubscriber(BulkMail::class);
 
 class OUS extends AbstractPlugin
 {
+
+    const FACULTY_TITLE_ABBREVIATIONS = [
+        'Assistant Vice President' => 'AVP',
+        'Assistant VP of Research' => 'AVPR',
+        'Associate Vice President' => 'AVP',
+        'Vice President' => 'VP',
+        'Executive Vice President' => 'EVP',
+        'Provost & Executive Vice President for Academic Affairs' => 'Provost',
+        'Senior Vice Provost' => 'SVP',
+        'Vice President for Equity and Inclusion' => 'VPEI',
+    ];
+
+    /**
+     * These titles will be passed through and used in personalized greetings,
+     * all others that aren't abbreviated above will be replaced by "Professor"
+     * for faculty, and no title will be used for staff
+     */
+    const FACULTY_GREETABLE_TITLES = [
+        'President',
+        'Dean',
+        'Provost',
+        'Chancellor',
+    ];
 
     /**
      * @param array<string,array<string,ToolbarLink|ToolbarSeparator|ToolbarSpacer>> $buttons
@@ -203,6 +227,41 @@ class OUS extends AbstractPlugin
             while (--$i) $semester = $semester->previous();
         }
         return $semester->__toString();
+    }
+
+    public static function onShortCode_email_dear_line(ShortcodeInterface $s): ?string
+    {
+        $netIds = [];
+        $emails = [];
+        if ($user = BulkMail::toUser()) {
+            $netIds = OUS::userNetIDs($user);
+            foreach ($user->emails() as $email) {
+                if (str_ends_with($email, '@unm.edu')) continue;
+                $emails[] = $email;
+            }
+        }
+        $netIds = array_unique($netIds);
+        $emails = array_unique($emails);
+        foreach ($netIds as $netId) {
+            if ($faculty = FacultyInfo::search($netId)) {
+                $title = $faculty->title;
+                $title = preg_replace('/^(Interim|Acting) /i', '', $title);
+                if (isset(static::FACULTY_TITLE_ABBREVIATIONS[$title])) $title = static::FACULTY_TITLE_ABBREVIATIONS[$title];
+                elseif (!in_array($title, static::FACULTY_GREETABLE_TITLES)) $title = 'Professor';
+                return sprintf("Dear %s %s,", $title, $faculty->lastName);
+            } elseif ($name = PersonInfo::getFullNameFor($netId)) {
+                return sprintf("Dear %s,", $name);
+            }
+        }
+        foreach ($emails as $email) {
+            if ($name = PersonInfo::getFullNameFor($email)) {
+                return sprintf("Dear %s,", $name);
+            }
+        }
+        if ($user = BulkMail::toUser()) {
+            return sprintf('Dear %s,', $user->name());
+        }
+        return 'Dear Colleague,';
     }
 
     public static function onStaticUrlPermissions_ous(URL $url): bool

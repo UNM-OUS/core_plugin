@@ -27,6 +27,10 @@ unm:
     - Valencia County Branch
   semester_prelaunch: P7D # give each semester a 7 day "buffer" where we switch before its official start
   semesters: # known start dates of semesters, to update check https://registrar.unm.edu/academic-calendar/ten-year-semester-dates-calendar.html
+    2034:
+      spring: [1, 15]
+      summer: [6,3]
+      fall: [8, 19]
     2033:
       spring: [1, 17]
       summer: [6, 6]
@@ -154,6 +158,8 @@ bulk_mail:
       enabled: true
     site-promotion:
       enabled: true
+    personal:
+      enabled: true
   sources:
     faculty:
       enabled: true
@@ -205,7 +211,11 @@ email:
   from: univsec@unm.edu
   service_categories:
     site-announcement: true
+    personal: true
   categories:
+    personal:
+      label: Personal messages
+      description: Personalized messages for specific individuals
     site-announcement:
       label: Site announcement
       description: Important announcements regarding this site
