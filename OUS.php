@@ -232,13 +232,19 @@ class OUS extends AbstractPlugin
     public static function onShortCode_email_dear_line(ShortcodeInterface $s): ?string
     {
         $netIds = [];
-        $emails = [];
+        $emails = [BulkMail::toEmail()];
         if ($user = BulkMail::toUser()) {
             $netIds = OUS::userNetIDs($user);
             foreach ($user->emails() as $email) {
-                if (str_ends_with($email, '@unm.edu')) continue;
+                if (str_ends_with($email, '@unm.edu')) {
+                    $netIds[] = preg_replace('/@unm\.edu$/', '', $email);
+                    continue;
+                }
                 $emails[] = $email;
             }
+        }
+        if (str_ends_with($email = BulkMail::toEmail(), '@unm.edu')) {
+            $netIds[] = preg_replace('/@unm\.edu$/', '', $email);
         }
         $netIds = array_unique($netIds);
         $emails = array_unique($emails);
