@@ -6,6 +6,7 @@
 </p>
 <?php
 
+use DigraphCMS\UI\CallbackLink;
 use DigraphCMS\UI\Format;
 use DigraphCMS\UI\Pagination\ColumnDateFilteringHeader;
 use DigraphCMS\UI\Pagination\ColumnSortingHeader;
@@ -20,14 +21,16 @@ $table = new PaginatedTable(
     Permalinks::select()
         ->order('updated DESC'),
     function (Permalink $pl): array {
-        // TODO: editing tool, which includes delete/reset options
+        $reset = (new CallbackLink([$pl, 'resetCount']))
+            ->addChild('reset');
         return [
             implode('<br>', [
                 sprintf('<a href="%s">%s</a>', $pl->url(), $pl->slug()),
-                sprintf('<a href="%s">QR</a>', new URL('qr:' . $pl->slug()))
+                sprintf('<a href="%s">QR</a>', new URL('qr:' . $pl->slug())),
+                sprintf('<small><a href="%s">delete</a></small>', new URL('delete:' . $pl->slug())),
             ]),
             $pl->target(),
-            $pl->count(),
+            $pl->count() . "<br><small>$reset</small>",
             Format::date($pl->created()),
             $pl->createdBy(),
             Format::date($pl->updated()),

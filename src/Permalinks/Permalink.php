@@ -4,6 +4,7 @@ namespace DigraphCMS_Plugins\unmous\ous_digraph_module\Permalinks;
 
 use DateTime;
 use DigraphCMS\DB\DB;
+use DigraphCMS\Session\Session;
 use DigraphCMS\UI\Format;
 use DigraphCMS\URL\URL;
 use DigraphCMS\Users\User;
@@ -38,6 +39,21 @@ class Permalink
     public function count(): int
     {
         return $this->count;
+    }
+
+    public function resetCount(): static
+    {
+        $this->count = 0;
+        DB::query()
+            ->update('permalink')
+            ->set([
+                'count' => 0,
+                'updated' => time(),
+                'updated_by' => Session::uuid()
+            ])
+            ->where('id', $this->id)
+            ->execute();
+        return $this;
     }
 
     public function created(): DateTime
