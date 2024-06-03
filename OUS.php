@@ -209,11 +209,24 @@ class OUS extends AbstractPlugin
         if (!$bookmark) return null;
         $title = trim($s->getContent() ?? '') ?: $bookmark->title();
         $link_title = $bookmark->title();
-        $a = new A($bookmark->url());
+        // add fragment to URL
+        $fragment = trim($s->getParameter('fragment', ''));
+        if ($fragment) $fragment = '#' . $fragment;
+        // begin building tag
+        $a = new A($bookmark->url() . $fragment);
         $a->addChild($title);
         $a->setAttribute('title', $link_title);
+        // add classes
         $a->addClass('shared-bookmark');
         $a->addClass('shared-bookmark--' . $category);
+        if ($s->getParameter('class')) {
+            foreach (explode(' ', $s->getParameter('class')) as $class) {
+                $class = trim($class);
+                if (!$class) continue;
+                $a->addClass($class);
+            }
+        }
+        // return finished link
         return $a;
     }
 
