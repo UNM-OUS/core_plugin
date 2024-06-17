@@ -26,10 +26,13 @@ $table = new PaginatedTable(
         return [
             implode('<br>', [
                 sprintf('<a href="%s">%s</a>', $pl->url(), $pl->slug()),
-                sprintf('<a href="%s">QR</a>', new URL('qr:' . $pl->slug())),
+                sprintf('<small><a href="%s">QR&nbsp;code</a></small>', new URL('qr:' . $pl->slug())),
                 sprintf('<small><a href="%s">delete</a></small>', new URL('delete:' . $pl->slug())),
             ]),
-            $pl->target(),
+            implode('<br>',[
+                $pl->target(),
+                sprintf('<small><a href="%s">edit</a></small>', new URL('edit:' . $pl->slug())),
+            ]),
             $pl->count() . "<br><small>$reset</small>",
             Format::date($pl->created()),
             $pl->createdBy(),

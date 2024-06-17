@@ -15,7 +15,6 @@ use DigraphCMS\URL\URL;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\Permalinks\Permalinks;
 
 $pl = Permalinks::get(Context::url()->actionSuffix());
-
 if (!$pl) {
     throw new HttpError(404, 'Permalink not found');
 }

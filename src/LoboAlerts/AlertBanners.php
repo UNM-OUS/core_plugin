@@ -6,6 +6,8 @@ use DigraphCMS\Cache\Cache;
 use DigraphCMS\Curl\CurlHelper;
 use DigraphCMS\Events\Dispatcher;
 use DigraphCMS\ExceptionLog;
+use DigraphCMS_Plugins\unmous\ous_digraph_module\LoboAlerts\DB\GlobalAlerts;
+use DigraphCMS_Plugins\unmous\ous_digraph_module\LoboAlerts\DB\GlobalAlert;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\LoboAlerts\DB\SiteAlert;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\LoboAlerts\DB\SiteAlerts;
 
@@ -36,20 +38,25 @@ class AlertBanners
                     ExceptionLog::log($th);
                 }
                 // get OUS-global alerts
-                foreach (static::globalAlerts() as $alert) $alerts[] = $alert; // get site alerts
-                foreach (static::siteAlerts() as $alert) $alerts[] = $alert; // use dispatcher to append more alerts
-                Dispatcher::dispatchEvent('onLoboAlerts', [&$alerts]); // return the final alert
+                foreach (static::globalAlerts() as $alert) $alerts[] = $alert;
+                // get site alerts
+                foreach (static::siteAlerts() as $alert) $alerts[] = $alert;
+                // use dispatcher to append more alerts
+                Dispatcher::dispatchEvent('onLoboAlerts', [&$alerts]);
+                // return the final alert list
                 return $alerts;
             },
             300
         );
     }
 
-    // @phpstan-ignore-next-line we don't have a type for this yet
+    /**
+     * @return GlobalAlert[]
+     */
     public static function globalAlerts(): array
     {
-        // TODO global alerts once site-level alerts are worked out
-        return [];
+        // @phpstan-ignore-next-line
+        return GlobalAlerts::new()->currentAlerts()->fetchAll();
     }
 
     /**
@@ -58,6 +65,6 @@ class AlertBanners
     protected static function siteAlerts(): array
     {
         // @phpstan-ignore-next-line
-        return SiteAlerts::new()->current()->fetchAll();
+        return SiteAlerts::new()->currentAlerts()->fetchAll();
     }
 }

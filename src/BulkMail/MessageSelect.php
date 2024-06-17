@@ -5,6 +5,7 @@ namespace DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail;
 use DigraphCMS\DB\AbstractMappedSelect;
 use DigraphCMS\DB\DB;
 
+/** @extends AbstractMappedSelect<Message> */
 class MessageSelect extends AbstractMappedSelect
 {
     /** @var Mailing */

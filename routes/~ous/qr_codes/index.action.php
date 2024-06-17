@@ -9,6 +9,7 @@ use DigraphCMS\HTML\Forms\UrlInput;
 use DigraphCMS\HTTP\RedirectException;
 use DigraphCMS\UI\Notifications;
 use DigraphCMS\URL\URL;
+use DigraphCMS\URL\WaybackMachine;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\Permalinks\Permalinks;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\QrGenerator;
 
@@ -26,6 +27,9 @@ $permalink = (new CheckboxField('Create permalink'))
 if ($form->ready()) {
     if ($permalink->value()) {
         $permalink = Permalinks::create($url->value());
+        // pre-emptively queue wayback check
+        WaybackMachine::check($permalink->target());
+        // notify and return
         Notifications::flashConfirmation('Permalink created');
         throw new RedirectException(new URL('../permalinks/qr:' . $permalink->slug()));
     } else {

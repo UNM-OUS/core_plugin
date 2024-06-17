@@ -6,6 +6,7 @@ use DigraphCMS\DB\AbstractMappedSelect;
 use DigraphCMS\DB\DB;
 use DigraphCMS\Users\Permissions;
 
+/** @extends AbstractMappedSelect<Mailing> */
 class MailingSelect extends AbstractMappedSelect
 {
     protected $returnObjectClass = Mailing::class;

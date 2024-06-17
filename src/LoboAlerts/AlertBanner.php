@@ -40,17 +40,14 @@ class AlertBanner
     {
         return sprintf(
             implode(PHP_EOL, [
-                '<div class="loboalert loboalert--%s" id="%s">',
-                '<div class="loboalert__title">%s</div>',
-                '<a class="loboalert__expand" href="#%s">-- read more --</a>',
+                '<details class="loboalert loboalert--%s" id="%s">',
+                '<summary class="loboalert__title">%s</summary>',
                 '<div class="loboalert__content">%s</div>',
-                '<a class="loboalert__collapse" href="#">-- collapse --</a>',
-                '</div>',
+                '</details>',
             ]),
             $this->class(),
             $this->id(),
             $this->title(),
-            $this->id(),
             $this->content(),
         );
     }

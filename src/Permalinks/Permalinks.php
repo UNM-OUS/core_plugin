@@ -13,13 +13,7 @@ class Permalinks
     public static function create(string $target, string $slug = null): Permalink
     {
         $slug = $slug ?? strtolower(Digraph::uuid());
-        // run through URLify
-        $slug = URLify::transliterate($slug);
-        // trim and clean up
-        $slug = strtolower($slug);
-        $slug = preg_replace('@[^' . Slugs::SLUG_CHARS . '\/]+@', '_', $slug);
-        $slug = preg_replace('@/+@', '_', $slug);
-        $slug = trim($slug, '_');
+        $slug = static::cleanSlug($slug);
         // insert into database
         DB::query()
             ->insertInto('permalink', [
@@ -34,6 +28,19 @@ class Permalinks
             ->execute();
         // return object re-retrieved from database sort of as a sanity check
         return static::get($slug);
+    }
+
+    public static function cleanSlug(string $slug): string
+    {
+        // run through URLify
+        $slug = URLify::transliterate($slug);
+        // trim and clean up
+        $slug = strtolower($slug);
+        $slug = preg_replace('@[^' . Slugs::SLUG_CHARS . '\/]+@', '_', $slug);
+        $slug = preg_replace('@/+@', '_', $slug);
+        $slug = trim($slug, '_');
+        // return
+        return $slug;
     }
 
     public static function get(string $slug): ?Permalink

@@ -13,7 +13,7 @@ if (!$pl) {
 }
 
 printf(
-    '<p>This QR code redirects to <a href="%s"><kbd>%s</kbd></a>.<br>The permalink has been followed %s times.</p>',
+    '<p>This QR code redirects to <a href="%s" data-wayback-ignore="true"><kbd>%s</kbd></a>.<br>The permalink has been followed %s times.</p>',
     $pl->target(),
     $pl->target(),
     $pl->count()

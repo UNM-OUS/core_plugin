@@ -3,23 +3,23 @@
 namespace DigraphCMS_Plugins\unmous\ous_digraph_module\LoboAlerts\DB;
 
 use DigraphCMS\DB\AbstractMappedSelect;
-use DigraphCMS\DB\DB;
+use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedDB;
 
-/** @extends AbstractMappedSelect<SiteAlert> */
-class SiteAlerts extends AbstractMappedSelect
+/** @extends AbstractMappedSelect<GlobalAlert> */
+class GlobalAlerts extends AbstractMappedSelect
 {
-    const DB_CLASS = DB::class;
+    const DB_CLASS = SharedDB::class;
     const DB_TABLE = 'site_alerts';
-    protected $returnObjectClass = SiteAlert::class;
+    protected $returnObjectClass = GlobalAlert::class;
 
-    public static function new(): SiteAlerts
+    public static function new(): GlobalAlerts
     {
-        return new SiteAlerts(
+        return new GlobalAlerts(
             static::DB_CLASS::query()->from(static::DB_TABLE)
         );
     }
 
-    public static function get(null|string $uuid): ?SiteAlert
+    public static function get(null|string $uuid): ?GlobalAlert
     {
         if (!$uuid) return null;
         return static::new()->where('uuid', $uuid)->fetch();
@@ -46,7 +46,7 @@ class SiteAlerts extends AbstractMappedSelect
             ->where('end_time <= ?', [time()]);
     }
 
-    public static function update(SiteAlert $alert): void
+    public static function update(GlobalAlert $alert): void
     {
         static::DB_CLASS::query()->update(
             static::DB_TABLE,
@@ -62,7 +62,7 @@ class SiteAlerts extends AbstractMappedSelect
             ->execute();
     }
 
-    public static function create(SiteAlert $alert): void
+    public static function create(GlobalAlert $alert): void
     {
         static::DB_CLASS::query()->insertInto(
             static::DB_TABLE,
@@ -78,7 +78,7 @@ class SiteAlerts extends AbstractMappedSelect
             ->execute();
     }
 
-    public static function delete(SiteAlert $alert): void
+    public static function delete(GlobalAlert $alert): void
     {
         static::DB_CLASS::query()->delete(static::DB_TABLE)
             ->where('uuid', $alert->uuid())
