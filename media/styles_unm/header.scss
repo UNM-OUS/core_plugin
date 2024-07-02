@@ -12,17 +12,20 @@
     justify-content: flex-end;
     z-index: 1;
 
-    > #header__wrapper {
+    >#header__wrapper {
         background: var(--background-a80);
         color: var(--color);
         box-shadow: var(--shadow-inset);
         border-top: 1px solid var(--background);
         margin-top: $grid * 8;
-        > h1 {
+
+        >h1 {
             margin: 0;
             padding: $grid;
+
             a {
                 text-decoration: none;
+
                 &:hover {
                     text-decoration: underline;
                 }
@@ -37,18 +40,21 @@
         padding: 0;
         box-shadow: none;
         min-height: 0;
-    
-        > #header__wrapper {
+
+        >#header__wrapper {
             background: transparent;
             color: inherit;
             box-shadow: none;
             border: 0;
             margin-top: 0;
-            > h1 {
+
+            >h1 {
                 margin: 0;
                 padding: $grid;
+
                 a {
                     text-decoration: none;
+
                     &:hover {
                         text-decoration: underline;
                     }
@@ -65,6 +71,7 @@
     font-weight: lighter;
     border-top: 1px solid var(--background-a80);
     border-bottom: 2px solid var(--background-lighter);
+    align-items: flex-end;
 
     &.menubar--overflowed {
         &.menubar--overflowed--open {
