@@ -152,9 +152,7 @@ class OUS extends AbstractPlugin
 
     public static function cronJob_maintenance(): void
     {
-        // pull fresh permissions from the user source.
-        // cache them for up to 24 hours, in case they disappear from the source
-        // or it becomes unreachable for some reason.
+        // pull fresh permissions from the shared user source
         UserData::data(true);
         // generate shared bookmarks for all of this site's pages
         if (Config::get('unm.shared_bookmarks.update')) static::updateSharedBookmarks();
