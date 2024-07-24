@@ -58,6 +58,29 @@ class Validation
         };
     }
 
+    public static function netIdWithExtensionOrEmail(): callable
+    {
+        return function (InputInterface $input): string|null {
+            if (!$input->value())
+                return null;
+            if (strpos($input->value(), '@') !== false) {
+                // validate as email
+                // make sure it's a valid email address
+                if (!filter_var($input->value(), FILTER_VALIDATE_EMAIL)) {
+                    return "Please enter a valid email address or NetID";
+                }
+                // disallow alternate unm emails
+                if (preg_match('/@.+\.unm\.edu$/', $input->value(), $matches)) {
+                    return "Anyone associated with UNM should be referenced by their main campus NetID, not their <em>" . $matches[0] . "</em> email address. This is in many cases important for data consistency and login system integrations.";
+                }
+                // return null
+                return null;
+            } else {
+                return static::netIdWithExtension()($input);
+            }
+        };
+    }
+
     public static function netID(): callable
     {
         return function (InputInterface $input): string|null {

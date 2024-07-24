@@ -6,13 +6,37 @@ use DigraphCMS\HTML\Forms\INPUT;
 
 class EmailOrNetIDInput extends INPUT
 {
-    public function __construct()
+    public function __construct(string $id = null, bool $allow_netid_extensions = false)
     {
-        $this->addValidator(Validation::netIDorEmail());
+        parent::__construct($id);
+        if ($allow_netid_extensions) {
+            $this->addValidator(Validation::netIdWithExtensionOrEmail());
+        } else {
+            $this->addValidator(Validation::netIDorEmail());
+        }
     }
 
-    public function value(bool $useDefault = false): string
+    public function value(bool $useDefault = false): string|null
     {
-        return preg_replace('/@unm\.edu$/', '', strtolower(parent::value($useDefault) ?? ''));
+        return preg_replace('/@unm\.edu$/', '', strtolower(parent::value($useDefault) ?? ''))
+            ?: '';
+    }
+
+    public function netIdValue(bool $useDefault = false): string|null
+    {
+        if (str_contains($this->value($useDefault) ?? '', '@')) {
+            return null;
+        }
+        return preg_replace('/\..*$/', '', $this->value($useDefault))
+            ?: null;
+    }
+
+    public function extensionValue(bool $useDefault = false): string|null
+    {
+        if (str_contains($this->value($useDefault) ?? '', '@')) {
+            return null;
+        }
+        return preg_replace('/^.*\./', '', $this->value($useDefault))
+            ?: null;
     }
 }

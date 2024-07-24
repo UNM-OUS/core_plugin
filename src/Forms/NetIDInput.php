@@ -6,10 +6,10 @@ use DigraphCMS\HTML\Forms\INPUT;
 
 class NetIDInput extends INPUT
 {
-    public function __construct(string $id = null, bool $allow_extensions = false)
+    public function __construct(string $id = null, bool $allow_netid_extensions = false)
     {
         parent::__construct($id);
-        if ($allow_extensions) {
+        if ($allow_netid_extensions) {
             $this->addValidator(Validation::netIdWithExtension());
         } else {
             $this->addValidator(Validation::netID());
