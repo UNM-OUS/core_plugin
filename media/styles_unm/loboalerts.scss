@@ -34,9 +34,10 @@
     .loboalert__title {
         &:before {
             @include material-icon;
-            content: '\e686';
+            content: '\ea4b';
             display: inline-block;
             margin-right: $grid/2;
+            transform: translateY(0.025em) scale(1.4);
         }
     }
 }
