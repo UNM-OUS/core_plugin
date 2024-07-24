@@ -64,17 +64,51 @@ class Validation
             if (!$input->value())
                 return null;
             // validate as NetID
-            if (preg_match('/^[0-9]{9}$/', $input->value())) {
-                return "Please enter a NetID username, not a Banner ID number";
+            return static::validateNetId($input->value());
+        };
+    }
+
+    public static function netIdWithExtension(): callable
+    {
+        return function (InputInterface $input): string|null {
+            if (!$input->value())
+                return null;
+            // split on dots, so we can validate the NetID part this field lets
+            // you enter something like regents.jackfortner to indicate that
+            // this is a person who doesn't have a NetID, but should be
+            // associated with the NetID "regents"
+            $parts = explode('.', $input->value());
+            if (count($parts) > 2) {
+                return "NetID may only have one extension followed by a dot";
             }
-            if (!preg_match('/^[a-z].{1,19}$/', $input->value())) {
-                return "NetIDs must be 2-20 characters and begin with a letter";
+            // validate first part, the NetID
+            $netId_validation = static::validateNetId($parts[0]);
+            if ($netId_validation) {
+                return $netId_validation;
             }
-            if (preg_match('/[^a-z0-9_]/', $input->value())) {
-                return "NetIDs must contain only alphanumeric characters and underscores";
+            // validate the second part, the extension (it should be alphanumeric)
+            if (isset($parts[1])) {
+                if (!preg_match('/^[a-z0-9]+$/', $parts[1])) {
+                    return "NetID extensions must be alphanumeric";
+                }
             }
+            // return null if both parts are valid
             return null;
         };
+    }
+
+    protected static function validateNetId(string $input): string|null
+    {
+        if (preg_match('/^[0-9]{9}$/', $input)) {
+            return "Please enter a NetID username, not a Banner ID number";
+        }
+        if (!preg_match('/^[a-z].{1,19}$/', $input)) {
+            return "NetIDs must be 2-20 characters and begin with a letter";
+        }
+        if (preg_match('/[^a-z0-9_]/', $input)) {
+            return "NetIDs must contain only alphanumeric characters and underscores";
+        }
+        return null;
     }
 
     public static function notUglyCase(): callable
