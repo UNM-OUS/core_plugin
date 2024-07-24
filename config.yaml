@@ -1,4 +1,10 @@
 unm:
+  test_site:
+    active: false # set to true to add a banner and block all users who aren't in the admins, editors, or testers groups
+    allowed_routes: [signin, captcha] # list of routes that are allowed even when test_site is active
+    banner:
+      title: This is a test site
+      message: This is a site intended for internal testing and development. Access is limited and information may not be accurate or up-to-date.
   shared_bookmarks:
     update: true
     searchable: true

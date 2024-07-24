@@ -59,6 +59,29 @@ class OUS extends AbstractPlugin
         'Chancellor',
     ];
 
+    public function onStaticUrlPermissions(URL $url, User $user): bool|null
+    {
+        return static::testSitePermissions($url, $user);
+    }
+
+    public function onPageUrlPermissions(URL $url, User $user): bool|null
+    {
+        return static::testSitePermissions($url, $user);
+    }
+
+    protected static function testSitePermissions(URL $url, User $user): bool|null
+    {
+        if (Config::get('unm.test_site.active')) {
+            if (in_array($url->route(), Config::get('unm.test_site.allowed_routes'))) {
+                return true;
+            }
+            if (!Permissions::inGroups(['testers', 'editors', 'admins'])) {
+                return false;
+            }
+        }
+        return null;
+    }
+
     /**
      * @param array<string,array<string,ToolbarLink|ToolbarSeparator|ToolbarSpacer>> $buttons
      */

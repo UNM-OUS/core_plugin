@@ -3,6 +3,7 @@
 namespace DigraphCMS_Plugins\unmous\ous_digraph_module\LoboAlerts;
 
 use DigraphCMS\Cache\Cache;
+use DigraphCMS\Config;
 use DigraphCMS\Curl\CurlHelper;
 use DigraphCMS\Events\Dispatcher;
 use DigraphCMS\ExceptionLog;
@@ -21,6 +22,17 @@ class AlertBanners
             function (): array {
                 /** @var array<int,AlertBanner> */
                 $alerts = [];
+                // add test mode alert if configured
+                if (Config::get('unm.test_site.active')) {
+                    $alerts[] = new AlertBanner(
+                        Config::get('unm.test_site.banner.title')
+                            ?: 'This is a test site',
+                        Config::get('unm.test_site.banner.message')
+                            ?: 'This is a site intended for internal testing and development. It may not be accurate or up-to-date.',
+                        'test-site',
+                        'testmode',
+                    );
+                }
                 // get alerts from main source
                 $loboAlert = CurlHelper::get('https://webcore.unm.edu/v2/loboalerts.json');
                 try {

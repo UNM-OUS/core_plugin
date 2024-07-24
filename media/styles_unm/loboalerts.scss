@@ -25,6 +25,22 @@
     }
 }
 
+.loboalert--test-site {
+    background-color: var(--cue-information);
+    color: var(--cue-information-inv);
+    border-bottom: 1px solid var(--cue-information-dark);
+    border-top: 1px solid var(--cue-information-light);
+
+    .loboalert__title {
+        &:before {
+            @include material-icon;
+            content: '\e686';
+            display: inline-block;
+            margin-right: $grid/2;
+        }
+    }
+}
+
 .loboalert--danger {
     background-color: var(--cue-danger);
     color: var(--cue-danger-inv);
