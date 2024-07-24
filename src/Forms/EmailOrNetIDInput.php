@@ -39,4 +39,15 @@ class EmailOrNetIDInput extends INPUT
         return preg_replace('/^.*\./', '', $this->value($useDefault))
             ?: null;
     }
+
+    public function emailValue(bool $useDefault = false): string|null
+    {
+        if (str_contains($this->value($useDefault) ?? '', '@')) {
+            return $this->value($useDefault);
+        }
+        if ($netId = $this->netIdValue($useDefault)) {
+            return $netId . '@unm.edu';
+        }
+        return null;
+    }
 }
