@@ -33,11 +33,11 @@
 
     .loboalert__title {
         &:before {
-            @include material-icon;
-            content: '\ea4b';
+            @include icofont;
+            content: '\eaf2';
             display: inline-block;
             margin-right: $grid/2;
-            transform: translateY(0.025em) scale(1.4);
+            transform: translateY(-0.15em) scale(1.4);
         }
     }
 }
