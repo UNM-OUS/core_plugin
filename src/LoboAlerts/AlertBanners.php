@@ -5,6 +5,7 @@ namespace DigraphCMS_Plugins\unmous\ous_digraph_module\LoboAlerts;
 use DigraphCMS\Cache\Cache;
 use DigraphCMS\Config;
 use DigraphCMS\Curl\CurlHelper;
+use DigraphCMS\DB\DB;
 use DigraphCMS\Events\Dispatcher;
 use DigraphCMS\ExceptionLog;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\LoboAlerts\DB\GlobalAlerts;
@@ -31,6 +32,15 @@ class AlertBanners
                             ?: 'This is a site intended for internal testing and development. It may not be accurate or up-to-date.',
                         'test-site',
                         'testmode',
+                    );
+                }
+                // also check if we're using test databases
+                if (str_ends_with(Config::get('db.name'),'_test')) {
+                    $alerts[] = new AlertBanner(
+                        'Test database in use',
+                        'This site is currently using a test database. Changes made here will not affect the live site, and will be periodically discarded.',
+                        'test-site',
+                        'testdb',
                     );
                 }
                 // get alerts from main source

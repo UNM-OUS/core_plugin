@@ -20,6 +20,8 @@ class UserData
     public static function userGroups(string $userID): array
     {
         $groups = [];
+        // TODO: set up a shared DB table for holding group memberships and use it here
+        // TODO: once that is done refactor shared permissions to use it, and add it to facgov too
         // pull faculty group
         foreach (static::userNetIDs($userID) as $netID) {
             if (static::netIdIsFaculty($netID)) {
