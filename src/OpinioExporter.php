@@ -3,7 +3,6 @@
 namespace DigraphCMS_Plugins\unmous\ous_digraph_module;
 
 use Stringable;
-use URLify;
 
 class OpinioExporter
 {

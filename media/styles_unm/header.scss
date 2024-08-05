@@ -74,6 +74,11 @@
     align-items: flex-end;
 
     &.menubar--overflowed {
+
+        .menuitem {
+            width: 100%;
+        }
+
         &.menubar--overflowed--open {
             background: var(--background-dark);
 
