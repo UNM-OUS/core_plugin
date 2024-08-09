@@ -180,7 +180,7 @@ class UserData
                 $data = array_merge_recursive($data, $source_data);
             }
             foreach ($data as $netid => $user) {
-                $data[$netid]['groups'] = array_unique($user['groups']);
+                $data[$netid]['groups'] = array_values(array_unique($user['groups']));
             }
             if ($data) Cache::set($cacheID, $data, 86400);
             else throw new Exception('UNM user source failed to parse');
