@@ -20,8 +20,6 @@ class UserData
     public static function userGroups(string $userID): array
     {
         $groups = [];
-        // TODO: set up a shared DB table for holding group memberships and use it here
-        // TODO: once that is done refactor shared permissions to use it, and add it to facgov too
         // pull faculty group
         foreach (static::userNetIDs($userID) as $netID) {
             if (static::netIdIsFaculty($netID)) {
@@ -169,15 +167,26 @@ class UserData
         // use a static cache variable
         static $cache;
         if ($cache !== null && !$forceRefresh) return $cache;
+        $cacheID = 'unm/userdata_'.md5(serialize(Config::get('unm.user_sources')));
         // if force refresh is true or stored cache isn't set or is expired, run job to get data
-        if ($forceRefresh || !Cache::exists('unm/userdata') || Cache::expired('unm/userdata')) {
-            $data = CurlHelper::get(Config::get('unm.user_source'));
-            if ($data === null) throw new HttpError(503, 'User data failed to load, this is a rare and usually a temporary error. Please try again in a few minutes.');
-            if ($data = Yaml::parse($data)) Cache::set('unm/userdata', $data, 86400);
+        if ($forceRefresh || !Cache::exists($cacheID) || Cache::expired($cacheID)) {
+            /** @var array<string,array{groups:string[]}> */
+            $data = [];
+            foreach (Config::get('unm.user_sources') as $source) {
+                $source_data = CurlHelper::get($source);
+                if ($source_data === null) throw new HttpError(503, 'User data from ' . $source . ' failed to load, this is a rare and usually a temporary error. Please try again in a few minutes.');
+                if (!$source_data = Yaml::parse($source_data)) throw new Exception('User source ' . $source . ' failed to parse.');
+                /** @var array<string,array{groups:string[]}> $source_data */
+                $data = array_merge_recursive($data, $source_data);
+            }
+            foreach ($data as $netid => $user) {
+                $data[$netid]['groups'] = array_unique($user['groups']);
+            }
+            if ($data) Cache::set($cacheID, $data, 86400);
             else throw new Exception('UNM user source failed to parse');
             return $cache = $data;
         }
         // otherwise just return the main cache value
-        return $cache = Cache::get('unm/userdata');
+        return $cache = Cache::get($cacheID);
     }
 }

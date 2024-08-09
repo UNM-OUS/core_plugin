@@ -1,4 +1,11 @@
 unm:
+  # shared user sources, which are yaml files that contain lists of netIDs and groups to put them into
+  # formatted like (note groups are in their own key, so we can add more info later if neeeded):
+  # netid:
+  #   groups: []
+  user_sources:
+    - https://secretary.unm.edu/shared_permissions/known_netids.yaml
+  # config options for turning on the "test site" feature, which adds a banner and blocks unknown users
   test_site:
     active: false # set to true to add a banner and block all users who aren't in the admins, editors, or testers groups
     allowed_routes: [signin, captcha] # list of routes that are allowed even when test_site is active
@@ -8,12 +15,16 @@ unm:
   shared_bookmarks:
     update: true
     searchable: true
+  # enable to block login completely for unknown users (users not found in any sources under unm.user_sources)
   block_unknown_netids: false
+  # follows the same format as user_sources, but can be configured locally
   known_netids: []
+  # configure the shared database connection
   shared_db:
     dsn: null
     user: null
     pass: null
+  # list of HSC orgs to be used by things like FacultyInfo to determine if people are in HSC
   hsc_orgs:
     - School of Medicine
     - HS Library and Informatics Center
@@ -24,15 +35,20 @@ unm:
     - HSC VP Research
     - UNM HSC West Campus
     - UNM Medical Group
+  # used similarly to determine if somebody is "north campus" including non-HSC orgs
   north_orgs: # note that this is only orgs that are north BEYOND the HSC orgs above
     - School of Law
+  # list of branch orgs to be used by things like FacultyInfo to determine if people are in branch
   branch_orgs:
     - Gallup Branch
     - Los Alamos Branch
     - Taos Branch
     - Valencia County Branch
-  semester_prelaunch: P7D # give each semester a 7 day "buffer" where we switch before its official start
-  semesters: # known start dates of semesters, to update check https://registrar.unm.edu/academic-calendar/ten-year-semester-dates-calendar.html
+  # give each semester a 7 day "buffer" where we switch before its official start
+  semester_prelaunch: P7D
+  # known start dates of semesters
+  # to update check https://registrar.unm.edu/academic-calendar/ten-year-semester-dates-calendar.html
+  semesters:
     2034:
       spring: [1, 15]
       summer: [6,3]
