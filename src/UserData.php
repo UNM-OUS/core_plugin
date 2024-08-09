@@ -144,6 +144,20 @@ class UserData
     }
 
     /**
+     * @return string[]
+     */
+    public static function groupNetIds(string $group): array
+    {
+        $netids = [];
+        foreach (static::data() as $netid => $d) {
+            if (in_array($group, $d['groups'])) {
+                $netids[] = $netid;
+            }
+        }
+        return $netids;
+    }
+
+    /**
      * @return array<string,array<string,string[]>>
      */
     public static function data(bool $forceRefresh = false): array
@@ -167,7 +181,7 @@ class UserData
         // use a static cache variable
         static $cache;
         if ($cache !== null && !$forceRefresh) return $cache;
-        $cacheID = 'unm/userdata_'.md5(serialize(Config::get('unm.user_sources')));
+        $cacheID = 'unm/userdata';
         // if force refresh is true or stored cache isn't set or is expired, run job to get data
         if ($forceRefresh || !Cache::exists($cacheID) || Cache::expired($cacheID)) {
             /** @var array<string,array{groups:string[]}> */

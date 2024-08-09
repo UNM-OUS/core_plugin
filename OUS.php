@@ -173,10 +173,14 @@ class OUS extends AbstractPlugin
         return $cache[$netId];
     }
 
+    public static function cronJob_hourly(): void
+    {
+        // pull fresh permissions from the shared user sources
+        UserData::data(true);
+    }
+
     public static function cronJob_maintenance(): void
     {
-        // pull fresh permissions from the shared user source
-        UserData::data(true);
         // generate shared bookmarks for all of this site's pages
         if (Config::get('unm.shared_bookmarks.update')) static::updateSharedBookmarks();
     }
