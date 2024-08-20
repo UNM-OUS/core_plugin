@@ -308,9 +308,15 @@ class OUS extends AbstractPlugin
         return 'Dear Colleague,';
     }
 
-    public static function onStaticUrlPermissions_ous(URL $url): bool
+    public static function onUrlPermissions(URL $url, User $user): bool|null
     {
-        return Permissions::inMetaGroup('ous__edit');
+        if ($url->route() == 'home' && $url->actionPrefix() == 'pl') return true;
+        return null;
+    }
+
+    public static function onStaticUrlPermissions_ous(URL $url, User $user): bool|null
+    {
+        return Permissions::inMetaGroup('ous__edit', $user);
     }
 
     public static function onStaticUrlName_ous(URL $url): string|null
