@@ -7,11 +7,13 @@ use DigraphCMS\Config;
 use DigraphCMS\Curl\CurlHelper;
 use DigraphCMS\DB\DB;
 use DigraphCMS\Events\Dispatcher;
+use DigraphCMS\Exception;
 use DigraphCMS\ExceptionLog;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\LoboAlerts\DB\GlobalAlerts;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\LoboAlerts\DB\GlobalAlert;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\LoboAlerts\DB\SiteAlert;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\LoboAlerts\DB\SiteAlerts;
+use Throwable;
 
 class AlertBanners
 {
@@ -35,7 +37,7 @@ class AlertBanners
                     );
                 }
                 // also check if we're using test databases
-                if (str_ends_with(Config::get('db.name'),'_test')) {
+                if (str_ends_with(Config::get('db.name'), '_test')) {
                     $alerts[] = new AlertBanner(
                         'Test database in use',
                         'This site is currently using a test database. Changes made here will not affect the live site, and will be periodically discarded.',
@@ -44,9 +46,9 @@ class AlertBanners
                     );
                 }
                 // get alerts from main source
-                $loboAlert = CurlHelper::get('https://webcore.unm.edu/v2/loboalerts.json');
+                $loboAlert_data = CurlHelper::get('https://webcore.unm.edu/v2/loboalerts.json');
                 try {
-                    if ($loboAlert && $loboAlert = json_decode($loboAlert, true, 512, JSON_THROW_ON_ERROR)) {
+                    if ($loboAlert_data && $loboAlert = json_decode($loboAlert_data, true, 512, JSON_THROW_ON_ERROR)) {
                         if ($loboAlert['alert'] != 'none') {
                             $alerts[] = new AlertBanner(
                                 $loboAlert['alert'] ?? 'LoboAlert',
@@ -56,8 +58,8 @@ class AlertBanners
                             );
                         }
                     }
-                } catch (\Throwable $th) {
-                    ExceptionLog::log($th);
+                } catch (Throwable $th) {
+                    ExceptionLog::log(new Exception("LoboAlert parsing error", $loboAlert_data, $th));
                 }
                 // get OUS-global alerts
                 foreach (static::globalAlerts() as $alert) $alerts[] = $alert;
