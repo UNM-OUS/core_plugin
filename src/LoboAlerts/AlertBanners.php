@@ -41,7 +41,7 @@ class AlertBanners
                     $alerts[] = new AlertBanner(
                         'Test database in use',
                         'This site is currently using a test database. Changes made here will not affect the live site, and will be periodically discarded.',
-                        'test-site',
+                        'test-database',
                         'testdb',
                     );
                 }
