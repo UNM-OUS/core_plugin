@@ -13,11 +13,23 @@ class FacultyInfo
 {
     protected string|bool $rank = false;
 
-    public static function search(string|null $netId, bool $voting_only = false): ?FacultyInfo
+    public static function search(string $netId, bool $voting_only = false): ?FacultyInfo
     {
-        $query = $voting_only ? VotingFaculty::select() : AllFaculty::select();
-        $query->where('netid', $netId);
-        if ($result = $query->fetch()) {
+        $voting_query = VotingFaculty::select()
+            ->where('netid', $netId);
+        $all_query = AllFaculty::select()
+            ->where('netid', $netId);
+        $result = null;
+        if ($voting_only) {
+            $result = $voting_query->fetch();
+            $voting = true;
+        } elseif ($result = $voting_query->fetch()) {
+            $voting = true;
+        }else {
+            $result = $all_query->fetch();
+            $voting = false;
+        }
+        if ($result) {
             return new FacultyInfo(
                 $result['netid'],
                 $result['email'],
@@ -27,9 +39,7 @@ class FacultyInfo
                 $result['department'],
                 $result['title'],
                 $result['academic_title'],
-                $voting_only
-                    ? true
-                    : boolval(VotingFaculty::select()->where('netid', $netId)->count())
+                $voting
             );
         }
         return null;
