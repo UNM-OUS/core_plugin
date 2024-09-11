@@ -66,6 +66,7 @@ if ($form->ready()) {
             $department = StringFixer::department($row['org desc']);
             $title = StringFixer::jobTitle($row['job title']);
             $academicTitle = FacultyRanks::cleanAcademicTitle($row['academic title']) ?? '';
+            $academicTitle = FacultyRanks::cleanClinicianEducatorText($academicTitle);
             $netID = strtolower($row['netid']);
             $email = strtolower($row['email']);
             // load name, allowing overrides from PersonInfo

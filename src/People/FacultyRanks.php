@@ -99,6 +99,16 @@ class FacultyRanks {
         return null;
     }
 
+    public static function cleanClinicianEducatorText(string $rank): string
+    {
+        $rank = preg_replace(
+            '/(clin(ician|cian|ical|ican)(\-| )ed(ucator)?( ?\- ?|\, ?| +))/i',
+            'Clinician Educator - ',
+            $rank
+        );
+        return $rank;
+    }
+
     public static function inferRankFromTitle(string $title, bool $attempt_inferences = false): ?string
     {
         $title = trim(strtolower($title));
@@ -116,11 +126,7 @@ class FacultyRanks {
         if ($rank) {
             // fix clinician educator formatting
             /** @var string */
-            $rank = preg_replace(
-                '/(clin(ician|cian|ical|ican)(\-| )ed(ucator)?( ?\- ?|\, ?| +))/',
-                'Clinician Educator - ',
-                $rank
-            );
+            $rank = static::cleanClinicianEducatorText($rank);
             // uppercase words
             /** @var string[] */
             $rank = explode(' ', ucwords($rank));
