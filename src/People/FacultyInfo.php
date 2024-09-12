@@ -52,14 +52,36 @@ class FacultyInfo
     public static function import(array $row, bool|null $voting, string $job_group): void
     {
         list($first_name, $last_name) = static::importName($row);
-        $netid = strtolower($row['netid']);
-        $email = strtolower($row['email'] ?? $row['netid'] . '@unm.edu');
-        $org = StringFixer::organization($row['org level 3 desc']);
-        $department = StringFixer::department($row['org desc']);
-        $title = StringFixer::jobTitle($row['job title']);
+        $netid = trim(strtolower($row['netid']));
+        if (!$netid) throw new Exception('NetID cannot be blank');
+        $existing = static::search($netid);
+        // email address
+        $email = ($row['email'] ? $row['email'] : null)
+            ?? $existing?->email
+            ?? $netid . '@unm.edu';
+        // org (org level 3 desc in banner)
+        $org = ($row['org level 3 desc'] ? $row['org level 3 desc'] : null)
+            ?? $existing?->org
+            ?? 'Unknown Organization';
+        // department (org desc in banner)
+        $department = ($row['org desc'] ? $row['org desc'] : null)
+            ?? $existing?->department
+            ?? 'Unknown Department';
+        $department = StringFixer::department($department);
+        // job title
+        $title = ($row['job title'] ? $row['job title'] : null)
+            ?? $existing?->title
+            ?? 'Unknown Title';
+        $title = StringFixer::jobTitle($title);
+        // rank is more complicated. It will first try to infer it from title,
+        // then from academic title if it exists, then from existing entries for
+        // this person (to handle partial updates that might not include a
+        // person's academic title), then default to 'Unknown Rank'
         $rank = FacultyRankParser::commonRankFromTitle($title)
-            ?? FacultyRankParser::inferRankFromTitle($row['academic title'])
+            ?? ($row['academic title'] ? FacultyRankParser::inferRankFromTitle($row['academic title']) : null)
+            ?? $existing?->rank
             ?? 'Unknown Rank';
+        // flags
         $voting = $voting ?? static::importVoting($row);
         $hsc = static::importHsc($org);
         $branch = static::importBranch($org);

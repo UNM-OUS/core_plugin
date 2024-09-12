@@ -43,11 +43,28 @@ class StaffInfo
     public static function import(array $row, string $job_group): void
     {
         list($first_name, $last_name) = FacultyInfo::importName($row);
-        $netid = strtolower($row['netid']);
-        $email = strtolower($row['email'] ?? $row['netid'] . '@unm.edu');
-        $org = StringFixer::organization($row['org level 3 desc']);
-        $department = StringFixer::department($row['org desc']);
-        $title = StringFixer::jobTitle($row['job title']);
+        $netid = trim(strtolower($row['netid']));
+        if (!$netid) throw new Exception('NetID cannot be blank');
+        $existing = static::search($netid);
+        // email address
+        $email = ($row['email'] ? $row['email'] : null)
+            ?? $existing?->email
+            ?? $netid . '@unm.edu';
+        // org (org level 3 desc in banner)
+        $org = ($row['org level 3 desc'] ? $row['org level 3 desc'] : null)
+            ?? $existing?->org
+            ?? 'Unknown Organization';
+        // department (org desc in banner)
+        $department = ($row['org desc'] ? $row['org desc'] : null)
+            ?? $existing?->department
+            ?? 'Unknown Department';
+        $department = StringFixer::department($department);
+        // job title
+        $title = ($row['job title'] ? $row['job title'] : null)
+            ?? $existing?->title
+            ?? 'Unknown Title';
+        $title = StringFixer::jobTitle($title);
+        // flags
         $hsc = FacultyInfo::importHsc($org);
         $branch = FacultyInfo::importBranch($org);
         // update record in main DB
