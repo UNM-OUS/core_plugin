@@ -18,6 +18,7 @@ use DigraphCMS\Context;
 use DigraphCMS\Cron\DeferredJob;
 use DigraphCMS\Cron\DeferredProgressBar;
 use DigraphCMS\Cron\SpreadsheetJob;
+use DigraphCMS\Digraph;
 use DigraphCMS\HTML\Forms\Field;
 use DigraphCMS\HTML\Forms\FormWrapper;
 use DigraphCMS\HTML\Forms\SELECT;
@@ -68,6 +69,7 @@ if ($form->ready()) {
     assert($type == 'normal' || $type == 'voting');
     $org = $org->value();
     assert(is_string($org) && $org || is_null($org));
+    $job_group = Digraph::uuid('update_faculty');
     $job = new SpreadsheetJob(
         $file->value()['tmp_name'],
         function (array $row, DeferredJob $job) use ($type) {
@@ -76,12 +78,12 @@ if ($form->ready()) {
             FacultyInfo::import($row, $voting, $job->group());
             return "Imported faculty record for " . $row['netid'];
         },
-        teardownFn: function (DeferredJob $job) use ($type, $org) {
+        teardownFn: function () use ($type, $org, $job_group) {
             // teardown function should clear all faculty records of different
             // job IDs that would have been in this update
             $query = SharedDB::query()
                 ->delete('faculty')
-                ->where('job <> ?', $job->id());
+                ->where('job <> ?', $job_group);
             // if type is voting, only delete voting faculty
             if ($type == 'voting') {
                 $query->where('voting', true);
@@ -95,6 +97,7 @@ if ($form->ready()) {
             if ($org) return "Teardown deleted $count '$type' records from $org";
             else return "Teardown deleted $count '$type' records";
         },
+        group: $job_group
     );
     // redirect to job progress
     throw new RedirectException(new URL('?job=' . $job->group()));

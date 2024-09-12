@@ -17,6 +17,7 @@ use DigraphCMS\Context;
 use DigraphCMS\Cron\DeferredJob;
 use DigraphCMS\Cron\DeferredProgressBar;
 use DigraphCMS\Cron\SpreadsheetJob;
+use DigraphCMS\Digraph;
 use DigraphCMS\HTML\Forms\Field;
 use DigraphCMS\HTML\Forms\FormWrapper;
 use DigraphCMS\HTML\Forms\SELECT;
@@ -36,7 +37,7 @@ if ($job = Context::arg('job')) {
 $form = new FormWrapper();
 
 $orgs = SharedDB::query()
-    ->from('faculty_list')
+    ->from('staff_list')
     ->select('DISTINCT(org) as org', true)
     ->orderBy('org')
     ->fetchAll();
@@ -55,18 +56,19 @@ $file = (new Field('Staff list spreadsheet', $upload = new UploadSingle()))
 if ($form->ready()) {
     $org = $org->value();
     assert(is_string($org) && $org || is_null($org));
+    $job_group = Digraph::uuid('update_staff');
     $job = new SpreadsheetJob(
         $file->value()['tmp_name'],
         function (array $row, DeferredJob $job) {
             StaffInfo::import($row, $job->group());
             return "Imported staff record for " . $row['netid'];
         },
-        teardownFn: function (DeferredJob $job) use ($org) {
+        teardownFn: function () use ($org, $job_group) {
             // teardown function should clear all faculty records of different
             // job IDs that would have been in this update
             $query = SharedDB::query()
                 ->delete('faculty')
-                ->where('job <> ?', $job->id());
+                ->where('job <> ?', $job_group);
             // if org is set, only delete faculty from that org
             if ($org) {
                 $query->where('org', $org);
@@ -76,6 +78,7 @@ if ($form->ready()) {
             if ($org) return "Teardown deleted $count records from $org";
             else return "Teardown deleted $count records";
         },
+        group: $job_group
     );
     // redirect to job
     throw new RedirectException(new URL('?job=' . $job->group()));
