@@ -99,7 +99,7 @@ class StaffInfo
         if (!$netid) throw new Exception('NetID cannot be blank');
         // delete existing records from this job/netid
         SharedDB::query()
-            ->delete('faculty_list')
+            ->delete('staff_list')
             ->where('netid', $netid)
             ->where('job', $job_group)
             ->execute();
