@@ -18,7 +18,6 @@ use DigraphCMS\URL\URL;
 use DigraphCMS\Users\Permissions;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\OpinioExporter;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedDB;
-use Envms\FluentPDO\Queries\Select as QueriesSelect;
 
 echo '<div class="navigation-frame navigation-frame--stateless" id="opinio-export-interface">';
 $form = new FormWrapper();
@@ -26,48 +25,48 @@ $form->button()->setText('Continue');
 $form->setData('target', 'opinio-export-interface');
 
 $type = (new Field('Affiliation', new SELECT([
-'voting_faculty' => 'Voting faculty',
-'all_faculty' => 'All faculty',
-'staff' => 'Staff',
+    'voting_faculty' => 'Voting faculty',
+    'all_faculty' => 'All faculty',
+    'staff' => 'Staff',
 ])))
     ->addForm($form);
 
 $query = SharedDB::query();
 switch ($type->value()) {
     case 'voting_faculty':
-        $query->from('faculty_list')
+        $query = $query->from('faculty_list')
             ->where('voting');
         break;
     case 'all_faculty':
-        $query->from('faculty_list');
+        $query = $query->from('faculty_list');
         break;
     case 'staff':
-        $query->from('staff_list');
+        $query = $query->from('staff_list');
         break;
+    default:
+        throw new Exception('Invalid type');
 }
-// @phpstan-ignore-next-line
-assert($query instanceof QueriesSelect);
 
 if ($type->value()) {
     $org = (
         new AutocompleteField(
-        'School/College/Organization',
+            'School/College/Organization',
             (
                 new AutocompleteInput(
-                null,
+                    null,
                     new URL('/~api/v1/unm-affiliation/org.php'),
-                function ($value) use ($query) {
-                    if (!$value) return null;
-                    if ($value != 'Other' && !Permissions::inMetaGroup('unmaffiliation__edit')) {
-                        $query = clone $query;
-                        $query->where('org', $value);
-                        if (!$query->count()) return null;
+                    function ($value) use ($query) {
+                        if (!$value) return null;
+                        if ($value != 'Other' && !Permissions::inMetaGroup('unmaffiliation__edit')) {
+                            $query = clone $query;
+                            $query->where('org', $value);
+                            if (!$query->count()) return null;
+                        }
+                        return [
+                            'html' => $value,
+                            'value' => $value
+                        ];
                     }
-                    return [
-                    'html' => $value,
-                    'value' => $value
-                    ];
-                }
                 )
             )->addClass('autocomplete-input--autopopulate')
         )
@@ -78,24 +77,24 @@ if ($type->value()) {
 if (isset($org) && $org->value() && !in_array($org->value(), ['Other'])) {
     $department = (
         new AutocompleteField(
-        'Department',
+            'Department',
             (
                 new AutocompleteInput(
-                null,
+                    null,
                     new URL('/~api/v1/unm-affiliation/department.php?org=' . $org->value()),
-                function ($value) use ($query, $org) {
-                    if (!$value) return null;
-                    if (!Permissions::inMetaGroup('unmaffiliation__edit')) {
-                        $query = clone $query;
-                        $query->where('org', $org->value())
-                            ->where('department', $value);
-                        if (!$query->count()) return null;
+                    function ($value) use ($query, $org) {
+                        if (!$value) return null;
+                        if (!Permissions::inMetaGroup('unmaffiliation__edit')) {
+                            $query = clone $query;
+                            $query->where('org', $org->value())
+                                ->where('department', $value);
+                            if (!$query->count()) return null;
+                        }
+                        return [
+                            'html' => $value,
+                            'value' => $value
+                        ];
                     }
-                    return [
-                    'html' => $value,
-                    'value' => $value
-                    ];
-                }
                 )
             )->addClass('autocomplete-input--autopopulate')
         )
@@ -130,10 +129,12 @@ if ($type->value()) {
             $query->select('org, department, title');
             if ($org->value()) $query->where('org', $org->value());
             if ($department?->value()) $query->where('department', $department->value());
+            $results = $query->fetchAll();
+            assert(is_array($results));
             FS::touch($file->path());
             file_put_contents(
                 $file->path(),
-                OpinioExporter::array($query->fetchAll(), true)
+                OpinioExporter::array($results, true)
             );
         },
         [
