@@ -82,7 +82,7 @@ if ($form->ready()) {
             // teardown function should clear all faculty records of different
             // job IDs that would have been in this update
             $query = SharedDB::query()
-                ->delete('faculty')
+                ->delete('faculty_list')
                 ->where('job <> ?', $job_group);
             // if type is voting, only delete voting faculty
             if ($type == 'voting') {

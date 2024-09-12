@@ -64,12 +64,12 @@ if ($form->ready()) {
             return "Imported staff record for " . $row['netid'];
         },
         teardownFn: function () use ($org, $job_group) {
-            // teardown function should clear all faculty records of different
+            // teardown function should clear all staff records of different
             // job IDs that would have been in this update
             $query = SharedDB::query()
-                ->delete('faculty')
+                ->delete('staff_list')
                 ->where('job <> ?', $job_group);
-            // if org is set, only delete faculty from that org
+            // if org is set, only delete staff from that org
             if ($org) {
                 $query->where('org', $org);
             }
