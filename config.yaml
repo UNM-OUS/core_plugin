@@ -35,9 +35,6 @@ unm:
     - HSC VP Research
     - UNM HSC West Campus
     - UNM Medical Group
-  # used similarly to determine if somebody is "north campus" including non-HSC orgs
-  north_orgs: # note that this is only orgs that are north BEYOND the HSC orgs above
-    - School of Law
   # list of branch orgs to be used by things like FacultyInfo to determine if people are in branch
   branch_orgs:
     - Gallup Branch

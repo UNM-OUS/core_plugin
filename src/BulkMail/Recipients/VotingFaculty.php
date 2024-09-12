@@ -2,6 +2,7 @@
 
 namespace DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients;
 
+use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedDB;
 use Envms\FluentPDO\Queries\Select;
 
 class VotingFaculty extends AbstractSelectRecipientSource
@@ -14,7 +15,9 @@ class VotingFaculty extends AbstractSelectRecipientSource
     protected function query(): Select
     {
         /** @var Select */
-        $query = \DigraphCMS_Plugins\unmous\ous_digraph_module\People\VotingFaculty::select()
+        $query = SharedDB::query()
+            ->from('faculty_list')
+            ->where('voting', true)
             ->where('email is not null');
         return $query;
     }

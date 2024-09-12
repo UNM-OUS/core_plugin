@@ -10,7 +10,7 @@ class FacultyRanksTest extends TestCase
     #[DataProvider('parseRankFromTitleDataProvider')]
     public function testParseRankFromTitle(string $title, string|null $expected_rank): void
     {
-        $inferred_rank = FacultyRanks::inferRankFromTitle($title);
+        $inferred_rank = FacultyRankParser::inferRankFromTitle($title);
         $this->assertEquals(
             $expected_rank,
             $inferred_rank,
@@ -26,7 +26,7 @@ class FacultyRanksTest extends TestCase
     /**
      * @return array<int,array<int,string|null>>
      */
-    protected function parseRankFromTitleDataProvider(): array
+    public static function parseRankFromTitleDataProvider(): array
     {
         return [
             ["Executive Vice President for Health Sciences Center", null],

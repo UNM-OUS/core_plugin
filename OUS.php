@@ -292,7 +292,7 @@ class OUS extends AbstractPlugin
                 $title = preg_replace('/^(Interim|Acting) /i', '', $title);
                 if (isset(static::FACULTY_TITLE_ABBREVIATIONS[$title])) $title = static::FACULTY_TITLE_ABBREVIATIONS[$title];
                 elseif (!in_array($title, static::FACULTY_GREETABLE_TITLES)) $title = 'Professor';
-                return sprintf("Dear %s %s,", $title, $faculty->lastName);
+                return sprintf("Dear %s %s,", $title, $faculty->last_name);
             } elseif ($name = PersonInfo::getFullNameFor($netId)) {
                 return sprintf("Dear %s,", $name);
             }

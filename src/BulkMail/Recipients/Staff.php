@@ -2,6 +2,7 @@
 
 namespace DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients;
 
+use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedDB;
 use Envms\FluentPDO\Queries\Select;
 
 class Staff extends AbstractSelectRecipientSource
@@ -14,7 +15,8 @@ class Staff extends AbstractSelectRecipientSource
     protected function query(): Select
     {
         /** @var Select */
-        $query = \DigraphCMS_Plugins\unmous\ous_digraph_module\People\Staff::select()
+        $query = SharedDB::query()
+            ->from('staff_list')
             ->where('email is not null');
         return $query;
     }

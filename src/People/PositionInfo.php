@@ -17,10 +17,8 @@ class PositionInfo
         public readonly string|null $department,
         public readonly string|null $org,
         public readonly string|null $facultyRank,
-        public readonly string|null $facultyAcademicTitle,
         public readonly bool $facultyResearch,
         public readonly bool $facultyVisiting,
-        public readonly bool $clinicianEducator,
     ) {
     }
 
@@ -34,14 +32,12 @@ class PositionInfo
             $faculty ? true : false,
             $faculty ? $faculty->voting : false,
             $staff ? true : false,
-            $faculty?->title ?: $faculty?->academicTitle ?: $staff?->title ?: null,
+            $faculty?->title ?: $staff?->title ?: null,
             $faculty?->department ?: $staff?->department ?: null,
             $faculty?->org ?: $staff?->org ?: null,
-            $faculty?->rank() ?: null,
-            $faculty?->academicTitle ?: null,
-            $faculty?->isResearchFaculty() ?: false,
-            $faculty?->isVisiting() ?: false,
-            $faculty?->isClinicianEducator() ?: false
+            $faculty?->rank ?: null,
+            $faculty?->research ?: false,
+            $faculty?->visiting ?: false,
         );
     }
 }

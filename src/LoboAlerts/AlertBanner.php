@@ -66,7 +66,7 @@ class AlertBanner
     {
         return md5(
             $this->uuid
-            ?? serialize([$this->title, $this->content, $this->class])
+                ?? serialize([$this->title, $this->content, $this->class])
         );
     }
 
@@ -75,7 +75,7 @@ class AlertBanner
         return 'alert-' . $this->uuid();
     }
 
-    public function class (): string
+    public function class(): string
     {
         return $this->class;
     }

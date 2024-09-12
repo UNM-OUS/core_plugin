@@ -18,6 +18,7 @@ use DigraphCMS\URL\URL;
 use DigraphCMS\Users\Permissions;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\OpinioExporter;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedDB;
+use Envms\FluentPDO\Queries\Select as QueriesSelect;
 
 echo '<div class="navigation-frame navigation-frame--stateless" id="opinio-export-interface">';
 $form = new FormWrapper();
@@ -31,6 +32,22 @@ $type = (new Field('Affiliation', new SELECT([
 ])))
     ->addForm($form);
 
+$query = SharedDB::query();
+switch ($type->value()) {
+    case 'voting_faculty':
+        $query->from('faculty_list')
+            ->where('voting', true);
+        break;
+    case 'all_faculty':
+        $query->from('faculty_list');
+        break;
+    case 'staff':
+        $query->from('staff_list');
+        break;
+}
+// @phpstan-ignore-next-line
+assert($query instanceof QueriesSelect);
+
 if ($type->value()) {
     $org = (
         new AutocompleteField(
@@ -39,11 +56,11 @@ if ($type->value()) {
                 new AutocompleteInput(
                 null,
                     new URL('/~api/v1/unm-affiliation/org.php'),
-                function ($value) use ($type) {
+                function ($value) use ($query) {
                     if (!$value) return null;
                     if ($value != 'Other' && !Permissions::inMetaGroup('unmaffiliation__edit')) {
-                        $query = SharedDB::query()->from($type->value())
-                            ->where('org', $value);
+                        $query = clone $query;
+                        $query->where('org', $value);
                         if (!$query->count()) return null;
                     }
                     return [
@@ -66,11 +83,11 @@ if (isset($org) && $org->value() && !in_array($org->value(), ['Other'])) {
                 new AutocompleteInput(
                 null,
                     new URL('/~api/v1/unm-affiliation/department.php?org=' . $org->value()),
-                function ($value) use ($type, $org) {
+                function ($value) use ($query, $org) {
                     if (!$value) return null;
                     if (!Permissions::inMetaGroup('unmaffiliation__edit')) {
-                        $query = SharedDB::query()->from($type->value())
-                            ->where('org', $org->value())
+                        $query = clone $query;
+                        $query->where('org', $org->value())
                             ->where('department', $value);
                         if (!$query->count()) return null;
                     }
@@ -105,8 +122,8 @@ if ($type->value()) {
             ),
             date('YmdGi')
         ),
-        function (DeferredFile $file) use ($type, $org, $department): void {
-            $query = SharedDB::query()->from($type->value());
+        function (DeferredFile $file) use ($query, $org, $department): void {
+            $query = clone $query;
             $query->select('CONCAT(firstname," ",lastname) as Name', true);
             $query->select('email as Email');
             $query->select('netid as NetID');
@@ -116,7 +133,6 @@ if ($type->value()) {
             FS::touch($file->path());
             file_put_contents(
                 $file->path(),
-                // @phpstan-ignore-next-line
                 OpinioExporter::array($query->fetchAll(), true)
             );
         },

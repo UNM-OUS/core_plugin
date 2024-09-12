@@ -2,7 +2,7 @@
 
 namespace DigraphCMS_Plugins\unmous\ous_digraph_module\People;
 
-class FacultyRanks {
+class FacultyRankParser {
     /**
      * A list of common ranks that should be used as-is if they match the given
      * title. This allows a simple, fast, and reliable method for converting a
@@ -82,14 +82,6 @@ class FacultyRanks {
         'Scholor' => 'Scholar',
     ];
 
-    public static function cleanAcademicTitle(?string $name): ?string
-    {
-        $name = trim($name ?? '');
-        $name = preg_replace('/ +/', ' ', $name);
-        if ($name) return $name;
-        else return null;
-    }
-
     public static function commonRankFromTitle(string $title): ?string
     {
         $title = trim(strtolower($title));
@@ -102,14 +94,14 @@ class FacultyRanks {
     public static function cleanClinicianEducatorText(string $rank): string
     {
         $rank = preg_replace(
-            '/(clin(ician|cian|ical|ican)(\-| )ed(ucator)?( ?\- ?|\, ?| +))/i',
+            '/clin(ician|cian|ical|ican) *[\-,]? *ed(ucator)? *[\-,]? */i',
             'Clinician Educator - ',
             $rank
         );
         return $rank;
     }
 
-    public static function inferRankFromTitle(string $title, bool $attempt_inferences = false): ?string
+    public static function inferRankFromTitle(string $title): ?string
     {
         $title = trim(strtolower($title));
         $rank = null;

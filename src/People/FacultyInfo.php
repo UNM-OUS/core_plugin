@@ -3,7 +3,10 @@
 namespace DigraphCMS_Plugins\unmous\ous_digraph_module\People;
 
 use DigraphCMS\Config;
-use DigraphCMS\ExceptionLog;
+use DigraphCMS_Plugins\unmous\ous_digraph_module\PersonInfo;
+use DigraphCMS_Plugins\unmous\ous_digraph_module\Semesters;
+use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedDB;
+use DigraphCMS_Plugins\unmous\ous_digraph_module\StringFixer;
 use Exception;
 
 /**
@@ -11,96 +14,204 @@ use Exception;
  */
 class FacultyInfo
 {
-    protected string|bool $rank = false;
-
-    public static function search(string $netId, bool $voting_only = false): ?FacultyInfo
-    {
-        $voting_query = VotingFaculty::select()
-            ->where('netid', $netId);
-        $all_query = AllFaculty::select()
-            ->where('netid', $netId);
-        $result = null;
-        if ($voting_only) {
-            $result = $voting_query->fetch();
-            $voting = true;
-        } elseif ($result = $voting_query->fetch()) {
-            $voting = true;
-        }else {
-            $result = $all_query->fetch();
-            $voting = false;
-        }
-        if ($result) {
-            return new FacultyInfo(
-                $result['netid'],
-                $result['email'],
-                $result['firstname'],
-                $result['lastname'],
-                $result['org'],
-                $result['department'],
-                $result['title'],
-                $result['academic_title'],
-                $voting
-            );
-        }
-        return null;
-    }
-
     public function __construct(
-        public readonly string $netId,
+        public readonly int $id,
+        public readonly string $netid,
         public readonly string $email,
-        public readonly string $firstName,
-        public readonly string $lastName,
+        public readonly string $first_name,
+        public readonly string $last_name,
         public readonly string $org,
         public readonly string $department,
         public readonly string $title,
-        public readonly string $academicTitle,
-        public readonly bool $voting
-    ) {
+        public readonly string $academic_title,
+        public readonly string $rank,
+        public readonly bool $voting,
+        public readonly bool $hsc,
+        public readonly bool $branch,
+        public readonly bool $research,
+        public readonly bool $visiting,
+        public readonly string $job,
+        public readonly string $time,
+    ) {}
+
+    public static function search(string $netId, bool $voting_only = false): ?FacultyInfo
+    {
+        $query = SharedDB::query()
+            ->from('faculty_list')
+            ->order('time DESC')
+            ->where('netid', $netId)
+            ->asObject(static::class); // @phpstan-ignore-line
+        if ($voting_only) $query->where('voting', true);
+        return $query->fetch();
     }
 
-    public function hsc(): bool
+    /**
+     * Import a single row from a spreadsheet into the database. Much work will
+     * be done to normalize and check everything.
+     * @param array<string,string> $row
+     * @param bool|null $voting if null, will attempt to infer from existing records
+     */
+    public static function import(array $row, bool|null $voting, string $job_group): void
     {
-        return in_array($this->org, Config::get('unm.hsc_orgs'));
+        list($first_name, $last_name) = static::importName($row);
+        $netid = strtolower($row['netid']);
+        $email = strtolower($row['email'] ?? $row['netid'] . '@unm.edu');
+        $org = StringFixer::organization($row['org level 3 desc']);
+        $department = StringFixer::department($row['org desc']);
+        $title = StringFixer::jobTitle($row['job title']);
+        $rank = FacultyRankParser::commonRankFromTitle($title)
+            ?? FacultyRankParser::inferRankFromTitle($row['academic title'])
+            ?? 'Unknown Rank';
+        $voting = $voting ?? static::importVoting($row);
+        $hsc = static::importHsc($org);
+        $branch = static::importBranch($org);
+        $research = static::importResearch($rank);
+        $visiting = static::importVisiting($rank);
+        // update record in main DB
+        static::set(
+            $netid,
+            $email,
+            $first_name,
+            $last_name,
+            $org,
+            $department,
+            $title,
+            $rank,
+            $voting,
+            $hsc,
+            $branch,
+            $research,
+            $visiting,
+            $job_group
+        );
+        // update personinfo
+        PersonInfo::setFor($netid, [
+            'firstname' => PersonInfo::getFirstNameFor($netid) ?? $first_name,
+            'lastname' => PersonInfo::getLastNameFor($netid) ?? $last_name,
+            'email' => PersonInfo::getFor($netid, 'email') ?? $email,
+            'faculty' => [
+                'semester' => Semesters::current()->intVal(),
+                'voting' => $voting ? Semesters::current()->intVal() : null,
+            ],
+            'affiliation' => [
+                'type' => 'faculty',
+                'org' => $org,
+                'department' => $department,
+                'title' => $title,
+                'rank' => $rank,
+                'voting' => $voting,
+                'hsc' => $hsc,
+                'branch' => $branch,
+                'research' => $research,
+                'visiting' => $visiting,
+            ],
+        ]);
     }
 
-    public function branch(): bool
+    protected static function importVisiting(string $rank): bool
     {
-        return in_array($this->org, Config::get('unm.branch_orgs'));
+        return str_contains($rank, 'Visiting ')
+            || str_contains($rank, 'Research Scholar');
     }
 
-    public function north(): bool
+    protected static function importResearch(string $rank): bool
     {
-        return $this->hsc() || in_array($this->org, Config::get('unm.north_orgs'));
+        return str_contains($rank, 'Research ');
     }
 
-    public function rank(): string
+    public static function importHsc(string $org): bool
     {
-        if (!is_string($this->rank)) {
-            $this->rank =
-                FacultyRanks::commonRankFromTitle($this->title)
-                ?? FacultyRanks::inferRankFromTitle($this->academicTitle)
-                ?? false;
-            if (!$this->rank) {
-                ExceptionLog::log(new Exception('Faculty rank parsing failed: ' . $this->netId));
-                $this->rank = 'Unknown Rank';
+        return in_array($org, Config::get('unm.hsc_orgs'));
+    }
+
+    public static function importBranch(string $org): bool
+    {
+        return in_array($org, Config::get('unm.branch_orgs'));
+    }
+
+    /**
+     * @param array<string,string> $row
+     */
+    protected static function importVoting(array $row): bool
+    {
+        // TODO: look at row if we can get that data in the spreadsheets themselves
+        // as a last resort infer from existing records
+        return !!static::search(strtolower($row['netid']), true);
+    }
+
+    /**
+     * @param array<string,string> $row
+     * @return string[] first name, last name
+     */
+    public static function importName(array $row): array
+    {
+        $first_name = null;
+        $last_name = null;
+        if ($full_name = $row['full name'] ?? $row['name']) {
+            if (preg_match('/^(.+?), (.+)$/', $full_name, $m)) {
+                $first_name = $m[1];
+                $last_name = $m[2];
+            } else {
+                $name = explode(' ', $full_name);
+                $last_name = array_pop($name);
+                $first_name = implode(' ', $name);
             }
         }
-        return $this->rank;
+        if ($row['first name']) {
+            $first_name = $row['first name'];
+        }
+        if ($row['last name']) {
+            $last_name = $row['last name'];
+        }
+        // remove initials like A. B. from first name
+        $first_name = preg_replace('/ [A-Z]\./', '', $first_name);
+        $first_name = trim($first_name);
+        $last_name = trim($last_name);
+        return [$first_name, $last_name];
     }
 
-    public function isClinicianEducator(): bool
-    {
-        return str_contains($this->rank(), 'Clinician Educator');
-    }
-
-    public function isResearchFaculty(): bool
-    {
-        return str_contains($this->rank(), 'Research ');
-    }
-
-    public function isVisiting(): bool
-    {
-        return str_contains($this->rank(), 'Visiting ')
-            || str_contains($this->rank(), 'Research Scholar');
+    public static function set(
+        string $netid,
+        string $email,
+        string $first_name,
+        string $last_name,
+        string $org,
+        string $department,
+        string $title,
+        string $rank,
+        bool $voting,
+        bool $hsc,
+        bool $branch,
+        bool $research,
+        bool $visiting,
+        string $job_group,
+    ): void {
+        // normalize netid
+        $netid = strtolower(trim($netid));
+        if (!$netid) throw new Exception('NetID cannot be blank');
+        // delete existing records from this job/netid
+        SharedDB::query()
+            ->delete('faculty_list')
+            ->where('netid', $netid)
+            ->where('job', $job_group)
+            ->execute();
+        // insert new record
+        SharedDB::query()->insertInto('faculty', [
+            'netid' => $netid,
+            'email' => $email,
+            'first_name' => $first_name,
+            'last_name' => $last_name,
+            'org' => $org,
+            'department' => $department,
+            'title' => $title,
+            'rank' => $rank,
+            'voting' => $voting,
+            'hsc' => $hsc,
+            'branch' => $branch,
+            'research' => $research,
+            'visiting' => $visiting,
+            'job' => $job_group,
+            'time' => time(),
+        ])->execute();
     }
 }
