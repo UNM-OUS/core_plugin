@@ -37,10 +37,10 @@ unm:
     - UNM Medical Group
   # list of branch orgs to be used by things like FacultyInfo to determine if people are in branch
   branch_orgs:
-    - Gallup Branch
-    - Los Alamos Branch
-    - Taos Branch
-    - Valencia County Branch
+    - "UNM - Gallup"
+    - "UNM - Los Alamos"
+    - "UNM - Taos"
+    - "UNM - Valencia"
   # give each semester a 7 day "buffer" where we switch before its official start
   semester_prelaunch: P7D
   # known start dates of semesters
@@ -48,7 +48,7 @@ unm:
   semesters:
     2034:
       spring: [1, 15]
-      summer: [6,3]
+      summer: [6, 3]
       fall: [8, 19]
     2033:
       spring: [1, 17]
