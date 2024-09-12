@@ -196,25 +196,26 @@ class FacultyInfo
             ->where('job', $job_group)
             ->execute();
         // insert new record
-        SharedDB::query()->insertInto(
-            'faculty_list',
-            [
-                'netid' => $netid,
-                'email' => $email,
-                'first_name' => $first_name,
-                'last_name' => $last_name,
-                'org' => $org,
-                'department' => $department,
-                'title' => $title,
-                'rank' => $rank,
-                'voting' => $voting,
-                'hsc' => $hsc,
-                'branch' => $branch,
-                'research' => $research,
-                'visiting' => $visiting,
-                'job' => $job_group,
-                'time' => time(),
-            ]
-        )->execute();
+        SharedDB::query()
+            ->insertInto(
+                'faculty_list',
+                [
+                    'netid' => $netid,
+                    'email' => $email,
+                    'first_name' => $first_name,
+                    'last_name' => $last_name,
+                    'org' => $org,
+                    'department' => $department,
+                    'title' => $title,
+                    'rank' => $rank,
+                    'voting' => intval($voting),
+                    'hsc' => intval($hsc),
+                    'branch' => intval($branch),
+                    'research' => intval($research),
+                    'visiting' => intval($visiting),
+                    'job' => $job_group,
+                    'time' => time(),
+                ]
+            )->execute();
     }
 }

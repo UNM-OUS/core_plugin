@@ -115,8 +115,8 @@ class StaffInfo
                     'org' => $org,
                     'department' => $department,
                     'title' => $title,
-                    'hsc' => $hsc,
-                    'branch' => $branch,
+                    'hsc' => intval($hsc),
+                    'branch' => intval($branch),
                     'job' => $job_group,
                     'time' => time(),
                 ]
