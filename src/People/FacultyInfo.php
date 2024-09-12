@@ -105,14 +105,12 @@ class FacultyInfo
             $visiting,
             $job_group
         );
-        // if voting, delete any old non-voting records for this person
-        if ($voting) {
-            SharedDB::query()
-                ->delete('faculty_list')
-                ->where('netid', $netid)
-                ->where('voting', 0)
-                ->execute();
-        }
+        // delete old records for this person
+        SharedDB::query()
+            ->delete('faculty_list')
+            ->where('netid', $netid)
+            ->where('job <> ?', $job_group)
+            ->execute();
         // update personinfo
         $first_name = PersonInfo::getFirstNameFor($netid) ?? $first_name;
         $last_name = PersonInfo::getLastNameFor($netid) ?? $last_name;

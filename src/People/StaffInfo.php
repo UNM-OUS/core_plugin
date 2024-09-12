@@ -81,6 +81,12 @@ class StaffInfo
             $branch,
             $job_group,
         );
+        // delete old records for this person
+        SharedDB::query()
+            ->delete('staff_list')
+            ->where('netid', $netid)
+            ->where('job <> ?', $job_group)
+            ->execute();
         // update personinfo
         $first_name = PersonInfo::getFirstNameFor($netid) ?? $first_name;
         $last_name = PersonInfo::getLastNameFor($netid) ?? $last_name;
