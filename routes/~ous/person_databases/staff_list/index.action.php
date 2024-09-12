@@ -6,7 +6,10 @@ use DigraphCMS\UI\Pagination\ColumnStringFilteringHeader;
 use DigraphCMS\UI\Pagination\PaginatedTable;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedDB;
 
-$query = SharedDB::query()->from('staff_list');
+$query = SharedDB::query()
+    ->from('staff_list')
+    ->order('time desc')
+    ->order('last_name, first_name');
 
 $table = new PaginatedTable(
     $query,
