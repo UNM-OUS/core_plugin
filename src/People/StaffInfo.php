@@ -13,20 +13,18 @@ use Exception;
  */
 class StaffInfo
 {
-    public function __construct(
-        public readonly int $id,
-        public readonly string $netid,
-        public readonly string $email,
-        public readonly string $first_name,
-        public readonly string $last_name,
-        public readonly string $org,
-        public readonly string $department,
-        public readonly string $title,
-        public readonly bool $hsc,
-        public readonly bool $branch,
-        public readonly string $job,
-        public readonly string $time,
-    ) {}
+    public readonly int $id; // @phpstan-ignore-line comes from DB
+    public readonly string $netid; // @phpstan-ignore-line comes from DB
+    public readonly string $email; // @phpstan-ignore-line comes from DB
+    public readonly string $first_name; // @phpstan-ignore-line comes from DB
+    public readonly string $last_name; // @phpstan-ignore-line comes from DB
+    public readonly string $org; // @phpstan-ignore-line comes from DB
+    public readonly string $department; // @phpstan-ignore-line comes from DB
+    public readonly string $title; // @phpstan-ignore-line comes from DB
+    public readonly bool $hsc; // @phpstan-ignore-line comes from DB
+    public readonly bool $branch; // @phpstan-ignore-line comes from DB
+    public readonly string $job; // @phpstan-ignore-line comes from DB
+    public readonly string $time; // @phpstan-ignore-line comes from DB
 
     public static function search(string $netId): ?StaffInfo
     {

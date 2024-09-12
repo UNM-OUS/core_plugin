@@ -14,25 +14,23 @@ use Exception;
  */
 class FacultyInfo
 {
-    public function __construct(
-        public readonly int $id,
-        public readonly string $netid,
-        public readonly string $email,
-        public readonly string $first_name,
-        public readonly string $last_name,
-        public readonly string $org,
-        public readonly string $department,
-        public readonly string $title,
-        public readonly string $academic_title,
-        public readonly string $rank,
-        public readonly bool $voting,
-        public readonly bool $hsc,
-        public readonly bool $branch,
-        public readonly bool $research,
-        public readonly bool $visiting,
-        public readonly string $job,
-        public readonly string $time,
-    ) {}
+    public readonly int $id; // @phpstan-ignore-line comes from DB
+    public readonly string $netid; // @phpstan-ignore-line comes from DB
+    public readonly string $email; // @phpstan-ignore-line comes from DB
+    public readonly string $first_name; // @phpstan-ignore-line comes from DB
+    public readonly string $last_name; // @phpstan-ignore-line comes from DB
+    public readonly string $org; // @phpstan-ignore-line comes from DB
+    public readonly string $department; // @phpstan-ignore-line comes from DB
+    public readonly string $title; // @phpstan-ignore-line comes from DB
+    public readonly string $academic_title; // @phpstan-ignore-line comes from DB
+    public readonly string $rank; // @phpstan-ignore-line comes from DB
+    public readonly bool $voting; // @phpstan-ignore-line comes from DB
+    public readonly bool $hsc; // @phpstan-ignore-line comes from DB
+    public readonly bool $branch; // @phpstan-ignore-line comes from DB
+    public readonly bool $research; // @phpstan-ignore-line comes from DB
+    public readonly bool $visiting; // @phpstan-ignore-line comes from DB
+    public readonly string $job; // @phpstan-ignore-line comes from DB
+    public readonly string $time; // @phpstan-ignore-line comes from DB
 
     public static function search(string $netId, bool $voting_only = false): ?FacultyInfo
     {
@@ -84,6 +82,14 @@ class FacultyInfo
             $visiting,
             $job_group
         );
+        // if voting, delete any old non-voting records for this person
+        if ($voting) {
+            SharedDB::query()
+                ->delete('faculty_list')
+                ->where('netid', $netid)
+                ->where('voting', 0)
+                ->execute();
+        }
         // update personinfo
         PersonInfo::setFor($netid, [
             'firstname' => $first_name,
@@ -137,7 +143,7 @@ class FacultyInfo
     {
         // TODO: look at row if we can get that data in the spreadsheets themselves
         // as a last resort infer from existing records
-        return !!static::search(strtolower($row['netid']), true);
+        return !!static::search(strtolower(trim($row['netid'])), true);
     }
 
     /**

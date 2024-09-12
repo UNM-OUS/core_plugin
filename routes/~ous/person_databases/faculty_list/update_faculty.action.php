@@ -44,6 +44,8 @@ $type = (new Field('List type', new SELECT(
     ],
     '-- select --'
 )))
+    ->addTip("If \"All faculty\" is selected, all faculty records will be updated. Any faculty records not included in the uploaded spreadsheet will be deleted.")
+    ->addTip("If \"Voting faculty\" is selected, only voting faculty records will be updated. Any voting faculty records not included in the uploaded spreadsheet will be deleted, but non-voting records will not be touched.")
     ->setRequired(true)
     ->addForm($form);
 
