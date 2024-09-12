@@ -36,7 +36,7 @@ $query = SharedDB::query();
 switch ($type->value()) {
     case 'voting_faculty':
         $query->from('faculty_list')
-            ->where('voting', true);
+            ->where('voting');
         break;
     case 'all_faculty':
         $query->from('faculty_list');

@@ -86,7 +86,7 @@ if ($form->ready()) {
                 ->where('job <> ?', $job_group);
             // if type is voting, only delete voting faculty
             if ($type == 'voting') {
-                $query->where('voting', true);
+                $query->where('voting');
             }
             // if org is set, only delete faculty from that org
             if ($org) {

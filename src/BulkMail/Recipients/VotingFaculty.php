@@ -17,7 +17,7 @@ class VotingFaculty extends AbstractSelectRecipientSource
         /** @var Select */
         $query = SharedDB::query()
             ->from('faculty_list')
-            ->where('voting', true)
+            ->where('voting')
             ->where('email is not null');
         return $query;
     }

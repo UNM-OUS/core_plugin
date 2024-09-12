@@ -66,7 +66,9 @@ class UserData
         if (!$netID) return null;
         $netID = strtolower($netID);
         return @$cache[$netID]
-            ?? ($cache[$netID] = !!SharedDB::query()->from('voting_faculty')
+            ?? ($cache[$netID] = !!SharedDB::query()
+                ->from('faculty_list')
+                ->where('voting')
                 ->where('netid', $netID)->count());
     }
 
@@ -83,19 +85,19 @@ class UserData
     public static function facultyGroup(): Group
     {
         static $group;
-        return $group ?? $group = new Group('faculty', 'UNM Faculty', new URL('/~ous/person_databases/all_faculty/'));
+        return $group ?? $group = new Group('faculty', 'UNM Faculty', new URL('/~ous/person_databases/faculty_list/'));
     }
 
     public static function votingFacultyGroup(): Group
     {
         static $group;
-        return $group ?? $group = new Group('voting_faculty', 'UNM Voting Faculty', new URL('/~ous/person_databases/voting_faculty/'));
+        return $group ?? $group = new Group('voting_faculty', 'UNM Voting Faculty', new URL('/~ous/person_databases/faculty_list/'));
     }
 
     public static function staffGroup(): Group
     {
         static $group;
-        return $group ?? $group = new Group('staff', 'UNM Staff', new URL('/~ous/person_databases/all_staff/'));
+        return $group ?? $group = new Group('staff', 'UNM Staff', new URL('/~ous/person_databases/staff_list/'));
     }
 
     /** @return string[] */

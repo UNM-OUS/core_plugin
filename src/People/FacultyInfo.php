@@ -41,7 +41,7 @@ class FacultyInfo
             ->order('time DESC')
             ->where('netid', $netId)
             ->asObject(static::class); // @phpstan-ignore-line
-        if ($voting_only) $query->where('voting', true);
+        if ($voting_only) $query->where('voting');
         return $query->fetch() ?: null;
     }
 
