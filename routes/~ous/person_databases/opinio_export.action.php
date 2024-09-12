@@ -18,6 +18,7 @@ use DigraphCMS\URL\URL;
 use DigraphCMS\Users\Permissions;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\OpinioExporter;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedDB;
+use Envms\FluentPDO\Queries\Select as QueriesSelect;
 
 echo '<div class="navigation-frame navigation-frame--stateless" id="opinio-export-interface">';
 $form = new FormWrapper();
@@ -43,9 +44,8 @@ switch ($type->value()) {
     case 'staff':
         $query = $query->from('staff_list');
         break;
-    default:
-        throw new \Exception('Invalid type');
 }
+assert($query instanceof QueriesSelect);
 
 if ($type->value()) {
     $org = (
