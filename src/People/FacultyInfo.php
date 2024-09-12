@@ -42,7 +42,7 @@ class FacultyInfo
             ->where('netid', $netId)
             ->asObject(static::class); // @phpstan-ignore-line
         if ($voting_only) $query->where('voting', true);
-        return $query->fetch();
+        return $query->fetch() ?: null;
     }
 
     /**

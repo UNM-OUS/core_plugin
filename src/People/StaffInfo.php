@@ -34,7 +34,7 @@ class StaffInfo
             ->from('staff_list')
             ->where('netid', $netId)
             ->asObject(static::class); // @phpstan-ignore-line
-        return $query->fetch();
+        return $query->fetch() ?: null;
     }
 
     /**
