@@ -10,8 +10,11 @@
     <li>Org Level 3 Desc</li>
     <li>Org Desc</li>
     <li>Job Title</li>
-    <li>Academic Title</li>
 </ul>
+<p>
+    The column "Academic Title" is not required, but is recommended to get the best possible rank information, especially for faculty with chair/dean-type titles that are not their academic titles.
+    For updates that do not include an academic title column, existing rank data will be used where available if necessary.
+</p>
 <?php
 
 use DigraphCMS\Context;
