@@ -44,7 +44,7 @@ switch ($type->value()) {
         $query = $query->from('staff_list');
         break;
     default:
-        throw new Exception('Invalid type');
+        throw new \Exception('Invalid type');
 }
 
 if ($type->value()) {
