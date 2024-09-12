@@ -63,6 +63,7 @@ class FacultyInfo
         $org = ($row['org level 3 desc'] ? $row['org level 3 desc'] : null)
             ?? $existing?->org
             ?? 'Unknown Organization';
+        $org = StringFixer::organization($org);
         // department (org desc in banner)
         $department = ($row['org desc'] ? $row['org desc'] : null)
             ?? $existing?->department
