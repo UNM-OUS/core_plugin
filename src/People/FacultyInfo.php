@@ -149,8 +149,8 @@ class FacultyInfo
         $last_name = null;
         if ($full_name = $row['full name'] ?? $row['name']) {
             if (preg_match('/^(.+?), (.+)$/', $full_name, $m)) {
-                $first_name = $m[1];
-                $last_name = $m[2];
+                $first_name = $m[2];
+                $last_name = $m[1];
             } else {
                 $name = explode(' ', $full_name);
                 $last_name = array_pop($name);
