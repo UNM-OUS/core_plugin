@@ -114,10 +114,13 @@ class FacultyInfo
                 ->execute();
         }
         // update personinfo
+        $first_name = PersonInfo::getFirstNameFor($netid) ?? $first_name;
+        $last_name = PersonInfo::getLastNameFor($netid) ?? $last_name;
+        $full_name = PersonInfo::getFullNameFor($netid) ?? $first_name . ' ' . $last_name;
         PersonInfo::setFor($netid, [
             'firstname' => $first_name,
             'lastname' => $last_name,
-            'fullname' => $first_name . ' ' . $last_name,
+            'fullname' => $full_name,
             'email' => $email,
             'faculty' => [
                 'semester' => Semesters::current()->intVal(),
