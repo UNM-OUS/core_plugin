@@ -56,7 +56,7 @@ class UserData
         if (!$netID) return null;
         $netID = strtolower($netID);
         return @$cache[$netID]
-            ?? ($cache[$netID] = !!SharedDB::query()->from('all_faculty')
+            ?? ($cache[$netID] = !!SharedDB::query()->from('faculty_list')
                 ->where('netid', $netID)->count());
     }
 
