@@ -78,7 +78,7 @@ class UserData
         if (!$netID) return null;
         $netID = strtolower($netID);
         return @$cache[$netID]
-            ?? ($cache[$netID] = !!SharedDB::query()->from('staff')
+            ?? ($cache[$netID] = !!SharedDB::query()->from('staff_list')
                 ->where('netid', $netID)->count());
     }
 
