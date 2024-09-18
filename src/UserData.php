@@ -190,7 +190,7 @@ class UserData
             $data = [];
             foreach (Config::get('unm.user_sources') as $source) {
                 $source_data = CurlHelper::get($source);
-                if ($source_data === null) throw new HttpError(503, 'User data from ' . $source . ' failed to load, this is a rare and usually a temporary error. Please try again in a few minutes.');
+                if ($source_data === null) throw new HttpError(503, 'User data from an external source failed to load, this is a rare and usually a temporary error. Please try again in a few minutes.');
                 if (!$source_data = Yaml::parse($source_data)) throw new Exception('User source ' . $source . ' failed to parse.');
                 /** @var array<string,array{groups:string[]}> $source_data */
                 $data = array_merge_recursive($data, $source_data);
