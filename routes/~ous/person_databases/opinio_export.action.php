@@ -123,7 +123,7 @@ if ($type->value()) {
         ),
         function (DeferredFile $file) use ($query, $org, $department): void {
             $query = clone $query;
-            $query->select('CONCAT(firstname," ",lastname) as Name', true);
+            $query->select('CONCAT(first_name," ",last_name) as Name', true);
             $query->select('email as Email');
             $query->select('netid as NetID');
             $query->select('org, department, title');
