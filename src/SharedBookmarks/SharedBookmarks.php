@@ -87,6 +87,7 @@ class SharedBookmarks
         }
         $score += similar_text(metaphone($query), metaphone($bookmark->title()));
         $score += similar_text(metaphone($query), metaphone($bookmark->category() . ' ' . $bookmark->name()));
+        $score += similar_text(metaphone($query), metaphone($bookmark->url()));
         return $score;
     }
 }

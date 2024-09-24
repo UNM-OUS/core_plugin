@@ -26,6 +26,12 @@ $where_args = [];
 foreach (preg_split('/ +/', Context::arg('query')) ?: [] as $word) {
     $where_queries[] = 'title LIKE ?';
     $where_args[] = AbstractMappedSelect::prepareLikePattern($word, true, true);
+    $where_queries[] = 'url LIKE ?';
+    $where_args[] = AbstractMappedSelect::prepareLikePattern($word, true, true);
+    $where_queries[] = 'category LIKE ?';
+    $where_args[] = AbstractMappedSelect::prepareLikePattern($word, true, true);
+    $where_queries[] = 'name LIKE ?';
+    $where_args[] = AbstractMappedSelect::prepareLikePattern($word, true, true);
 }
 $query->where('(' . implode(' OR ', $where_queries) . ')', $where_args);
 $bookmarks = array_merge(
