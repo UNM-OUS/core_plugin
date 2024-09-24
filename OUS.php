@@ -93,7 +93,7 @@ class OUS extends AbstractPlugin
             'pages',
             null,
             new URL('&action=shared_bookmark')
-        ))->setShortcut('Ctrl+K');
+        ))->setShortcut('Ctrl+Shift+B');
     }
 
     public static function cronJob_frequent(): void
