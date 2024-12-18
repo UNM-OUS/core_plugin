@@ -144,8 +144,8 @@ themes:
           green: "#a8aa19"
           purple: "#8a387c"
         commencement:
-          graduate: "#8a387c"
-          undergraduate: "#ed8b00"
+          graduate: "#ed8b00"
+          undergraduate: "#a8aa19"
         theme:
           neutral: "#63666a"
           accent: "#a7a8aa"
