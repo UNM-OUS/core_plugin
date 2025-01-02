@@ -53,20 +53,26 @@ class Semester
 
     public function start(): DateTime
     {
-        // @phpstan-ignore-next-line
-        return (
-            DateTime::createFromFormat(
-                'Y-n-j',
-                sprintf(
-                    '%s-%s-%s',
-                    $this->year,
-                    $this->month(),
-                    $this->day()
-                )
+        $date = DateTime::createFromFormat(
+            'Y-n-j',
+            sprintf(
+                '%s-%s-%s',
+                $this->year,
+                $this->month(),
+                $this->day()
             )
-        )
-            ->sub(Semesters::prelaunchInterval())
-            ->setTime(0, 0, 0, 0);
+        );
+        assert($date instanceof DateTime);
+        $prelaunch = Semesters::prelaunchInterval();
+        if ($prelaunch) {
+            if (Semesters::prelaunchInvert()) {
+                $date->add($prelaunch);
+            } else {
+                $date->sub($prelaunch);
+            }
+        }
+        $date->setTime(0, 0, 0, 0);
+        return $date;
     }
 
     public function end(): DateTime

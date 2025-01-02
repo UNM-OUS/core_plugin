@@ -92,7 +92,14 @@ class Semesters
     public static function fromDate($date): Semester
     {
         $date = Format::parseDate($date);
-        $date->add(static::prelaunchInterval());
+        $prelaunch = static::prelaunchInterval();
+        if ($prelaunch) {
+            if (Config::get('unm.semester_prelaunch_invert')) {
+                $date->sub($prelaunch);
+            } else {
+                $date->add($prelaunch);
+            }
+        }
         $year = intval($date->format('Y'));
         $month = intval($date->format('n'));
         $day = intval($date->format('j'));
@@ -113,11 +120,18 @@ class Semesters
         return new Semester($year, $semester);
     }
 
-    public static function prelaunchInterval(): DateInterval
+    public static function prelaunchInterval(): ?DateInterval
     {
-        static $interval;
-        return $interval
-            ?? $interval = new DateInterval(Config::get('unm.semester_prelaunch') ?? "P7D");
+        if (Config::get('unm.semester_prelaunch')) {
+            return new DateInterval(Config::get('unm.semester_prelaunch'));
+        } else {
+            return null;
+        }
+    }
+
+    public static function prelaunchInvert(): bool
+    {
+        return boolval(Config::get('unm.semester_prelaunch_invert'));
     }
 
     /**
