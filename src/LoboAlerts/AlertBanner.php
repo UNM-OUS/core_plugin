@@ -18,8 +18,11 @@ class AlertBanner
         $html = trim($html);
         $parsed = preg_match('/^<h[1-6].+?>(.+?)<\/h[1-6]>(.+)$/is', $html, $matches);
         if ($parsed === false) return null;
-        $title = trim(strip_tags(html_entity_decode(@$matches[1] ? $matches[1] : '')), '\t\n\r\0\x0B ');
-        $content = trim(@$matches[2] ? $matches[2] : '');
+        if (!isset($matches[1]) || !isset($matches[2])) return null;
+        $title = trim(strip_tags(html_entity_decode($matches[1]), '\t\n\r\0\x0B '));
+        if (empty($title)) return null;
+        $content = trim($matches[2]);
+        if (empty($content)) return null;
         return new AlertBanner(
             $title,
             $content,
