@@ -71,7 +71,7 @@ class AlertBanners
                 return $alerts;
             },
             300
-        );
+        ) ?? [];
     }
 
     /**
