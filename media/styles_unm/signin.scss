@@ -7,4 +7,14 @@ menu.signin-sources {
       color: #000;
     }
   }
+
+  li.signin-source--oauth2_google,
+  li.signin-source--oauth2_apple {
+    order: 10;
+  }
+
+  li.signin-source--oauth2_github,
+  li.signin-source--oauth2_facebook {
+    order: 1000;
+  }
 }
