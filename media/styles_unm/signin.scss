@@ -1,0 +1,10 @@
+menu.signin-sources {
+  li.signin-source--cas_netid {
+    order: 0;
+
+    >a {
+      background-color: #a7a8aa;
+      color: #000;
+    }
+  }
+}
