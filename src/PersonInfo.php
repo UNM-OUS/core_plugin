@@ -10,6 +10,8 @@ class PersonInfo extends FlatArray
     /** @var string */
     protected $identifier;
 
+    // TODO: add a mechanism for building arbitrary queries on the personinfo database
+
     /**
      * @param string|null $identifier
      * @param array<string,mixed> $data
