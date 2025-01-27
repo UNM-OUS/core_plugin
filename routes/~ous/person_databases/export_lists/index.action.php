@@ -14,9 +14,10 @@ use DigraphCMS\Users\Permissions;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedDB;
 use Envms\FluentPDO\Queries\Select as QueriesSelect;
 
+echo '<div class="navigation-frame navigation-frame--stateless" id="list-exporter-picker-interface">';
 $form = new FormWrapper();
 $form->button()->setText('Continue');
-$form->setData('target', 'opinio-export-interface');
+$form->setData('target', 'list-exporter-picker-interface');
 
 $type = (new Field('Affiliation', new SELECT([
     'voting_faculty' => 'Voting faculty',
@@ -102,5 +103,7 @@ if ($type->value()) {
     $url->arg('type', $type->value());
     if ($org->value()) $url->arg('org', $org->value());
     if ($department && $department->value()) $url->arg('department', $department->value());
-    printf('<div id="list-export-interface" class="navigation-frame navigation-frame--stateless" data-target="_frame" data-initial-source=""></div>');
+    printf('<div id="list-export-interface" class="navigation-frame navigation-frame--stateless" data-target="_frame" data-initial-source="%s"></div>', $url);
 }
+
+echo '</div>';
