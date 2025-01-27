@@ -4,20 +4,16 @@
 </p>
 <?php
 
-use DigraphCMS\FS;
 use DigraphCMS\HTML\Forms\Field;
 use DigraphCMS\HTML\Forms\Fields\Autocomplete\AutocompleteField;
 use DigraphCMS\HTML\Forms\Fields\Autocomplete\AutocompleteInput;
 use DigraphCMS\HTML\Forms\FormWrapper;
 use DigraphCMS\HTML\Forms\SELECT;
-use DigraphCMS\Media\DeferredFile;
 use DigraphCMS\URL\URL;
 use DigraphCMS\Users\Permissions;
-use DigraphCMS_Plugins\unmous\ous_digraph_module\OpinioExporter;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedDB;
 use Envms\FluentPDO\Queries\Select as QueriesSelect;
 
-echo '<div class="navigation-frame navigation-frame--stateless" id="opinio-export-interface">';
 $form = new FormWrapper();
 $form->button()->setText('Continue');
 $form->setData('target', 'opinio-export-interface');
@@ -107,52 +103,4 @@ if ($type->value()) {
     if ($org->value()) $url->arg('org', $org->value());
     if ($department && $department->value()) $url->arg('department', $department->value());
     printf('<div id="list-export-interface" class="navigation-frame navigation-frame--stateless" data-target="_frame" data-initial-source=""></div>');
-    $file = new DeferredFile(
-        sprintf(
-            'Opinio invites - %s - %s.csv',
-            implode(
-                ' - ',
-                array_filter(
-                    [
-                        $type->value(),
-                        $org->value(),
-                        $department?->value(),
-                    ],
-                    fn($e) => !empty($e)
-                )
-            ),
-            date('YmdGi')
-        ),
-        function (DeferredFile $file) use ($query, $org, $department): void {
-            $query = clone $query;
-            $query->select('CONCAT(first_name," ",last_name) as Name', true);
-            $query->select('email as Email');
-            $query->select('netid as NetID');
-            $query->select('org, department, title');
-            if ($org->value()) $query->where('org', $org->value());
-            if ($department?->value()) $query->where('department', $department->value());
-            $results = $query->fetchAll();
-            assert(is_array($results));
-            FS::touch($file->path());
-            file_put_contents(
-                $file->path(),
-                OpinioExporter::array($results, true)
-            );
-        },
-        [
-            'opinio export',
-            $type->value(),
-            $org->value(),
-            $department?->value(),
-        ]
-    );
-
-    echo '<h2>Download current selections</h2>';
-    printf(
-        '<p><a href="%s" class="button button--inverted" target="_blank">%s</a></p>',
-        $file->url(),
-        $file->filename(),
-    );
 }
-
-echo '</div>';
