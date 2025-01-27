@@ -1,9 +1,6 @@
-<h1>Export faculty/staff for Opinio invites</h1>
+<h1>Export faculty/staff lists</h1>
 <p>
-    This tool exports faculty or staff lists, optionally filtered by school/college and department name, in the format
-    that Opino likes.
-    The files exported here are not actually standard CSV files, because Opinio is actually very picky about its CSV
-    file format.
+    This tool exports faculty and staff lists, optionally filtered by school/college and department name, in various useful formats.
 </p>
 <?php
 
@@ -105,6 +102,11 @@ if (isset($org) && $org->value() && !in_array($org->value(), ['Other'])) {
 echo $form;
 
 if ($type->value()) {
+    $url = new URL('_list_export.html');
+    $url->arg('type', $type->value());
+    if ($org->value()) $url->arg('org', $org->value());
+    if ($department && $department->value()) $url->arg('department', $department->value());
+    printf('<div id="list-export-interface" class="navigation-frame navigation-frame--stateless" data-target="_frame" data-initial-source=""></div>');
     $file = new DeferredFile(
         sprintf(
             'Opinio invites - %s - %s.csv',
