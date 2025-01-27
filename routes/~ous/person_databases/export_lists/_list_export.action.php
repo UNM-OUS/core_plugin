@@ -87,7 +87,22 @@ $tabs->addTab('excel', 'Spreadsheet', function () use ($query) {
             Context::arg('department'),
             date('Y-m-d')
         ])),
-        null
+        null,
+        [
+            'First name',
+            'Last name',
+            'Level 3 org',
+            'Department',
+            'Title',
+            'Rank',
+            'Voting',
+            'HSC',
+            'Branch',
+            'Research',
+            'Visiting',
+            'NetID',
+            'Email',
+        ]
     );
 
     echo $table;
