@@ -7,6 +7,7 @@ use DigraphCMS_Plugins\unmous\ous_digraph_module\PersonInfo;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\Semesters;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedDB;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\StringFixer;
+use Envms\FluentPDO\Queries\Select;
 use Exception;
 
 /**
@@ -34,13 +35,19 @@ class FacultyInfo
 
     public static function search(string $netId, bool $voting_only = false): ?FacultyInfo
     {
+        return static::query($voting_only)
+            ->where('netid', $netId)
+            ->fetch() ?: null;
+    }
+
+    public static function query(bool $voting_only = false): Select
+    {
         $query = SharedDB::query()
             ->from('faculty_list')
             ->order('time DESC')
-            ->where('netid', $netId)
             ->asObject(static::class); // @phpstan-ignore-line
         if ($voting_only) $query->where('voting');
-        return $query->fetch() ?: null;
+        return $query;
     }
 
     /**

@@ -6,6 +6,7 @@ use DigraphCMS_Plugins\unmous\ous_digraph_module\PersonInfo;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\Semesters;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedDB;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\StringFixer;
+use Envms\FluentPDO\Queries\Select;
 use Exception;
 
 /**
@@ -28,11 +29,17 @@ class StaffInfo
 
     public static function search(string $netId): ?StaffInfo
     {
-        $query = SharedDB::query()
-            ->from('staff_list')
+        return static::query()
             ->where('netid', $netId)
+            ->fetch() ?: null;
+    }
+
+    public static function query(): Select
+    {
+        return SharedDB::query()
+            ->from('staff_list')
+            ->order('time DESC')
             ->asObject(static::class); // @phpstan-ignore-line
-        return $query->fetch() ?: null;
     }
 
     /**
