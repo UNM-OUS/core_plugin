@@ -6,6 +6,7 @@
 <ul>
     <li>Name, Full Name, or First Name and Last Name</li>
     <li>Email</li>
+    <li>UNM ID (not saved, but used to generate a unique ID if NetIDs are missing)</li>
     <li>NetID</li>
     <li>Org Level 3 Desc</li>
     <li>Org Desc</li>

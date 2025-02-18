@@ -3,6 +3,7 @@
 namespace DigraphCMS_Plugins\unmous\ous_digraph_module\People;
 
 use DigraphCMS\Config;
+use DigraphCMS\Digraph;
 use DigraphCMS\Exception as DigraphCMSException;
 use DigraphCMS\ExceptionLog;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\PersonInfo;
@@ -62,7 +63,10 @@ class FacultyInfo
     {
         list($first_name, $last_name) = static::importName($row);
         $netid = trim(strtolower($row['netid']));
-        if (!$netid) throw new DigraphCMSException('NetID cannot be blank', ['row' => $row]);
+        if (!$netid) {
+            ExceptionLog::log(throw new DigraphCMSException('Import: NetID is blank', ['row' => $row]));
+            $netid = 'unknown.' . Digraph::uuid(null, Config::secret() . $row['unm id']);
+        }
         $existing = static::search($netid);
         // email address
         $email = ($row['email'] ? $row['email'] : null)
@@ -94,8 +98,8 @@ class FacultyInfo
             ?? $existing?->rank
             ?? 'Unknown Rank';
         // save an exception log entry if rank is unknown
-        if ($rank == 'Unknown Rank' && !str_contains($title,'Temporary')) {
-            ExceptionLog::log(new DigraphCMSException('Unknown rank for ' . $netid, ['row' => $row]));
+        if ($rank == 'Unknown Rank' && !str_contains($title, 'Temporary')) {
+            ExceptionLog::log(new DigraphCMSException('Import: Unknown rank for ' . $netid, ['row' => $row]));
         }
         // flags
         $voting = $voting ?? static::importVoting($row);
