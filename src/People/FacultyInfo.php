@@ -3,6 +3,8 @@
 namespace DigraphCMS_Plugins\unmous\ous_digraph_module\People;
 
 use DigraphCMS\Config;
+use DigraphCMS\Exception as DigraphCMSException;
+use DigraphCMS\ExceptionLog;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\PersonInfo;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\Semesters;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedDB;
@@ -60,7 +62,7 @@ class FacultyInfo
     {
         list($first_name, $last_name) = static::importName($row);
         $netid = trim(strtolower($row['netid']));
-        if (!$netid) throw new Exception('NetID cannot be blank');
+        if (!$netid) throw new DigraphCMSException('NetID cannot be blank', ['row' => $row]);
         $existing = static::search($netid);
         // email address
         $email = ($row['email'] ? $row['email'] : null)
@@ -91,6 +93,10 @@ class FacultyInfo
             ?? ($title != 'Unknown Title' ? FacultyRankParser::inferRankFromTitle($title) : null)
             ?? $existing?->rank
             ?? 'Unknown Rank';
+        // save an exception log entry if rank is unknown
+        if ($rank == 'Unknown Rank' && !str_contains($title,'Temporary')) {
+            ExceptionLog::log(new DigraphCMSException('Unknown rank for ' . $netid, ['row' => $row]));
+        }
         // flags
         $voting = $voting ?? static::importVoting($row);
         $hsc = static::importHsc($org);
