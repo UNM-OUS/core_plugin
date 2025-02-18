@@ -172,6 +172,7 @@ class FacultyRanksTest extends TestCase
             ["Visiting Professor of Theater and Dance", "Visiting Professor"],
             ["Visiting Professor", "Visiting Professor"],
             ["Visiting Scholar", "Visiting Scholar"],
+            ["Clinician Educator - Associate Professor", "Clinician Educator - Associate Professor"]
         ];
     }
 }

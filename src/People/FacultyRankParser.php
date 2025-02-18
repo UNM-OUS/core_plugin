@@ -14,6 +14,7 @@ class FacultyRankParser {
         "Associate Provost",
         "Clinician Educator - Assistant Professor",
         "Clinician Educator - Professor",
+        "Clinician Educator - Associate Professor",
         "Distinguished Professor",
         "Lecturer I",
         "Lecturer II",
