@@ -56,7 +56,7 @@ class StaffInfo
         list($first_name, $last_name) = FacultyInfo::importName($row);
         $netid = trim(strtolower($row['netid']));
         if (!$netid) {
-            ExceptionLog::log(throw new DigraphCMSException('Import: NetID is blank', ['row' => $row]));
+            ExceptionLog::log(new DigraphCMSException('Import: NetID is blank', ['row' => $row]));
             $netid = 'unknown.' . Digraph::uuid(null, Config::secret() . $row['unm id']);
         }
         $existing = static::search($netid);
