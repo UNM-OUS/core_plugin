@@ -52,6 +52,7 @@ class AccommodationsField extends FIELDSET
         // set up classes
         $this->requested->addClass('accommodations-field__requested');
         $this->needs->addClass('accommodations-field__needs');
+        $this->needs->addTip('<button class="button button--small button--warning accommodations-field__cancel">I do not require accommodations</button>');
         $this->extraRequest->addClass('accommodations-field__extra-request');
         // set up validation
         $this->needs->addValidator(function () {
