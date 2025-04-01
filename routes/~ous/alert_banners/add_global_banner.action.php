@@ -10,7 +10,6 @@ use DigraphCMS\RichContent\RichContentField;
 use DigraphCMS\UI\Notifications;
 use DigraphCMS\URL\URL;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\LoboAlerts\DB\GlobalAlert;
-use DigraphCMS_Plugins\unmous\ous_digraph_module\LoboAlerts\DB\SiteAlert;
 
 Context::ensureUUIDArg();
 $form = new FormWrapper();
@@ -50,7 +49,7 @@ if ($form->ready()) {
     );
     $alert->create();
     Notifications::flashConfirmation('Alert created');
-    throw new RedirectException(new URL('site_banners.html'));
+    throw new RedirectException(new URL('global_banners.html'));
 }
 
 echo $form;
