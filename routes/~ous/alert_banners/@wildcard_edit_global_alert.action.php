@@ -57,7 +57,7 @@ if ($form->ready()) {
         ->setEnd($end->value())
         ->update();
     Notifications::flashConfirmation('Alert updated');
-    throw new RedirectException(new URL('site_banners.html'));
+    throw new RedirectException(new URL('global_banners.html'));
 }
 
 echo $form;
