@@ -75,7 +75,7 @@ class OUS extends AbstractPlugin
             if (in_array($url->route(), Config::get('unm.test_site.allowed_routes'))) {
                 return true;
             }
-            if (!Permissions::inGroups(['testers', 'editors', 'admins'])) {
+            if (!Permissions::inGroups(['testers', 'editors', 'admins'], $user)) {
                 return false;
             }
         }
@@ -331,7 +331,7 @@ class OUS extends AbstractPlugin
     }
 
     /** @return string[] */
-    public static function userNetIDs(string|User $userID = null): array
+    public static function userNetIDs(string|User|null $userID = null): array
     {
         if ($userID instanceof User) $userID = $userID->uuid();
         $userID = $userID ?? Session::uuid();
