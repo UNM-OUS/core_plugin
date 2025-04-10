@@ -382,7 +382,7 @@ class OUS extends AbstractPlugin
      * @param string $netID
      * @return void
      */
-    public static function onCreateUser_cas_netid(User $user, string $source, string $provider, string $netID): void
+    public static function onCreateUser_cas_netid(User $user, string $netID): void
     {
         if (Config::get('unm.block_unknown_netids')) {
             if (!UserData::known($netID)) {
