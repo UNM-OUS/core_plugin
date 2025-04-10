@@ -375,12 +375,6 @@ class OUS extends AbstractPlugin
 
     /**
      * Assign new users from CAS NetIDs a default name of their NetID.
-     *
-     * @param User $user
-     * @param string $source
-     * @param string $provider
-     * @param string $netID
-     * @return void
      */
     public static function onCreateUser_cas_netid(User $user, string $netID): void
     {
