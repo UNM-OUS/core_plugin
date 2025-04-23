@@ -1,5 +1,6 @@
 <h1>Add global banner</h1>
 <?php
+
 use DigraphCMS\Context;
 use DigraphCMS\HTML\Forms\Field;
 use DigraphCMS\HTML\Forms\Fields\DatetimeField;
@@ -23,11 +24,12 @@ $content = (new RichContentField("", Context::arg('uuid')))
     ->addForm($form);
 
 $class = (new Field("Display class", new SELECT([
-'information' => 'Information/notice',
-'warning' => 'Warning',
-'safe' => 'Safe/confirmation',
-'danger' => 'Danger',
-'medical' => 'Medical information',
+    'announcement' => 'Announcement',
+    'information' => 'Information/notice',
+    'warning' => 'Warning',
+    'safe' => 'Safe/confirmation',
+    'danger' => 'Danger',
+    'medical' => 'Medical information',
 ])))
     ->setRequired(true)
     ->addForm($form);

@@ -1,3 +1,20 @@
+.loboalert--announcement {
+    background-color: var(--cue-interactive);
+    color: var(--cue-interactive-inv);
+    border-bottom: 1px solid var(--cue-interactive-dark);
+    border-top: 1px solid var(--cue-interactive-light);
+
+    .loboalert__title {
+        &:before {
+            @include material-icon;
+            content: '\ef49';
+            display: inline-block;
+            margin-right: $grid/2;
+            transform: scale(1.1) translateY(0.125em);
+        }
+    }
+}
+
 .loboalert--medical {
     background-color: #007a86;
     color: #fff;
