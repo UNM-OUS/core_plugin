@@ -108,11 +108,20 @@ class BulkMail
 
     public static function onBulkMailRecipientSource(string $name): ?AbstractRecipientSource
     {
-        // try to find source in full list of sources
-        foreach (static::sources() as $s) {
-            if ($s->name() == $name) {
-                return $s;
+        // return configured recipient source
+        if ($config = Config::get('bulk_mail.sources.' . $name)) {
+            // require source to be enabled
+            if (!$config['enabled']) return null;
+            // require metagroups if specified
+            if (@$config['require-groups']) {
+                if (!Permissions::inMetaGroups($config['require-groups'])) return null;
             }
+            // return instance of source
+            $reflection = new ReflectionClass($config['class']);
+            $args = @$config['args'] ?? [];
+            array_unshift($args, $name);
+            // @phpstan-ignore-next-line this is actually okay
+            return $reflection->newInstanceArgs($args);
         }
         // return null if not found
         return null;
