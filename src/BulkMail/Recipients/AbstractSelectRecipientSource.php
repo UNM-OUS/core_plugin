@@ -2,15 +2,11 @@
 
 namespace DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients;
 
-use DigraphCMS\DB\AbstractMappedSelect;
 use Envms\FluentPDO\Queries\Select;
 
 abstract class AbstractSelectRecipientSource extends AbstractRecipientSource
 {
-    /**
-     * @return Select|AbstractMappedSelect<mixed> $query
-     */
-    abstract protected function query(): Select|AbstractMappedSelect;
+    abstract protected function query(): Select;
 
     public function recipients(): iterable
     {
