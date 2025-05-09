@@ -7,6 +7,9 @@ use Envms\FluentPDO\Queries\Select;
 
 abstract class AbstractSelectRecipientSource extends AbstractRecipientSource
 {
+    /**
+     * @return Select|AbstractMappedSelect<mixed> $query
+     */
     abstract protected function query(): Select|AbstractMappedSelect;
 
     public function recipients(): iterable
