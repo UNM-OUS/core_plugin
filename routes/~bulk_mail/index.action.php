@@ -2,6 +2,7 @@
 <?php
 
 use DigraphCMS\UI\Format;
+use DigraphCMS\UI\Pagination\ColumnStringFilteringHeader;
 use DigraphCMS\UI\Pagination\PaginatedTable;
 use DigraphCMS\UI\Sidebar\Sidebar;
 use DigraphCMS\URL\URL;
@@ -71,7 +72,7 @@ echo new PaginatedTable(
         ];
     },
     [
-        'Mailing',
+        new ColumnStringFilteringHeader('Mailing', 'name'),
         '',
         '',
         '',
