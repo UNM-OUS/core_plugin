@@ -10,13 +10,13 @@
       "request": "launch",
       "runtimeArgs": [
         "-S",
-        "localhost:0",
+        "0.0.0.0:0",
         "${workspaceRoot}/demo/index.php"
       ],
       "cwd": "${workspaceRoot}/demo",
       "port": 0,
       "serverReadyAction": {
-        "pattern": "Development Server \\(http://localhost:([0-9]+)\\) started",
+        "pattern": "Development Server \\(http://0.0.0.0:([0-9]+)\\) started",
         "uriFormat": "http://localhost:%s",
         "action": "openExternally"
       },

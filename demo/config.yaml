@@ -9,7 +9,7 @@ fields:
 unm:
   block_unknown_netids: false
   shared_db:
-    dsn: "sqlite:${paths.base}/../../shared.sqlite"
+    dsn: "sqlite:${paths.base}/../../global/shared.sqlite"
 
 # disable email
 email:
