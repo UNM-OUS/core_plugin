@@ -1,4 +1,4 @@
-<h1>Begin a blank bulk mailing</h1>
+<h1>Create mailing template</h1>
 <?php
 
 use DigraphCMS\Config;
@@ -13,7 +13,7 @@ use DigraphCMS\URL\URL;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\BulkMail;
 
 $form = new FormWrapper();
-$form->button()->setText('Create draft');
+$form->button()->setText('Create template');
 
 $name = (new Field('Name'))
     ->setRequired(true)

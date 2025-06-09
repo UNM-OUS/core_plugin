@@ -10,7 +10,6 @@ use DigraphCMS\Email\Email;
 use DigraphCMS\Email\Emails;
 use DigraphCMS\RichContent\RichContent;
 use DigraphCMS\Session\Session;
-use DigraphCMS\UI\Format;
 use DigraphCMS\URL\URL;
 use DigraphCMS\Users\User;
 use DigraphCMS\Users\Users;
@@ -77,6 +76,33 @@ class Mailing
                 return static::sendMailingJob($job, $id);
             });
         });
+    }
+
+    /**
+     * Create a copy of this mailing and return the copy.
+     */
+    public function copy(): Mailing
+    {
+        $key = DB::query()->insertInto(
+            'bulk_mail',
+            [
+                'name' => $this->name(),
+                '`from`' => $this->from(),
+                'subject' => $this->subject(),
+                'body' => $this->body(),
+                'sources' => implode(',', $this->sourceNames()),
+                'extra_recipients' => $this->extraRecipients(),
+                'category' => $this->category(),
+                'created' => time(),
+                'created_by' => Session::uuid(),
+                'updated' => time(),
+                'updated_by' => Session::uuid(),
+            ]
+        )->execute();
+        if (!is_int($key)) {
+            throw new \RuntimeException('Failed to copy bulk mailing');
+        }
+        return BulkMail::mailing($key, true);
     }
 
     public static function rebuildRecipientJob(DeferredJob $job, int $id): string

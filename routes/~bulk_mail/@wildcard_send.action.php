@@ -3,8 +3,11 @@
 use DigraphCMS\Context;
 use DigraphCMS\DB\DB;
 use DigraphCMS\HTML\Forms\DateTimeInput;
+use DigraphCMS\HTML\Forms\Field;
+use DigraphCMS\HTML\Forms\Fields\CheckboxField;
 use DigraphCMS\HTML\Forms\Fields\DatetimeField;
 use DigraphCMS\HTML\Forms\FormWrapper;
+use DigraphCMS\HTML\Forms\TEXTAREA;
 use DigraphCMS\HTTP\HttpError;
 use DigraphCMS\HTTP\RedirectException;
 use DigraphCMS\HTTP\RefreshException;
@@ -17,6 +20,7 @@ use DigraphCMS\UI\Pagination\PaginatedTable;
 use DigraphCMS\UI\TabInterface;
 use DigraphCMS\URL\URL;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\BulkMail;
+use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Mailing;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\AbstractRecipientSource;
 
 $mailing = BulkMail::mailing(intval(Context::url()->actionSuffix()));
@@ -25,6 +29,7 @@ if (!$mailing || $mailing->sent()) throw new HttpError(404);
 printf('<h1>Send: %s</h1>', $mailing->name());
 Breadcrumb::setTopName($mailing->name());
 include __DIR__ . '/_actions.include.php';
+assert($mailing instanceof Mailing);
 
 // check for problems
 if (!$mailing->body()) {
@@ -58,8 +63,9 @@ if ($mailing->scheduled()) {
     });
 }
 
-// schedule tab is default
-$tabs->addTab('schedule', 'Schedule sending', function () use ($mailing) {
+// schedule tab
+// used to schedule a single sending of this mailing
+$tabs->addTab('schedule', 'Schedule single', function () use ($mailing) {
     $form = new FormWrapper();
     $form->button()->setText('Schedule mailing');
     $datetime = (new DatetimeField('Scheduled time'))
@@ -73,6 +79,7 @@ $tabs->addTab('schedule', 'Schedule sending', function () use ($mailing) {
         })
         ->addForm($form);
     if ($form->ready()) {
+        $mailing = $mailing->copy();
         DB::query()->update(
             'bulk_mail',
             [
@@ -86,12 +93,87 @@ $tabs->addTab('schedule', 'Schedule sending', function () use ($mailing) {
         throw new RedirectException(new URL('./'));
     }
     echo $form;
-    Notifications::printNotice('Sending process will begin as soon as possible after this time, and may take some time to complete (as long as a few hours for large mailings).');
+    Notifications::printNotice('Sending process will begin as soon as possible after the given time, and may take some time to complete (as long as a few hours for large mailings).');
     Notifications::printNotice('Recipient lists will be rebuilt before sending, so any automatically-generated mailing lists will use the latest data at the time of sending.');
 });
+
+// multi-schedule tab
+// used to schedule multiple copies on a given list of dates/times
+$tabs->addTab('multi', 'Multi-schedule', function () use ($mailing) {
+    $form = new FormWrapper();
+    $form->button()->setText('Schedule multiple mailings');
+    $times = (new Field('List dates/times', new TEXTAREA))
+        ->addTip('Enter a list of dates and times, one per line, most common formats are supported.')
+        ->addTip('The entered times do not need to be in any particular order.')
+        ->addTip('The system will warn you if it cannot parse a date/time.')
+        ->addTip('You will be shown a list of what it interprets your inputs as before scheduling.')
+        ->setRequired(true)
+        ->addForm($form);
+    $interpreted_times = preg_split('/\r\n|\r|\n/', $times->value());
+    $interpreted_times = array_map('trim', $interpreted_times); // @phpstan-ignore-line it's fine
+    $interpreted_times = array_filter($interpreted_times, fn($e) => !empty($e));
+    $interpreted_times = array_map(
+        function (string $in) use ($form) {
+            try {
+                $output = new DateTime($in, Format::timezone());
+            } catch (\Throwable $th) {
+                $form->addChild(sprintf(
+                    '<div class="notification notification--warning">Error parsing line: %s</div>',
+                    htmlspecialchars($in)
+                ));
+                return false;
+            }
+            if ($output->getTimestamp() < time()) {
+                $form->addChild(sprintf(
+                    '<div class="notification notification--warning">Warning: line %s is in the past and will be ignored.</div>',
+                    htmlspecialchars($in)
+                ));
+                return false; // ignore past dates
+            }
+            return $output;
+        },
+        $interpreted_times
+    );
+    /** @var DateTime[] */
+    $interpreted_times = array_filter($interpreted_times);
+    $interpreted_times = array_unique($interpreted_times);
+    sort($interpreted_times);
+    foreach ($interpreted_times as $time) {
+        $form->addChild(sprintf(
+            '<div class="notification notification--confirmation">%s</div>',
+            Format::datetime($time)
+        ));
+    }
+    if ($form->submitted()) {
+        (new CheckboxField('Confirm scheduling the dates shown above'))
+            ->setRequired(true)
+            ->addForm($form);
+    }
+    if ($form->ready()) {
+        foreach ($interpreted_times as $time) {
+            $mailing_copy = $mailing->copy();
+            DB::query()->update(
+                'bulk_mail',
+                [
+                    'scheduled' => $time->getTimestamp(),
+                    'updated' => time(),
+                    'updated_by' => Session::uuid()
+                ],
+                $mailing_copy->id()
+            )->execute();
+        }
+        Notifications::flashConfirmation("Scheduled " . count($interpreted_times) . " mailings");
+        throw new RedirectException(new URL('./'));
+    }
+    echo $form;
+});
+
 // send now tab
+// used for sending immediately
 $tabs->addTab('now', 'Send now', function () use ($mailing) {
+    echo '<p>Click the button below to send a copy of this mailing immediately. This action cannot be undone. It may take some time for all messages to actually send from the mailing queue.</p>';
     echo (new CallbackLink(function () use ($mailing) {
+        $mailing = $mailing->copy();
         $job = $mailing->send();
         throw new RedirectException(new URL('messages:' . $mailing->id() . '?job=' . $job->group()));
     }))

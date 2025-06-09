@@ -27,7 +27,7 @@ class BulkMail
             ->order('sent DESC');
     }
 
-    public static function drafts(): MailingSelect
+    public static function templates(): MailingSelect
     {
         return (new MailingSelect)
             ->where('sent is null')

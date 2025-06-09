@@ -10,11 +10,11 @@ use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\BulkMail;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Mailing;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\Semesters;
 
-echo "<h2>Drafts</h2>";
-printf('<a href="%s" class="button">Create blank bulk mailing</a>', new URL('_create.html'));
+echo "<h2>Templates</h2>";
+printf('<a href="%s" class="button">Create bulk mail template</a>', new URL('_create.html'));
 
 echo new PaginatedTable(
-    BulkMail::drafts(),
+    BulkMail::templates(),
     function (Mailing $mailing): array {
         return [
             $mailing->editUrl()->html(),
@@ -44,7 +44,6 @@ echo new PaginatedTable(
             $mailing->editUrl()->html(),
             sprintf('<a href="%s">preview</a>', $mailing->previewUrl()),
             sprintf('<a href="%s">recipients</a>', $mailing->recipientsUrl()),
-            sprintf('<a href="%s">schedule</a>', $mailing->sendUrl()),
             $mailing->scheduled() ? Format::date($mailing->scheduled()) : '',
             sprintf('<a href="%s">delete</a>', $mailing->deleteUrl())
         ];
@@ -53,8 +52,7 @@ echo new PaginatedTable(
         'Mailing',
         '',
         '',
-        '',
-        'Scheduled',
+        'Time',
         ''
     ]
 );

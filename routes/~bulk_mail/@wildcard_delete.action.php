@@ -23,4 +23,4 @@ echo (new CallbackLink(function () use ($mailing) {
     throw new RedirectException(new URL('./'));
 }))
     ->addClass('button button--danger')
-    ->addChild('Yes, really delete this draft');
+    ->addChild('Yes, really delete this mailing');
