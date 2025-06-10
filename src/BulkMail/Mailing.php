@@ -99,9 +99,6 @@ class Mailing
                 'updated_by' => Session::uuid(),
             ]
         )->execute();
-        if (!is_int($key)) {
-            throw new \RuntimeException('Failed to copy bulk mailing');
-        }
         return BulkMail::mailing($key, true);
     }
 
