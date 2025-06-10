@@ -20,7 +20,7 @@ echo new PaginatedTable(
             $mailing->editUrl()->html(),
             sprintf('<a href="%s">preview</a>', $mailing->previewUrl()),
             sprintf('<a href="%s">recipients</a>', $mailing->recipientsUrl()),
-            sprintf('<a href="%s">schedule</a>', $mailing->sendUrl()),
+            sprintf('<a href="%s">send</a>', $mailing->sendUrl()),
             Format::date($mailing->updated()),
             sprintf('<a href="%s">delete</a>', $mailing->deleteUrl())
         ];
