@@ -22,12 +22,6 @@ $variables = Theme::variables('light');
 
 <?php echo $email->body_html(); ?>
 
-<p>
-    <strong>---</strong><br>
-    <strong>Office of the University Secretary</strong><br>
-    <a href="tel:5052774664">(505) 277-4664</a><br>
-    <a href="mailto:<?= $email->from() ?>"><?= $email->from() ?></a>
-</p>
 </body>
 
 </html>
