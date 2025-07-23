@@ -136,8 +136,6 @@ $tabs->addTab('multi', 'Multi-schedule', function () use ($mailing) {
     );
     /** @var DateTime[] */
     $interpreted_times = array_filter($interpreted_times);
-    $interpreted_times = array_unique($interpreted_times);
-    sort($interpreted_times);
     foreach ($interpreted_times as $time) {
         $form->addChild(sprintf(
             '<div class="notification notification--confirmation">%s</div>',
