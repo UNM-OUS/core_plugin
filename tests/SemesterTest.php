@@ -119,7 +119,6 @@ class SemesterTest extends TestCase
 
     public function testDefaultDates(): void
     {
-        Config::set('unm.semesters.1800', null);
         $spring = new Semester(1800, 'spring');
         $this->assertEquals(1800, $spring->year());
         $this->assertEquals(1, $spring->month());
@@ -136,22 +135,19 @@ class SemesterTest extends TestCase
 
     public function testConfiguredDates(): void
     {
-        Config::set('unm.semesters.1803', [
-            'spring' => [2, 18],
-            'summer' => [7, 8],
-            'fall' => [9, 23],
-        ]);
-        $spring = new Semester(1803, 'spring');
-        $this->assertEquals(1803, $spring->year());
-        $this->assertEquals(2, $spring->month());
+        // Note that this test relies on particular data being configured for 1801
+        // this shouldn't collide with real data because UNM didn't exist
+        $spring = new Semester(2021, 'spring');
+        $this->assertEquals(2021, $spring->year());
+        $this->assertEquals(1, $spring->month());
         $this->assertEquals(18, $spring->day());
-        $summer = new Semester(1803, 'summer');
-        $this->assertEquals(1803, $summer->year());
-        $this->assertEquals(7, $summer->month());
-        $this->assertEquals(8, $summer->day());
-        $fall = new Semester(1803, 'fall');
-        $this->assertEquals(1803, $fall->year());
-        $this->assertEquals(9, $fall->month());
+        $summer = new Semester(2021, 'summer');
+        $this->assertEquals(2021, $summer->year());
+        $this->assertEquals(6, $summer->month());
+        $this->assertEquals(7, $summer->day());
+        $fall = new Semester(2021, 'fall');
+        $this->assertEquals(2021, $fall->year());
+        $this->assertEquals(8, $fall->month());
         $this->assertEquals(23, $fall->day());
     }
 
@@ -267,8 +263,8 @@ class SemesterTest extends TestCase
 
     public function testDateTimeOutput(): void
     {
-        Config::set('unm.semesters.1800', null);
-        Config::set('unm.semesters.1801', null);
+        // Note that this test relies on there being no data for 1800
+        // should be easy because UNM didn't exist
         $spring = new Semester(1800, 'spring');
         $this->assertEquals(
             (new DateTime())->setDate(1800, 1, 8)->setTime(0, 0, 0, 0),
