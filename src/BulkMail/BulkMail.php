@@ -10,6 +10,8 @@ use DigraphCMS\UI\UserMenu;
 use DigraphCMS\URL\URL;
 use DigraphCMS\Users\Permissions;
 use DigraphCMS\Users\User;
+use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\CustomLists\CustomLists;
+use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\CustomLists\CustomRecipientList;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\AbstractRecipientSource;
 use ReflectionClass;
 
@@ -39,8 +41,8 @@ class BulkMail
     {
         return (new MailingSelect)
             ->where('sent is null')
-        ->where('scheduled is not null')
-        ->order('scheduled asc');
+            ->where('scheduled is not null')
+            ->order('scheduled asc');
     }
 
     public static function mailing(int $id, bool $bust_cache = false): ?Mailing
@@ -89,15 +91,21 @@ class BulkMail
 
     /**
      * @param array<string,AbstractRecipientSource> $sources
+     *
      * @return void
      */
     public static function onBulkMailRecipientSources(array &$sources): void
     {
+        // get main sources
         /** @var string $name */
         foreach (array_keys(Config::get('bulk_mail.sources')) as $name) {
             if ($source = static::source($name)) {
                 $sources[$name] = $source;
             }
+        }
+        // get custom sources
+        foreach (CustomLists::allLists() as $list) {
+            $sources[$list->name()] = $list;
         }
     }
 
@@ -120,8 +128,17 @@ class BulkMail
             $reflection = new ReflectionClass($config['class']);
             $args = @$config['args'] ?? [];
             array_unshift($args, $name);
-            // @phpstan-ignore-next-line this is actually okay
-            return $reflection->newInstanceArgs($args);
+            $source = $reflection->newInstanceArgs($args);
+            assert($source instanceof AbstractRecipientSource);
+            return $source;
+        }
+        // try to locate a custom source
+        if (str_starts_with($name, 'custom/')) {
+            $uuid = substr($name, 7);
+            if ($list = CustomLists::get($uuid)) {
+                assert($list instanceof CustomRecipientList);
+                return $list;
+            }
         }
         // return null if not found
         return null;
