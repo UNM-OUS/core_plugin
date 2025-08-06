@@ -47,7 +47,7 @@ if ($form->ready()) {
             $url = $row['url'];
             if ($category == 'uap') {
                 $lower_title = strtolower($title);
-                if (preg_match('/^RPM (\d+(\.\d+)+)/', $title, $matches)) {
+                if (preg_match('/^RPM ([0-9]+(\.[0-9]+)+)/', $title, $matches)) {
                     $name = $matches[1];
                 } elseif (str_contains($lower_title, 'foreword')) {
                     $name = 'foreword';
@@ -57,7 +57,7 @@ if ($form->ready()) {
                     $name = 'preface';
                 }
             } elseif ($category == 'rpm') {
-                if (preg_match('/^UAP (\d+)/', $title, $matches)) {
+                if (preg_match('/^UAP ([0-9]+)/', $title, $matches)) {
                     $name = $matches[1];
                 }
             }
