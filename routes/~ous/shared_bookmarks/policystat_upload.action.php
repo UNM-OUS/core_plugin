@@ -45,7 +45,7 @@ if ($form->ready()) {
             $id = $row['policystat id'];
             $name = null;
             $url = $row['url'];
-            if ($category == 'uap') {
+            if ($category == 'rpm') {
                 $lower_title = strtolower($title);
                 if (preg_match('/RPM ([0-9]+(\.[0-9]+)+)/im', $title, $matches)) {
                     $name = $matches[1];
@@ -56,7 +56,7 @@ if ($form->ready()) {
                 } elseif (str_contains($lower_title, 'preface')) {
                     $name = 'preface';
                 }
-            } elseif ($category == 'rpm') {
+            } elseif ($category == 'uap') {
                 if (preg_match('/UAP ([0-9]+)/im', $title, $matches)) {
                     $name = $matches[1];
                 }
