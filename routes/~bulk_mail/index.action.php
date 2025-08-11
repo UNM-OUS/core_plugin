@@ -78,50 +78,11 @@ echo new PaginatedTable(
     ]
 );
 
-// look for and surface relevant past mailings from this time last year/semester
+// look for and surface relevant past mailings from this time last year
 
 // this time last equivalent semester
 Sidebar::add(function (): string {
-    $last_semester = Semesters::currentFull()->previous(3);
-    $relevant = BulkMail::mailings();
-    $other_day = $start = Semesters::transferTime(
-        time(),
-        $last_semester,
-        Semesters::current(),
-    );
-    $start = (clone $other_day)->sub(new DateInterval('P1W'));
-    $end = (clone $other_day)->add(new DateInterval('P2W'));
-    $relevant
-        ->where(
-            'sent > ?',
-            $start->getTimestamp()
-        )->where(
-            'sent < ?',
-            $end->getTimestamp()
-        );
-    // if ($relevant->count() == 0) return null;
-    return sprintf(
-        '<h1>This time %s</h1><div class="small">%s to %s</div>%s',
-        $last_semester,
-        Format::date($start),
-        Format::date($end),
-        new PaginatedTable(
-            $relevant,
-            function (Mailing $mailing): array {
-                return [
-                    $mailing->previewUrl()->html(),
-                    sprintf('<a href="%s">copy</a>', $mailing->copyUrl()),
-                    sprintf('<a href="%s">source</a>', $mailing->sourceUrl()),
-                ];
-            }
-        )
-    );
-});
-
-// this time last main semester
-Sidebar::add(function (): string|null {
-    if (Semesters::current()->semester() == "Summer") return null;
-    $last_semester = Semesters::currentFull()->previousFull();
+    $last_semester = Semesters::current()->previous(3);
     $relevant = BulkMail::mailings();
     $other_day = $start = Semesters::transferTime(
         time(),
