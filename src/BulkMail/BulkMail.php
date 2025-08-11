@@ -34,7 +34,7 @@ class BulkMail
         return (new MailingSelect)
             ->where('sent is null')
             ->where('scheduled is null')
-            ->order('updated DESC');
+            ->order('name ASC');
     }
 
     public static function scheduled(): MailingSelect
