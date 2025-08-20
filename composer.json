@@ -4,7 +4,8 @@
     "require": {
         "digraphcms/digraph-core": "^2",
         "apereo/phpcas": "^1.6",
-        "mpdf/qrcode": "^1.2"
+        "mpdf/qrcode": "^1.2",
+        "joby/toolbox": "^1.0"
     },
     "require-dev": {
         "php": ">=8.1",

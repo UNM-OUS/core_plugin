@@ -25,10 +25,9 @@ use DigraphCMS\Users\Permissions;
 use DigraphCMS\Users\User;
 use DigraphCMS\Users\Users;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\BulkMail;
-use Thunder\Shortcode\Shortcode\ShortcodeInterface;
-use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Mailing;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\People\FacultyInfo;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedBookmarks\SharedBookmarks;
+use Thunder\Shortcode\Shortcode\ShortcodeInterface;
 
 // register additional event subscribers for this plugin
 Dispatcher::addSubscriber(BulkMail::class);
@@ -59,16 +58,6 @@ class OUS extends AbstractPlugin
         'Chancellor',
     ];
 
-    public function onStaticUrlPermissions(URL $url, User $user): bool|null
-    {
-        return static::testSitePermissions($url, $user);
-    }
-
-    public function onPageUrlPermissions(URL $url, User $user): bool|null
-    {
-        return static::testSitePermissions($url, $user);
-    }
-
     protected static function testSitePermissions(URL $url, User $user): bool|null
     {
         if (Config::get('unm.test_site.active')) {
@@ -80,6 +69,16 @@ class OUS extends AbstractPlugin
             }
         }
         return null;
+    }
+
+    public function onStaticUrlPermissions(URL $url, User $user): bool|null
+    {
+        return static::testSitePermissions($url, $user);
+    }
+
+    public function onPageUrlPermissions(URL $url, User $user): bool|null
+    {
+        return static::testSitePermissions($url, $user);
     }
 
     /**
@@ -96,13 +95,18 @@ class OUS extends AbstractPlugin
         ))->setShortcut('Ctrl+Shift+B');
     }
 
-    public static function cronJob_frequent(): void
+    public static function cronJob_halfhourly(): void
     {
-        // get mailings that are scheduled for now or earlier and not sent
-        $mailings = BulkMail::scheduled()->where('scheduled <= ?', time());
-        /** @var Mailing $mailing */
-        foreach ($mailings as $mailing) {
-            $mailing->send();
+        // loop through all of the bulk mail templates and send any that need to be sent
+        // also remove any past scheduled times from any templates that are sent
+        $templates = BulkMail::templates();
+        foreach ($templates as $mailing) {
+            if ($mailing->scheduledSendNeeded()) {
+                DB::beginTransaction();
+                $mailing->copy()->send();
+                $mailing->removePastScheduledTimes()->update();
+                DB::commit();
+            }
         }
     }
 
@@ -183,37 +187,6 @@ class OUS extends AbstractPlugin
     {
         // generate shared bookmarks for all of this site's pages
         if (Config::get('unm.shared_bookmarks.update')) static::updateSharedBookmarks();
-    }
-
-    protected static function updateSharedBookmarks(): void
-    {
-        new DeferredJob(
-            function (DeferredJob $job) {
-                $uuids = Pages::select()
-                    ->order('updated asc')
-                    ->query()
-                    ->select('uuid', true);
-                foreach ($uuids as $uuid) {
-                    $uuid = $uuid['uuid'];
-                    $job->spawn(function () use ($uuid) {
-                        $page = Pages::get($uuid);
-                        if (!$page) return "Page $uuid not found";
-                        $url = $page->url();
-                        if (!Permissions::url($url, Users::guest())) return "Page $uuid not publicly visible";
-                        SharedBookmarks::set(
-                            'link',
-                            $page->uuid(),
-                            $page->name(),
-                            $url,
-                            !!Config::get('unm.shared_bookmarks.searchable'),
-                        );
-                        return "Updated shared bookmark for $uuid";
-                    });
-                }
-                return "Spawned shared bookmark link update jobs";
-            },
-            'update_shared_bookmarks'
-        );
     }
 
     public static function cronJob_maintenance_heavy(): void
@@ -360,8 +333,9 @@ class OUS extends AbstractPlugin
     }
 
     /**
-     * @param string $userID
+     * @param string  $userID
      * @param Group[] $groups
+     *
      * @return void
      */
     public static function onUserGroups(string $userID, array &$groups): void
@@ -386,8 +360,8 @@ class OUS extends AbstractPlugin
         }
         $user->name(
             PersonInfo::getFullNameFor($netID)
-                ?? PersonInfo::getFirstNameFor($netID)
-                ?? $netID
+            ?? PersonInfo::getFirstNameFor($netID)
+            ?? $netID
         );
         $user->addEmail($netID . '@unm.edu', 'Main campus NetID', true);
     }
@@ -407,5 +381,36 @@ class OUS extends AbstractPlugin
                 $user->update();
             }
         }
+    }
+
+    protected static function updateSharedBookmarks(): void
+    {
+        new DeferredJob(
+            function (DeferredJob $job) {
+                $uuids = Pages::select()
+                    ->order('updated asc')
+                    ->query()
+                    ->select('uuid', true);
+                foreach ($uuids as $uuid) {
+                    $uuid = $uuid['uuid'];
+                    $job->spawn(function () use ($uuid) {
+                        $page = Pages::get($uuid);
+                        if (!$page) return "Page $uuid not found";
+                        $url = $page->url();
+                        if (!Permissions::url($url, Users::guest())) return "Page $uuid not publicly visible";
+                        SharedBookmarks::set(
+                            'link',
+                            $page->uuid(),
+                            $page->name(),
+                            $url,
+                            !!Config::get('unm.shared_bookmarks.searchable'),
+                        );
+                        return "Updated shared bookmark for $uuid";
+                    });
+                }
+                return "Spawned shared bookmark link update jobs";
+            },
+            'update_shared_bookmarks'
+        );
     }
 }

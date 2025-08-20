@@ -18,5 +18,5 @@ if ($mailing->sent()) {
     ActionMenu::addContextAction($mailing->previewUrl(), 'preview mailing');
     ActionMenu::addContextAction($mailing->recipientsUrl(), 'mailing recipients');
     ActionMenu::addContextAction($mailing->copyUrl(), 'copy mailing');
-    ActionMenu::addContextAction($mailing->sendUrl(), 'send mailing');
+    ActionMenu::addContextAction($mailing->scheduleUrl(), 'schedule mailing');
 }

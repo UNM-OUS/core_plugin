@@ -11,6 +11,7 @@ use DigraphCMS\HTTP\RefreshException;
 use DigraphCMS\RichContent\RichContentField;
 use DigraphCMS\Session\Session;
 use DigraphCMS\UI\Breadcrumb;
+use DigraphCMS\UI\Notifications;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\BulkMail;
 
 $mailing = BulkMail::mailing(intval(Context::url()->actionSuffix()));
@@ -21,7 +22,7 @@ printf('<h1>Edit: %s</h1>', $mailing->name());
 Breadcrumb::setTopName($mailing->name());
 
 $form = new FormWrapper();
-$form->button()->setText('Save draft');
+$form->button()->setText('Save template');
 
 $name = (new Field('Name'))
     ->setDefault($mailing->name())
@@ -49,19 +50,13 @@ $body = (new RichContentField('Body content', 'bulk_mail_body'))
     ->addForm($form);
 
 if ($form->ready()) {
-    DB::query()->update(
-        'bulk_mail',
-        [
-            'name' => $name->value(),
-            '`from`' => $from->value(),
-            'category' => $category->value(),
-            'subject' => $subject->value(),
-            'body' => $body->value()->source(),
-            'updated' => time(),
-            'updated_by' => Session::uuid()
-        ],
-        $mailing->id()
-    )->execute();
+    $mailing->setName($name->value());
+    $mailing->setFrom($from->value());
+    $mailing->setCategory($category->value());
+    $mailing->setSubject($subject->value());
+    $mailing->setBody($body->value()->source());
+    $mailing->update();
+    Notifications::flashConfirmation('Template updated');
     throw new RefreshException();
 }
 

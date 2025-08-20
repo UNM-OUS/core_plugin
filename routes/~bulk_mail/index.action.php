@@ -20,7 +20,7 @@ echo new PaginatedTable(
             $mailing->editUrl()->html(),
             sprintf('<a href="%s">preview</a>', $mailing->previewUrl()),
             sprintf('<a href="%s">recipients</a>', $mailing->recipientsUrl()),
-            sprintf('<a href="%s">send</a>', $mailing->sendUrl()),
+            sprintf('<a href="%s">schedule</a>', $mailing->scheduleUrl()),
             Format::date($mailing->updated()),
             sprintf('<a href="%s">delete</a>', $mailing->deleteUrl())
         ];
@@ -35,29 +35,7 @@ echo new PaginatedTable(
     ]
 );
 
-echo "<h2>Scheduled</h2>";
-echo new PaginatedTable(
-    BulkMail::scheduled()
-        ->order('scheduled asc'),
-    function (Mailing $mailing): array {
-        return [
-            $mailing->editUrl()->html(),
-            sprintf('<a href="%s">preview</a>', $mailing->previewUrl()),
-            sprintf('<a href="%s">recipients</a>', $mailing->recipientsUrl()),
-            $mailing->scheduled() ? Format::date($mailing->scheduled()) : '',
-            sprintf('<a href="%s">delete</a>', $mailing->deleteUrl())
-        ];
-    },
-    [
-        'Mailing',
-        '',
-        '',
-        'Time',
-        ''
-    ]
-);
-
-echo "<h2>Sent</h2>";
+echo "<h2>Send log</h2>";
 echo new PaginatedTable(
     BulkMail::mailings(),
     function (Mailing $mailing): array {
@@ -65,13 +43,11 @@ echo new PaginatedTable(
             $mailing->previewUrl()->html(),
             sprintf('<a href="%s">messages (%s)</a>', $mailing->messagesUrl(), $mailing->messageCount()),
             sprintf('<a href="%s">source</a>', $mailing->sourceUrl()),
-            sprintf('<a href="%s">copy</a>', $mailing->copyUrl()),
             Format::date($mailing->sent()),
         ];
     },
     [
         new ColumnStringFilteringHeader('Mailing', 'name'),
-        '',
         '',
         '',
         'Sent',

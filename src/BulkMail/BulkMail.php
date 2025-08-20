@@ -33,16 +33,7 @@ class BulkMail
     {
         return (new MailingSelect)
             ->where('sent is null')
-            ->where('scheduled is null')
             ->order('name ASC');
-    }
-
-    public static function scheduled(): MailingSelect
-    {
-        return (new MailingSelect)
-            ->where('sent is null')
-            ->where('scheduled is not null')
-            ->order('scheduled asc');
     }
 
     public static function mailing(int $id, bool $bust_cache = false): ?Mailing

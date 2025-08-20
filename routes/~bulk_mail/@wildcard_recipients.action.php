@@ -23,8 +23,6 @@ include __DIR__ . '/_actions.include.php';
 printf('<h1>Select recipients: %s</h1>', $mailing->name());
 Breadcrumb::setTopName($mailing->name());
 
-if ($mailing->scheduled()) Notifications::printWarning("This message is scheduled to send. Its recipient list will be rebuilt automatically before sending.");
-
 echo "<h2>Select recipient sources</h2>";
 
 // dynamic recipient sources
@@ -74,20 +72,20 @@ $table = new PaginatedTable(
             $selected
                 ? ''
                 : (new CallbackLink(function () use ($source, $selectedSourceNames, $mailing) {
-                    $selectedSourceNames = array_filter($selectedSourceNames, function ($s) use ($source) {
-                        return !($s == $source->name() || str_starts_with($source->name(), "$s/"));
-                    });
-                    $selectedSourceNames[] = $source->name();
-                    DB::query()->update(
-                        'bulk_mail',
-                        [
-                            'sources' => implode(',', $selectedSourceNames),
-                            'updated' => time(),
-                            'updated_by' => Session::uuid()
-                        ],
-                        $mailing->id()
-                    )->execute();
-                }))
+                $selectedSourceNames = array_filter($selectedSourceNames, function ($s) use ($source) {
+                    return !($s == $source->name() || str_starts_with($source->name(), "$s/"));
+                });
+                $selectedSourceNames[] = $source->name();
+                DB::query()->update(
+                    'bulk_mail',
+                    [
+                        'sources' => implode(',', $selectedSourceNames),
+                        'updated' => time(),
+                        'updated_by' => Session::uuid()
+                    ],
+                    $mailing->id()
+                )->execute();
+            }))
                 ->setData('target', 'recipient-sources')
                 ->addChild(new Icon('add', 'Add source'))
         ];
@@ -110,15 +108,9 @@ $extra = (new Field('Emails (one per line)', new TEXTAREA))
     ->setDefault($mailing->extraRecipients())
     ->addForm($form);
 if ($form->ready()) {
-    DB::query()->update(
-        'bulk_mail',
-        [
-            'extra_recipients' => $extra->value() ?? '',
-            'updated' => time(),
-            'updated_by' => Session::uuid()
-        ],
-        $mailing->id()
-    )->execute();
+    $mailing->setExtraRecipients($extra->value() ?? '');
+    $mailing->update();
+    Notifications::flashConfirmation('Extra recipient list updated');
     throw new RefreshException();
 }
 echo $form;

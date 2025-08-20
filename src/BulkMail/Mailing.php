@@ -10,11 +10,14 @@ use DigraphCMS\Email\Email;
 use DigraphCMS\Email\Emails;
 use DigraphCMS\RichContent\RichContent;
 use DigraphCMS\Session\Session;
+use DigraphCMS\UI\Format;
 use DigraphCMS\URL\URL;
 use DigraphCMS\Users\User;
 use DigraphCMS\Users\Users;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\AbstractRecipientSource;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\Recipient;
+use Flatrr\FlatArray;
+use InvalidArgumentException;
 
 class Mailing
 {
@@ -46,8 +49,8 @@ class Mailing
     protected $updated;
     /** @var string */
     protected $updated_by;
-    /** @var int|null */
-    protected $scheduled;
+    protected string $data;
+    protected FlatArray|null $data_object = null;
 
     /**
      * Spawn a job to send a bulk mailing, which will rebuild recipients and
@@ -78,12 +81,15 @@ class Mailing
         });
     }
 
-    /**
-     * Create a copy of this mailing and return the copy.
-     */
-    public function copy(): Mailing
+    public function sent(): ?DateTime
     {
-        $key = DB::query()->insertInto(
+        if (!$this->sent) return null;
+        return (new DateTime)->setTimestamp($this->sent);
+    }
+
+    public function update(): bool
+    {
+        return DB::query()->update(
             'bulk_mail',
             [
                 'name' => $this->name(),
@@ -92,14 +98,62 @@ class Mailing
                 'body' => $this->body(),
                 'sources' => implode(',', $this->sourceNames()),
                 'extra_recipients' => $this->extraRecipients(),
-                'category' => $this->category(),
-                'created' => time(),
-                'created_by' => Session::uuid(),
+                'data' => json_encode($this->data()->get()),
                 'updated' => time(),
                 'updated_by' => Session::uuid(),
-            ]
+            ],
+            $this->id()
         )->execute();
-        return BulkMail::mailing($key, true);
+    }
+
+    public function setExtraRecipients(string $extra_recipients): static
+    {
+        $this->extra_recipients = $extra_recipients;
+        return $this;
+    }
+
+    public function name(): string
+    {
+        return $this->name;
+    }
+
+    public function from(): string
+    {
+        return $this->from;
+    }
+
+    public function subject(): string
+    {
+        return $this->subject;
+    }
+
+    public function body(): string
+    {
+        return $this->body;
+    }
+
+    /**
+     * @return array<int,string>
+     */
+    public function sourceNames(): array
+    {
+        return explode(',', $this->sources);
+    }
+
+    public function extraRecipients(): string
+    {
+        return $this->extra_recipients;
+    }
+
+    public function data(): FlatArray
+    {
+        return $this->data_object
+            ??= new FlatArray(json_decode($this->data, true, 512, JSON_THROW_ON_ERROR));
+    }
+
+    public function id(): int
+    {
+        return $this->id;
     }
 
     public static function rebuildRecipientJob(DeferredJob $job, int $id): string
@@ -108,6 +162,89 @@ class Mailing
         if (!$mailing) return "Mailing $id not found";
         $mailing->rebuildRecipients();
         return 'Rebuilt recipient list';
+    }
+
+    public function rebuildRecipients(): static
+    {
+        // clear messages
+        DB::query()
+            ->delete('bulk_mail_message')
+            ->where('bulk_mail_id', $this->id())
+            ->where('sent is null')
+            ->execute();
+        // add messages from sources
+        foreach ($this->sources() as $source) {
+            foreach ($source->recipients() as $recipient) {
+                $this->addRecipient($recipient);
+            }
+        }
+        // add messages from extra recipients
+        foreach ($this->extraRecipientAddresses() as $email) {
+            $this->addRecipient(new Recipient($email));
+        }
+        return $this;
+    }
+
+    /**
+     * @return array<int,AbstractRecipientSource>
+     */
+    public function sources(): array
+    {
+        return array_filter(array_map(
+            function (string $name): ?AbstractRecipientSource {
+                return BulkMail::source($name);
+            },
+            $this->sourceNames()
+        ));
+    }
+
+    public function addRecipient(Recipient $recipient): static
+    {
+        $check = DB::query()->from('bulk_mail_message')
+            ->where('bulk_mail_id', $this->id())
+            ->where('email', $recipient->email())
+            ->count();
+        if ($check) {
+            // update user ID if specified, only for unsent messages
+            if ($recipient->userUuid()) {
+                DB::query()->update('bulk_mail_message', [
+                    'bulk_mail_id' => $this->id(),
+                    'email' => $recipient->email(),
+                    'user' => $recipient->userUuid(),
+                    'sent' => null
+                ])
+                    ->where('bulk_mail_id', $this->id())
+                    ->where('sent is null')
+                    ->where('email', $recipient->email())
+                    ->execute();
+            }
+            return $this;
+        }
+        // add new message
+        DB::query()->insertInto('bulk_mail_message', [
+            'bulk_mail_id' => $this->id(),
+            'email' => $recipient->email(),
+            'user' => $recipient->userUuid(),
+            'sent' => null
+        ])->execute();
+        return $this;
+    }
+
+    /** @return string[] */
+    public function extraRecipientAddresses(): array
+    {
+        return array_filter(
+            array_map(
+                function (string $line): string {
+                    return strtolower(trim($line));
+                },
+                // @phpstan-ignore-next-line
+                preg_split("/\r\n|\n|\r/", $this->extraRecipients())
+            ),
+            function (string $line): bool {
+                return !!filter_var($line, FILTER_VALIDATE_EMAIL);
+            }
+        );
     }
 
     public static function sendMailingJob(DeferredJob $job, int $id): string
@@ -160,105 +297,60 @@ class Mailing
         return 'Queued emails for bulk message #' . $message->id();
     }
 
-    public function rebuildRecipients(): static
+    public function category(): string
     {
-        // clear messages
-        DB::query()
-            ->delete('bulk_mail_message')
-            ->where('bulk_mail_id', $this->id())
-            ->where('sent is null')
-            ->execute();
-        // add messages from sources
-        foreach ($this->sources() as $source) {
-            foreach ($source->recipients() as $recipient) {
-                $this->addRecipient($recipient);
-            }
-        }
-        // add messages from extra recipients
-        foreach ($this->extraRecipientAddresses() as $email) {
-            $this->addRecipient(new Recipient($email));
-        }
-        return $this;
-    }
-
-    public function addRecipient(Recipient $recipient): static
-    {
-        $check = DB::query()->from('bulk_mail_message')
-            ->where('bulk_mail_id', $this->id())
-            ->where('email', $recipient->email())
-            ->count();
-        if ($check) {
-            // update user ID if specified, only for unsent messages
-            if ($recipient->userUuid()) {
-                DB::query()->update('bulk_mail_message', [
-                    'bulk_mail_id' => $this->id(),
-                    'email' => $recipient->email(),
-                    'user' => $recipient->userUuid(),
-                    'sent' => null
-                ])
-                    ->where('bulk_mail_id', $this->id())
-                    ->where('sent is null')
-                    ->where('email', $recipient->email())
-                    ->execute();
-            }
-            return $this;
-        }
-        // add new message
-        DB::query()->insertInto('bulk_mail_message', [
-            'bulk_mail_id' => $this->id(),
-            'email' => $recipient->email(),
-            'user' => $recipient->userUuid(),
-            'sent' => null
-        ])->execute();
-        return $this;
-    }
-
-    /** @return string[] */
-    public function extraRecipientAddresses(): array
-    {
-        return array_filter(
-            array_map(
-                function (string $line): string {
-                    return strtolower(trim($line));
-                },
-                // @phpstan-ignore-next-line
-                preg_split("/\r\n|\n|\r/", $this->extraRecipients())
-            ),
-            function (string $line): bool {
-                return !!filter_var($line, FILTER_VALIDATE_EMAIL);
-            }
-        );
-    }
-
-    public function extraRecipients(): string
-    {
-        return $this->extra_recipients;
+        return $this->category;
     }
 
     /**
-     * @return array<int,string>
+     * Create a copy of this mailing and return the copy. The schedule will not be retained, but other settings will be.
      */
-    public function sourceNames(): array
+    public function copy(): Mailing
     {
-        return explode(',', $this->sources);
+        $key = DB::query()->insertInto(
+            'bulk_mail',
+            [
+                'name' => $this->name(),
+                '`from`' => $this->from(),
+                'subject' => $this->subject(),
+                'body' => $this->body(),
+                'sources' => implode(',', $this->sourceNames()),
+                'extra_recipients' => $this->extraRecipients(),
+                'category' => $this->category(),
+                'created' => time(),
+                'created_by' => Session::uuid(),
+                'updated' => time(),
+                'updated_by' => Session::uuid(),
+            ]
+        )->execute();
+        return BulkMail::mailing($key, true);
     }
 
-    /**
-     * @return array<int,AbstractRecipientSource>
-     */
-    public function sources(): array
+    public function setFrom(string $from): static
     {
-        return array_filter(array_map(
-            function (string $name): ?AbstractRecipientSource {
-                return BulkMail::source($name);
-            },
-            $this->sourceNames()
-        ));
+        if (!filter_var($from, FILTER_VALIDATE_EMAIL)) {
+            throw new InvalidArgumentException('Invalid email address');
+        }
+        $this->from = $from;
+        return $this;
     }
 
-    public function messages(): MessageSelect
+    public function setSubject(string $subject): static
     {
-        return new MessageSelect($this);
+        $this->subject = $subject;
+        return $this;
+    }
+
+    public function setCategory(string $category): static
+    {
+        $this->category = $category;
+        return $this;
+    }
+
+    public function setBody(string $body): static
+    {
+        $this->body = $body;
+        return $this;
     }
 
     public function messageCount(): int
@@ -266,24 +358,9 @@ class Mailing
         return $this->messages()->count();
     }
 
-    public function body(): string
+    public function messages(): MessageSelect
     {
-        return $this->body;
-    }
-
-    public function category(): string
-    {
-        return $this->category;
-    }
-
-    public function subject(): string
-    {
-        return $this->subject;
-    }
-
-    public function from(): string
-    {
-        return $this->from;
+        return new MessageSelect($this);
     }
 
     public function createdBy(): User
@@ -312,28 +389,74 @@ class Mailing
         return (new DateTime)->setTimestamp($this->updated);
     }
 
-    public function scheduled(): DateTime|null
-    {
-        if (is_null($this->scheduled)) return null;
-        else return (new DateTime)->setTimestamp($this->scheduled);
-    }
-
-    public function sent(): ?DateTime
-    {
-        if (!$this->sent) return null;
-        return (new DateTime)->setTimestamp($this->sent);
-    }
-
     public function editUrl(): URL
     {
         return (new URL('/bulk_mail/edit:' . $this->id))
             ->setName($this->name());
     }
 
-    public function sendUrl(): URL
+    public function setName(string $name): static
     {
-        return (new URL('/bulk_mail/send:' . $this->id))
-            ->setName('Send: ' . $this->name());
+        $this->name = $name;
+        return $this;
+    }
+
+    public function scheduleUrl(): URL
+    {
+        return (new URL('/bulk_mail/schedule:' . $this->id))
+            ->setName('Schedule: ' . $this->name());
+    }
+
+    /**
+     * @return array<int>
+     */
+    public function scheduledTimes(): array
+    {
+        return $this->data()['schedule'] ?? [];
+    }
+
+    public function addScheduledTime(mixed $time): static
+    {
+        $time = Format::parseDate($time)->getTimestamp();
+        $schedule = $this->scheduledTimes();
+        $schedule[] = $time;
+        $schedule = array_unique($schedule);
+        sort($schedule);
+        $this->data()->unset('schedule');
+        $this->data()->set('schedule', $schedule);
+        return $this;
+    }
+
+    public function removeScheduledTime(mixed $time): static
+    {
+        $time = Format::parseDate($time)->getTimestamp();
+        $schedule = $this->scheduledTimes();
+        $schedule = array_filter($schedule, function ($t) use ($time) {
+            return $t != $time;
+        });
+        $this->data()->unset('schedule');
+        $this->data()->set('schedule', $schedule);
+        return $this;
+    }
+
+    public function removePastScheduledTimes(): static
+    {
+        $schedule = $this->scheduledTimes();
+        $schedule = array_filter($schedule, function ($t) {
+            return $t > time();
+        });
+        $this->data()->unset('schedule');
+        $this->data()->set('schedule', $schedule);
+        return $this;
+    }
+
+    public function scheduledSendNeeded(): bool
+    {
+        $schedule = $this->scheduledTimes();
+        // it's always sorted, so we can just check the first one, and if it's in the past we need to send this mailing
+        if (!$schedule) return false;
+        $first = reset($schedule);
+        return $first <= time();
     }
 
     public function deleteUrl(): URL
@@ -370,15 +493,5 @@ class Mailing
     {
         return (new URL('/bulk_mail/copy:' . $this->id))
             ->setName('Copy: ' . $this->name());
-    }
-
-    public function name(): string
-    {
-        return $this->name;
-    }
-
-    public function id(): int
-    {
-        return $this->id;
     }
 }
