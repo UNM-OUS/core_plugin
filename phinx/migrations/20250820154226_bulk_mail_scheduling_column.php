@@ -11,7 +11,7 @@ final class BulkMailSchedulingColumn extends AbstractMigration
         $this->table('bulk_mail')
             ->removeIndex('scheduled')
             ->removeColumn('scheduled')
-            ->addColumn('schedule', 'text', ['null' => false, 'default' => '', 'limit' => MysqlAdapter::TEXT_LONG])
+            ->addColumn('schedule', 'text', ['null' => false, 'limit' => MysqlAdapter::TEXT_LONG])
             ->save();
     }
 }
