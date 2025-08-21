@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use Phinx\Db\Adapter\MysqlAdapter;
 use Phinx\Migration\AbstractMigration;
 
 final class BulkMailSchedulingColumn extends AbstractMigration
@@ -10,7 +11,7 @@ final class BulkMailSchedulingColumn extends AbstractMigration
         $this->table('bulk_mail')
             ->removeIndex('scheduled')
             ->removeColumn('scheduled')
-            ->addColumn('data', 'json', ['null' => false, 'default' => '[]'])
+            ->addColumn('schedule', 'text', ['null' => false, 'default' => '', 'limit' => MysqlAdapter::TEXT_LONG])
             ->save();
     }
 }

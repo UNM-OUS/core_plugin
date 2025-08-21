@@ -16,41 +16,26 @@ use DigraphCMS\Users\User;
 use DigraphCMS\Users\Users;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\AbstractRecipientSource;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\Recipient;
-use Flatrr\FlatArray;
 use InvalidArgumentException;
 
 class Mailing
 {
-    /** @var int */
-    protected $id;
-    /** @var string */
-    protected $name;
-    /** @var string */
-    protected $from;
-    /** @var string */
-    protected $subject;
-    /** @var string */
-    protected $body;
-    /** @var string */
-    protected $sources;
-    /** @var string */
-    protected $extra_recipients;
-    /** @var string */
-    protected $category;
-    /** @var int|null */
-    protected $sent;
-    /** @var string|null */
-    protected $sent_by;
-    /** @var int */
-    protected $created;
-    /** @var string */
-    protected $created_by;
-    /** @var int */
-    protected $updated;
-    /** @var string */
-    protected $updated_by;
-    protected string $data;
-    protected FlatArray|null $data_object = null;
+    protected int $id;
+    protected string $name;
+    protected string $from;
+    protected string $subject;
+    protected string $body;
+    protected string $sources;
+    protected string $extra_recipients;
+    protected string $category;
+    protected int|null $sent;
+    protected string|null $sent_by;
+    protected int $created;
+    protected string $created_by;
+    protected int $updated;
+    protected string $updated_by;
+    /** @var string a newline-delimited list of timestamps, sorted */
+    protected string $schedule;
 
     /**
      * Spawn a job to send a bulk mailing, which will rebuild recipients and
@@ -98,7 +83,7 @@ class Mailing
                 'body' => $this->body(),
                 'sources' => implode(',', $this->sourceNames()),
                 'extra_recipients' => $this->extraRecipients(),
-                'data' => json_encode($this->data()->get()),
+                'schedule' => $this->schedule,
                 'updated' => time(),
                 'updated_by' => Session::uuid(),
             ],
@@ -143,12 +128,6 @@ class Mailing
     public function extraRecipients(): string
     {
         return $this->extra_recipients;
-    }
-
-    public function data(): FlatArray
-    {
-        return $this->data_object
-            ??= new FlatArray(json_decode($this->data, true, 512, JSON_THROW_ON_ERROR));
     }
 
     public function id(): int
@@ -412,7 +391,12 @@ class Mailing
      */
     public function scheduledTimes(): array
     {
-        return $this->data()['schedule'] ?? [];
+        $times = preg_split("/\r\n|\n|\r/", $this->schedule) ?? [];
+        $times = array_filter($times);
+        return array_map(
+            fn(string $time): int => (int)$time,
+            $times
+        );
     }
 
     public function addScheduledTime(mixed $time): static
@@ -422,8 +406,7 @@ class Mailing
         $schedule[] = $time;
         $schedule = array_unique($schedule);
         sort($schedule);
-        $this->data()->unset('schedule');
-        $this->data()->set('schedule', $schedule);
+        $this->schedule = implode("\n", $schedule);
         return $this;
     }
 
@@ -434,8 +417,7 @@ class Mailing
         $schedule = array_filter($schedule, function ($t) use ($time) {
             return $t != $time;
         });
-        $this->data()->unset('schedule');
-        $this->data()->set('schedule', $schedule);
+        $this->schedule = implode("\n", $schedule);
         return $this;
     }
 
@@ -445,8 +427,7 @@ class Mailing
         $schedule = array_filter($schedule, function ($t) {
             return $t > time();
         });
-        $this->data()->unset('schedule');
-        $this->data()->set('schedule', $schedule);
+        $this->schedule = implode("\n", $schedule);
         return $this;
     }
 
