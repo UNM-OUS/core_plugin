@@ -293,6 +293,7 @@ class Mailing
                 '`from`' => $this->from(),
                 'subject' => $this->subject(),
                 'body' => $this->body(),
+                'schedule' => '',
                 'sources' => implode(',', $this->sourceNames()),
                 'extra_recipients' => $this->extraRecipients(),
                 'category' => $this->category(),
