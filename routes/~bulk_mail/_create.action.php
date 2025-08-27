@@ -43,6 +43,7 @@ if ($form->ready()) {
                 'body' => '',
                 'sources' => '',
                 'extra_recipients' => '',
+                'schedule' => '',
                 'category' => $category->value(),
                 'created' => time(),
                 'created_by' => Session::uuid(),
