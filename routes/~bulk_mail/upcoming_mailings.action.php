@@ -4,7 +4,7 @@
 </p>
 <?php
 
-use DigraphCMS\Spreadsheets\CellWriters\DateTimeCell;
+use DigraphCMS\Spreadsheets\CellWriters\DateCell;
 use DigraphCMS\Spreadsheets\CellWriters\LinkCell;
 use DigraphCMS\UI\Format;
 use DigraphCMS\UI\Pagination\PaginatedTable;
@@ -61,7 +61,7 @@ $table->download(
         $mailing = $r['template'];
         $time = $r['time'];
         $row = [
-            new DateTimeCell($time),
+            new DateCell(Format::parseDate($time)),
             new LinkCell($mailing->name(), $mailing->previewUrl()),
         ];
         foreach ($source_columns as $source_name => $source_label) {
