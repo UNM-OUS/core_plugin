@@ -54,6 +54,7 @@ $table = new PaginatedTable(
     },
     $table_columns,
 );
+$table->paginator()->perPage(1000);
 
 $table->download(
     'Upcoming scheduled mailings',
