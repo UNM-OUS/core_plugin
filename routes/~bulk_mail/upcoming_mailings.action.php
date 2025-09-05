@@ -9,6 +9,7 @@ use DigraphCMS\Spreadsheets\CellWriters\LinkCell;
 use DigraphCMS\UI\Format;
 use DigraphCMS\UI\Pagination\PaginatedTable;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\BulkMail;
+use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\AbstractRecipientSource;
 use Joby\Toolbox\Sorting\Sort;
 
 $table_columns = ['Date', 'Template'];
@@ -37,22 +38,17 @@ $table = new PaginatedTable(
     function (array $r) use ($source_columns): array {
         $mailing = $r['template'];
         $time = $r['time'];
-        $row = [
+        return [
             Format::date($time),
             sprintf('<a href="%s">%s</a>', $mailing->previewUrl(), $mailing->name()),
+            implode('<br>', array_map(fn(AbstractRecipientSource $s) => $s->label(), $mailing->sources())),
         ];
-        foreach ($source_columns as $source_name => $source_label) {
-            foreach ($mailing->sources() as $source) {
-                if ($source->name() == $source_name) {
-                    $row[$source_name] = 'X';
-                    break;
-                }
-            }
-            $row[$source_name] ??= '';
-        }
-        return $row;
     },
-    $table_columns,
+    [
+        'Date',
+        'Template',
+        'Recipients'
+    ]
 );
 $table->paginator()->perPage(1000);
 
