@@ -82,6 +82,7 @@ class Mailing
                 'subject' => $this->subject(),
                 'body' => $this->body(),
                 'sources' => implode(',', $this->sourceNames()),
+                'category' => $this->category(),
                 'extra_recipients' => $this->extraRecipients(),
                 'schedule' => $this->schedule,
                 'updated' => time(),
