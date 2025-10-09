@@ -56,7 +56,7 @@ class PositionInfo
             }
         }
         // return results
-        return $results;
+        return array_values($results);
     }
 
     public static function search(string $netid): PositionInfo
