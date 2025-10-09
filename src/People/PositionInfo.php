@@ -2,6 +2,9 @@
 
 namespace DigraphCMS_Plugins\unmous\ous_digraph_module\People;
 
+use DigraphCMS\Users\User;
+use DigraphCMS_Plugins\unmous\ous_digraph_module\OUS;
+
 /**
  * Class to look up information about a person's current position at UNM, either
  * faculty or staff.
@@ -9,20 +12,52 @@ namespace DigraphCMS_Plugins\unmous\ous_digraph_module\People;
 class PositionInfo
 {
     public function __construct(
-        public readonly string $netid,
-        public readonly string $email,
-        public readonly bool $faculty,
-        public readonly bool $votingFaculty,
-        public readonly bool $staff,
+        public readonly string      $netid,
+        public readonly string      $email,
+        public readonly bool        $faculty,
+        public readonly bool        $votingFaculty,
+        public readonly bool        $staff,
         public readonly string|null $title,
         public readonly string|null $department,
         public readonly string|null $org,
         public readonly string|null $facultyRank,
-        public readonly bool $facultyResearch,
-        public readonly bool $facultyVisiting,
-        public readonly bool $branch,
-        public readonly bool $hsc,
-    ) {}
+        public readonly bool        $facultyResearch,
+        public readonly bool        $facultyVisiting,
+        public readonly bool        $branch,
+        public readonly bool        $hsc,
+    )
+    {
+    }
+
+    /**
+     * Get all positions for all NetIDs and emails of the given user.
+     *
+     * @param User $user
+     *
+     * @return array<PositionInfo>
+     */
+    public static function searchUser(User $user): array
+    {
+        $results = [];
+        // search by NetID
+        $netIDs = OUS::userNetIDs($user);
+        foreach ($netIDs as $netID) {
+            $result = static::search($netID);
+            if ($result) {
+                $results[serialize([$result->netid, $result->staff, $result->faculty])] = $result;
+            }
+        }
+        // search by email
+        $emails = $user->emails();
+        foreach ($emails as $email) {
+            $result = static::searchByEmail($email);
+            if ($result) {
+                $results[serialize([$result->netid, $result->staff, $result->faculty])] = $result;
+            }
+        }
+        // return results
+        return $results;
+    }
 
     public static function search(string $netid): PositionInfo
     {
