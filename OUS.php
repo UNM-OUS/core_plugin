@@ -187,6 +187,11 @@ class OUS extends AbstractPlugin
     {
         // generate shared bookmarks for all of this site's pages
         if (Config::get('unm.shared_bookmarks.update')) static::updateSharedBookmarks();
+        // force refresh of user data
+        new DeferredJob(function () {
+            UserData::getData(true);
+            return "Forced refresh of external user data";
+        });
     }
 
     public static function cronJob_maintenance_heavy(): void
