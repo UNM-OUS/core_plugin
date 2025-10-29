@@ -15,6 +15,8 @@ Context::response()->private(true);
 Context::response()->filename('response.json');
 
 $bookmarks = [];
+$search = trim(Context::arg_string('query'));
+$search_words = preg_split('/ +/', $search) ?: [];
 
 // get relatively strict name matches
 $query = SharedBookmarks::select()
@@ -23,9 +25,7 @@ $query = SharedBookmarks::select()
 $where_queries = [];
 $where_args = [];
 /** @var string $word */
-foreach (preg_split('/ +/', Context::arg_string('query', true)) ?: [] as $word) {
-    if (!$word)
-        continue;
+foreach ($search_words as $word) {
     $where_queries[] = 'title LIKE ?';
     $where_args[] = AbstractMappedSelect::prepareLikePattern($word, true, true);
     $where_queries[] = 'url LIKE ?';
@@ -47,10 +47,10 @@ $bookmarks = array_merge(
 
 // score results
 $bookmarks = array_map(
-    function (SharedBookmark $bookmark) {
+    function (SharedBookmark $bookmark) use ($search): array {
         return [
             $bookmark,
-            SharedBookmarks::scoreSearchResult($bookmark, Context::arg('query'))
+            SharedBookmarks::scoreSearchResult($bookmark, $search)
         ];
     },
     $bookmarks
@@ -72,14 +72,12 @@ $bookmarks = array_map(
 
 $bookmarks = array_unique($bookmarks, SORT_REGULAR);
 
-$words = preg_split('/ +/', trim(Context::arg('query'))) ?: [];
-
 echo json_encode(
     array_map(
-        function (SharedBookmark $bookmark) use ($words) {
+        function (SharedBookmark $bookmark) use ($search_words) {
             $name = $bookmark->title();
             $url = $bookmark->url();
-            foreach ($words as $word) {
+            foreach ($search_words as $word) {
                 $word = preg_quote($word, '/');
                 $name = preg_replace('/' . $word . '/i', '<strong>$0</strong>', $name);
             }
