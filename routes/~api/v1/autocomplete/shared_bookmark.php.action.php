@@ -35,6 +35,10 @@ foreach (preg_split('/ +/', Context::arg_string('query', true)) ?: [] as $word) 
     $where_queries[] = 'name LIKE ?';
     $where_args[] = AbstractMappedSelect::prepareLikePattern($word, true, true);
 }
+if (!$where_queries) {
+    echo json_encode([]);
+    exit;
+}
 $query->where('(' . implode(' OR ', $where_queries) . ')', $where_args);
 $bookmarks = array_merge(
     $bookmarks,
