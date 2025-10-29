@@ -7,7 +7,7 @@ use DigraphCMS\Session\Cookies;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedBookmarks\SharedBookmark;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedBookmarks\SharedBookmarks;
 
-if (Context::arg('csrf') !== Cookies::csrfToken('autocomplete')) {
+if (Context::arg_string('csrf') !== Cookies::csrfToken('autocomplete')) {
     throw new HttpError(401);
 }
 
@@ -23,7 +23,9 @@ $query = SharedBookmarks::select()
 $where_queries = [];
 $where_args = [];
 /** @var string $word */
-foreach (preg_split('/ +/', Context::arg('query')) ?: [] as $word) {
+foreach (preg_split('/ +/', Context::arg_string('query', true)) ?: [] as $word) {
+    if (!$word)
+        continue;
     $where_queries[] = 'title LIKE ?';
     $where_args[] = AbstractMappedSelect::prepareLikePattern($word, true, true);
     $where_queries[] = 'url LIKE ?';
