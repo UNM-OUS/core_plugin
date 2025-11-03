@@ -5,8 +5,6 @@ are not some sort of error or special case.
 */
 
 use DigraphCMS\Context;
-use DigraphCMS\Cron\Cron;
-use DigraphCMS\Media\Media;
 use DigraphCMS\Session\Cookies;
 use DigraphCMS\UI\ActionMenu;
 use DigraphCMS\UI\Breadcrumb;
@@ -21,45 +19,46 @@ use DigraphCMS\UI\UserMenu;
 <html lang="en">
 
 <head>
-<?php echo Templates::render('sections/analytics.php'); ?>
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>
+  <?php echo Templates::render('sections/analytics.php'); ?>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
     <?php echo Context::fields()['page.name'] ?? 'Untitled'; ?>
     :: <?php echo Context::fields()['site.name']; ?>
-</title>
-<?php echo Theme::head(); ?>
+  </title>
+  <?php echo Theme::head(); ?>
 </head>
 
 <body class='template-default no-js <?php echo implode(' ', Theme::bodyClasses()); ?>'>
   <section id="skip-to-content">
     <a href="#content">Skip to content</a>
   </section>
-<?php
-    Cookies::printConsentBanner();
-    echo Templates::render('unm/top-nav.php');
-    echo new UserMenu;
-    echo Templates::render('sections/header.php');
-    echo Templates::render('sections/navbar.php');
-    echo Templates::render('unm/loboalerts.php');
-    ?>
-<main id="page-wrapper">
+  <?php
+  Cookies::printConsentBanner();
+  echo Templates::render('unm/top-nav.php');
+  echo new UserMenu;
+  echo Templates::render('sections/header.php');
+  echo Templates::render('sections/navbar.php');
+  echo Templates::render('unm/loboalerts.php');
+  ?>
+  <main id="page-wrapper">
     <?php
-        echo '<div id="content">';
-        Breadcrumb::print();
-        if (!ActionMenu::isHidden()) echo new ActionMenu;
-        Notifications::printSection();
-        echo '<div id="article">';
-        echo Context::response()->content();
-        echo '</div>';
-        echo '</div>';
-        echo Sidebar::render();
-        ?>
-</main>
-<?php
-    echo Templates::render('sections/footer.php');
+    echo '<div id="content">';
+    Breadcrumb::print();
+    if (!ActionMenu::isHidden())
+      echo new ActionMenu;
+    Notifications::printSection();
+    echo '<div id="article">';
+    echo Context::response()->content();
+    echo '</div>';
+    echo '</div>';
+    echo Sidebar::render();
     ?>
+  </main>
+  <?php
+  echo Templates::render('sections/footer.php');
+  ?>
 </body>
 
 </html>
