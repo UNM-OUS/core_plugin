@@ -1,23 +1,17 @@
 #header {
     background-color: var(--background-darker);
-    background-image: url(/hero.jpg);
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
     padding: 0;
     box-shadow: var(--shadow-inset);
-    min-height: 8 * $grid;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     z-index: 1;
+    position: relative;
 
     >#header__wrapper {
         background: var(--background-a80);
         color: var(--color);
         box-shadow: var(--shadow-inset);
-        border-top: 1px solid var(--background);
-        margin-top: $grid * 8;
 
         >h1 {
             margin: 0;
@@ -34,6 +28,36 @@
     }
 }
 
+#header__hero {
+    z-index: 0;
+    overflow: hidden;
+    max-height: 25vh;
+    min-height: 8rem;
+
+    picture {
+        width: 100% !important;
+        max-width: none !important;
+        border: 0;
+
+        img {
+            width: 100%;
+            max-width: 100%;
+        }
+    }
+}
+
+#header__name {
+    z-index: 1;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--background-a80);
+    padding: $grid;
+    border-top: 1px solid var(--background-light);
+    border-bottom: 1px solid var(--background-dark);
+    box-shadow: var(--shadow);
+}
 @media print {
     #header {
         background: transparent;
