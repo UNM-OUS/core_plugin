@@ -8,7 +8,7 @@ use DigraphCMS\URL\URL;
 $url = new URL('/');
 $hero = Media::get('/hero.jpg')
     ->image()
-    ->crop(1600, 400);
+    ->cover(1920, 600);
 $picture = new ResponsivePicture($hero, 'header hero image');
 $picture->setExpectedWidth(100);
 echo "<header id=\"header\">";
