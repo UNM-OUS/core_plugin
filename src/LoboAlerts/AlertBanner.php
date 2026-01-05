@@ -13,7 +13,7 @@ class AlertBanner
     /** @var string */
     protected $class;
 
-    public static function parse(string $html, string $class = 'warning', string $uuid = null): ?AlertBanner
+    public static function parse(string $html, string $class = 'warning', ?string $uuid = null): ?AlertBanner
     {
         $html = trim($html);
         $parsed = preg_match('/^<h[1-6].+?>(.+?)<\/h[1-6]>(.+)$/is', $html, $matches);
@@ -31,7 +31,7 @@ class AlertBanner
         );
     }
 
-    public function __construct(string $title, string $content, string $class = 'warning', string $uuid = null)
+    public function __construct(string $title, string $content, string $class = 'warning', ?string $uuid = null)
     {
         $this->title = $title;
         $this->content = $content;

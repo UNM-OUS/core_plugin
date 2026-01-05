@@ -45,6 +45,9 @@ unm:
   # give each semester a 7 day "buffer" where we switch before its official start
   semester_prelaunch: P7D
 
+cookies:
+  consent_prompt: true
+
 sidebar:
   default_state: false
 

@@ -36,14 +36,14 @@ class OUS extends AbstractPlugin
 {
 
     const FACULTY_TITLE_ABBREVIATIONS = [
-        'Assistant Vice President' => 'AVP',
-        'Assistant VP of Research' => 'AVPR',
-        'Associate Vice President' => 'AVP',
-        'Vice President' => 'VP',
-        'Executive Vice President' => 'EVP',
+        'Assistant Vice President'                                => 'AVP',
+        'Assistant VP of Research'                                => 'AVPR',
+        'Associate Vice President'                                => 'AVP',
+        'Vice President'                                          => 'VP',
+        'Executive Vice President'                                => 'EVP',
         'Provost & Executive Vice President for Academic Affairs' => 'Provost',
-        'Senior Vice Provost' => 'SVP',
-        'Vice President for Equity and Inclusion' => 'VPEI',
+        'Senior Vice Provost'                                     => 'SVP',
+        'Vice President for Equity and Inclusion'                 => 'VPEI',
     ];
 
     /**
@@ -57,6 +57,17 @@ class OUS extends AbstractPlugin
         'Provost',
         'Chancellor',
     ];
+
+    /**
+     * Describe the TS* cookies that appear to be F5 load balancer session cookies
+     */
+    public static function onCookieDescribe(string $type, ?string $name): ?string
+    {
+        if (!$name && preg_match('/^TS[0-9a-f]+$/i', $type)) {
+            return 'Cookies used by UNM\'s main load-balancing servers to maintain session persistence.';
+        }
+        return null;
+    }
 
     protected static function testSitePermissions(URL $url, User $user): bool|null
     {
@@ -91,7 +102,7 @@ class OUS extends AbstractPlugin
             'Link to a bookmark',
             'pages',
             null,
-            new URL('&action=shared_bookmark')
+            new URL('&action=shared_bookmark'),
         ))->setShortcut('Ctrl+Shift+B');
     }
 
@@ -140,13 +151,14 @@ class OUS extends AbstractPlugin
             if ($existing) {
                 // existing user found, return them
                 $cache[$netId] = Users::get($existing['user_uuid']);
-            } elseif ($create) {
+            }
+            elseif ($create) {
                 // no existing user found, but we've been tasked with creating them
                 $user = new User();
                 $user->addEmail(
                     $netId . '@unm.edu',
                     'Added from NetID',
-                    true
+                    true,
                 );
                 $user->name($netId);
                 // try to set name
@@ -161,16 +173,17 @@ class OUS extends AbstractPlugin
                 $user->insert();
                 // insert authentication method
                 DB::query()->insertInto('user_source', [
-                    'user_uuid' => $user->uuid(),
+                    'user_uuid'   => $user->uuid(),
                     'provider_id' => $netId,
-                    'source' => 'cas',
-                    'provider' => 'netid',
-                    'created' => time(),
+                    'source'      => 'cas',
+                    'provider'    => 'netid',
+                    'created'     => time(),
                 ])->execute();
                 DB::commit();
                 // cache and return
                 $cache[$netId] = $user;
-            } else {
+            }
+            else {
                 $cache[$netId] = null;
             }
         }
@@ -186,7 +199,8 @@ class OUS extends AbstractPlugin
     public static function cronJob_maintenance(): void
     {
         // generate shared bookmarks for all of this site's pages
-        if (Config::get('unm.shared_bookmarks.update')) static::updateSharedBookmarks();
+        if (Config::get('unm.shared_bookmarks.update'))
+            static::updateSharedBookmarks();
         // force refresh of user data
         new DeferredJob(function () {
             UserData::getData(true);
@@ -206,15 +220,18 @@ class OUS extends AbstractPlugin
     {
         // handle shared bookmark shortcodes
         $category = $s->getName();
-        if (!SharedBookmarks::isCategory($category)) return null;
+        if (!SharedBookmarks::isCategory($category))
+            return null;
         $name = trim($s->getBbCode() ?? '');
         $bookmark = SharedBookmarks::get($category, $name);
-        if (!$bookmark) return null;
+        if (!$bookmark)
+            return null;
         $title = trim($s->getContent() ?? '') ?: $bookmark->title();
         $link_title = $bookmark->title();
         // add fragment to URL
         $fragment = trim($s->getParameter('fragment', ''));
-        if ($fragment) $fragment = '#' . $fragment;
+        if ($fragment)
+            $fragment = '#' . $fragment;
         // begin building tag
         $a = new A($bookmark->url() . $fragment);
         $a->addChild($title);
@@ -225,7 +242,8 @@ class OUS extends AbstractPlugin
         if ($s->getParameter('class')) {
             foreach (explode(' ', $s->getParameter('class')) as $class) {
                 $class = trim($class);
-                if (!$class) continue;
+                if (!$class)
+                    continue;
                 $a->addClass($class);
             }
         }
@@ -237,10 +255,12 @@ class OUS extends AbstractPlugin
     {
         $semester = Semesters::current();
         if (0 < $i = intval($s->getParameter('next'))) {
-            while (--$i) $semester = $semester->next();
+            while (--$i)
+                $semester = $semester->next();
         }
         if (0 < $i = intval($s->getParameter('previous'))) {
-            while (--$i) $semester = $semester->previous();
+            while (--$i)
+                $semester = $semester->previous();
         }
         return $semester->__toString();
     }
@@ -268,10 +288,13 @@ class OUS extends AbstractPlugin
             if ($faculty = FacultyInfo::search($netId)) {
                 $title = $faculty->title;
                 $title = preg_replace('/^(Interim|Acting) /i', '', $title);
-                if (isset(static::FACULTY_TITLE_ABBREVIATIONS[$title])) $title = static::FACULTY_TITLE_ABBREVIATIONS[$title];
-                elseif (!in_array($title, static::FACULTY_GREETABLE_TITLES)) $title = 'Professor';
+                if (isset(static::FACULTY_TITLE_ABBREVIATIONS[$title]))
+                    $title = static::FACULTY_TITLE_ABBREVIATIONS[$title];
+                elseif (!in_array($title, static::FACULTY_GREETABLE_TITLES))
+                    $title = 'Professor';
                 return sprintf("Dear %s %s,", $title, $faculty->last_name);
-            } elseif ($name = PersonInfo::getFullNameFor($netId)) {
+            }
+            elseif ($name = PersonInfo::getFullNameFor($netId)) {
                 return sprintf("Dear %s,", $name);
             }
         }
@@ -288,7 +311,8 @@ class OUS extends AbstractPlugin
 
     public static function onUrlPermissions(URL $url, User $user): bool|null
     {
-        if ($url->route() == 'home' && $url->actionPrefix() == 'pl') return true;
+        if ($url->route() == 'home' && $url->actionPrefix() == 'pl')
+            return true;
         return null;
     }
 
@@ -299,19 +323,23 @@ class OUS extends AbstractPlugin
 
     public static function onStaticUrlName_ous(URL $url): string|null
     {
-        if ($url->action() == 'index') return "OUS";
-        else return null;
+        if ($url->action() == 'index')
+            return "OUS";
+        else
+            return null;
     }
 
     public static function onUserMenu_user(UserMenu $menu): void
     {
-        if (Permissions::inMetaGroup('ous__edit')) $menu->addURL(new URL('/~ous/'));
+        if (Permissions::inMetaGroup('ous__edit'))
+            $menu->addURL(new URL('/~ous/'));
     }
 
     /** @return string[] */
     public static function userNetIDs(string|User|null $userID = null): array
     {
-        if ($userID instanceof User) $userID = $userID->uuid();
+        if ($userID instanceof User)
+            $userID = $userID->uuid();
         $userID = $userID ?? Session::uuid();
         $netIDs = array_map(
             function ($row) {
@@ -323,7 +351,7 @@ class OUS extends AbstractPlugin
                 ->where('user_uuid ', $userID)
                 ->where('source', 'cas')
                 ->where('provider', 'netid')
-                ->fetchAll()
+                ->fetchAll(),
         );
         $netIDs = array_filter($netIDs, function ($e): bool {
             if (!preg_match('/^[a-z].{1,19}$/', $e)) {
@@ -374,7 +402,8 @@ class OUS extends AbstractPlugin
     public static function onAuthentication(Authentication $auth): void
     {
         $user = $auth->user();
-        if ($user['name_explicitly_set']) return;
+        if ($user['name_explicitly_set'])
+            return;
         $netIDs = static::userNetIDs($user->uuid());
         foreach ($netIDs as $netID) {
             $name = PersonInfo::getFullNameFor($netID)
@@ -400,9 +429,11 @@ class OUS extends AbstractPlugin
                     $uuid = $uuid['uuid'];
                     $job->spawn(function () use ($uuid) {
                         $page = Pages::get($uuid);
-                        if (!$page) return "Page $uuid not found";
+                        if (!$page)
+                            return "Page $uuid not found";
                         $url = $page->url();
-                        if (!Permissions::url($url, Users::guest())) return "Page $uuid not publicly visible";
+                        if (!Permissions::url($url, Users::guest()))
+                            return "Page $uuid not publicly visible";
                         SharedBookmarks::set(
                             'link',
                             $page->uuid(),
@@ -415,7 +446,8 @@ class OUS extends AbstractPlugin
                 }
                 return "Spawned shared bookmark link update jobs";
             },
-            'update_shared_bookmarks'
+            'update_shared_bookmarks',
         );
     }
+
 }

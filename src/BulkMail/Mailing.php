@@ -74,7 +74,7 @@ class Mailing
 
     public function update(): bool
     {
-        return DB::query()->update(
+        return !!DB::query()->update(
             'bulk_mail',
             [
                 'name' => $this->name(),
@@ -304,6 +304,9 @@ class Mailing
                 'updated_by' => Session::uuid(),
             ]
         )->execute();
+        if (!is_int($key)) {
+            throw new \RuntimeException('Failed to copy mailing');
+        }
         return BulkMail::mailing($key, true);
     }
 
@@ -393,7 +396,7 @@ class Mailing
      */
     public function scheduledTimes(): array
     {
-        $times = preg_split("/\r\n|\n|\r/", $this->schedule) ?? [];
+        $times = preg_split("/\r\n|\n|\r/", $this->schedule) ?: [];
         $times = array_filter($times);
         return array_map(
             fn(string $time): int => (int)$time,

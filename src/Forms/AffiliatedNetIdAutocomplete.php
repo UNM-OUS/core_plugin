@@ -18,7 +18,7 @@ class AffiliatedNetIdAutocomplete extends AutocompleteInput
     const VOTING_FACULTY = 2;
     const ALL_FACULTY = 4;
 
-    public function __construct(string $id = null, int $include = 7)
+    public function __construct(?string $id = null, int $include = 7)
     {
         parent::__construct(
             $id,

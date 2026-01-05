@@ -121,7 +121,7 @@ class Semester
      * @param int $limit
      * @return Generator<int,Semester>
      */
-    public function allUpcoming(int $limit = null): Generator
+    public function allUpcoming(?int $limit = null): Generator
     {
         $current = $this;
         while ($limit === null or $limit--) yield $current = $current->next();
@@ -131,7 +131,7 @@ class Semester
      * @param int $limit
      * @return Generator<int,Semester>
      */
-    public function allUpcomingFull(int $limit = null): Generator
+    public function allUpcomingFull(?int $limit = null): Generator
     {
         $current = $this;
         while ($limit === null or $limit--) yield $current = $current->nextFull();
@@ -150,7 +150,7 @@ class Semester
      * @param int $limit
      * @return Generator<int,Semester>
      */
-    public function allPast(int $limit = null): Generator
+    public function allPast(?int $limit = null): Generator
     {
         $current = $this;
         while ($limit === null or $limit--) yield $current = $current->previous();
@@ -169,7 +169,7 @@ class Semester
      * @param int $limit
      * @return Generator<int,Semester>
      */
-    public function allPastFull(int $limit = null): Generator
+    public function allPastFull(?int $limit = null): Generator
     {
         $current = $this;
         while ($limit === null or $limit--) yield $current = $current->previousFull();

@@ -7,7 +7,7 @@ use DigraphCMS\HTML\Forms\INPUT;
 class BillingIndexInput extends INPUT
 {
     public function __construct(
-        string $id = null,
+        ?string $id = null,
         protected bool $accountCodeEnabled = false,
         protected ?string $defaultAccountCode = null,
     ) {

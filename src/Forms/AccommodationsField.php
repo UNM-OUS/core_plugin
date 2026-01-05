@@ -25,7 +25,7 @@ class AccommodationsField extends FIELDSET
     /** @var Field|null */
     protected $phone;
 
-    public function __construct(string $label = null, bool $phone = false, string $blurbTemplate = null)
+    public function __construct(?string $label = null, bool $phone = false, ?string $blurbTemplate = null)
     {
         parent::__construct($label ?? 'Special accommodations');
         // set up fields
@@ -84,7 +84,7 @@ class AccommodationsField extends FIELDSET
      * @param array<string,mixed>|null $value
      * @return $this
      */
-    public function setDefault(array $value = null)
+    public function setDefault(?array $value = null)
     {
         $value = $value ?? [];
         $this->requested->setDefault(@$value['requested'] ?? false);

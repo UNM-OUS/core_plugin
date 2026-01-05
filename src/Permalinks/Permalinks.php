@@ -10,7 +10,8 @@ use URLify;
 
 class Permalinks
 {
-    public static function create(string $target, string $slug = null): Permalink
+
+    public static function create(string $target, ?string $slug = null): Permalink
     {
         $slug = $slug ?? strtolower(Digraph::uuid());
         $slug = static::cleanSlug($slug);

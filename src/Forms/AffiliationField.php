@@ -39,7 +39,7 @@ class AffiliationField extends FIELDSET
      * @param array<mixed,mixed>|null $data
      * @return $this
      */
-    public function setDefault(array $data = null)
+    public function setDefault(?array $data = null)
     {
         return $this;
     }

@@ -12,19 +12,19 @@ use DigraphCMS_Plugins\unmous\ous_digraph_module\OUS;
 class PositionInfo
 {
     public function __construct(
-        public readonly string      $netid,
-        public readonly string      $email,
-        public readonly bool        $faculty,
-        public readonly bool        $votingFaculty,
-        public readonly bool        $staff,
+        public readonly string $netid,
+        public readonly string $email,
+        public readonly bool $faculty,
+        public readonly bool $votingFaculty,
+        public readonly bool $staff,
         public readonly string|null $title,
         public readonly string|null $department,
         public readonly string|null $org,
         public readonly string|null $facultyRank,
-        public readonly bool        $facultyResearch,
-        public readonly bool        $facultyVisiting,
-        public readonly bool        $branch,
-        public readonly bool        $hsc,
+        public readonly bool $facultyResearch,
+        public readonly bool $facultyVisiting,
+        public readonly bool $branch,
+        public readonly bool $hsc,
     )
     {
     }
@@ -59,11 +59,13 @@ class PositionInfo
         return array_values($results);
     }
 
-    public static function search(string $netid): PositionInfo
+    public static function search(string $netid): PositionInfo|null
     {
         $netid = strtolower($netid);
         $faculty = FacultyInfo::search($netid);
         $staff = StaffInfo::search($netid);
+        if (!$faculty && !$staff)
+            return null;
         return new PositionInfo(
             netid: $netid,
             email: $faculty?->email ?: $staff?->email ?: "$netid@unm.edu",

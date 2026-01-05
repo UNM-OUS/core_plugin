@@ -19,10 +19,10 @@ class SiteAlert extends AlertBanner
     protected $end_time;
 
     public function __construct(
-        string $title = null,
-        string $content = null,
-        string $class = null,
-        string $uuid = null,
+        ?string $title = null,
+        ?string $content = null,
+        ?string $class = null,
+        ?string $uuid = null,
         int|string|DateTime|null $start = null,
         int|string|DateTime|null $end = null,
     ) {

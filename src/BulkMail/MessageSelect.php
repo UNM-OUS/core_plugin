@@ -12,7 +12,7 @@ class MessageSelect extends AbstractMappedSelect
     protected $mailing;
     protected $returnObjectClass = Message::class;
 
-    public function __construct(Mailing $mailing = null)
+    public function __construct(?Mailing $mailing = null)
     {
         $this->mailing = $mailing;
         $query = DB::query()->from('bulk_mail_message');

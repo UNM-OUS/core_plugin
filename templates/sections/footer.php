@@ -2,6 +2,7 @@
 
 use DigraphCMS\Context;
 use DigraphCMS\Media\Media;
+use DigraphCMS\URL\URL;
 use DigraphCMS\Users\Users;
 
 $logo = Media::get('/unm-footer-logo.png');
@@ -40,6 +41,10 @@ $logo = Media::get('/unm-footer-logo.png');
             <a href="https://www.unm.edu/consumer-information/"><span>Consumer Information</span></a>
             <a href="http://nmhedss2.state.nm.us/Dashboard/index.aspx?ID=21">New Mexico Higher Education Dashboard</a>
         </p>
+
+        <!-- <p>
+            <a href="<?php echo new URL('/privacy/'); ?>">Website privacy information</a>
+        </p> -->
 
         <p style="opacity:0.5;">
             <a href="<?php echo Users::signinUrl(Context::url()) ?>">Log in to this site</a>

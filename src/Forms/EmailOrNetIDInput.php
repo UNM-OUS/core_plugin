@@ -6,7 +6,8 @@ use DigraphCMS\HTML\Forms\INPUT;
 
 class EmailOrNetIDInput extends INPUT
 {
-    public function __construct(string $id = null, bool $allow_netid_extensions = false)
+
+    public function __construct(?string $id = null, bool $allow_netid_extensions = false)
     {
         parent::__construct($id);
         if ($allow_netid_extensions) {

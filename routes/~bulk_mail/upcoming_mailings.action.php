@@ -35,7 +35,7 @@ Sort::sort($schedule, Sort::compareArrayValues('time'));
 
 $table = new PaginatedTable(
     $schedule,
-    function (array $r) use ($source_columns): array {
+    function (array $r): array {
         $mailing = $r['template'];
         $time = $r['time'];
         return [
