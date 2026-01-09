@@ -304,10 +304,10 @@ class Mailing
                 'updated_by' => Session::uuid(),
             ]
         )->execute();
-        if (!is_int($key)) {
-            throw new \RuntimeException('Failed to copy mailing, got key value of ' . $key);
+        if ($key === false) {
+            throw new \RuntimeException('Failed to copy mailing');
         }
-        return BulkMail::mailing($key, true);
+        return BulkMail::mailing((int) $key, true);
     }
 
     public function setFrom(string $from): static
