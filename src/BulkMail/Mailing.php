@@ -305,7 +305,7 @@ class Mailing
             ]
         )->execute();
         if (!is_int($key)) {
-            throw new \RuntimeException('Failed to copy mailing');
+            throw new \RuntimeException('Failed to copy mailing, got key value of ' . $key);
         }
         return BulkMail::mailing($key, true);
     }
