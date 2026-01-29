@@ -1,8 +1,6 @@
 <h1>PolicyStat upload</h1>
 <p>
-    This tool allows us to bulk update UAP and RPM using a CSV exported by PolicyStat from <a
-            href="https://unmpolicy.policystat.com/search/?sort=category">the policy office's full policy list</a>.
-    Running this tool will overwrite existing data for any UAP and RPM policies that are already in the database.
+    This tool allows us to bulk update UAP and RPM using a CSV exported by PolicyStat from <a href="https://unmpolicy.policystat.com/search/?sort=category">the policy office's full policy list</a>. Running this tool will overwrite existing data for any UAP and RPM policies that are already in the database.
 </p>
 <?php
 
@@ -41,24 +39,42 @@ if ($form->ready()) {
         $upload->value()['tmp_name'],
         function (array $row) {
             $category = strtolower($row['applicability']);
+            /** @var string the actual displayed text for the bookmark */
             $title = $row['title'];
             $id = $row['policystat id'];
+            /** @var string|null the slug to use as the bookmark "name" */
             $name = null;
             $url = $row['url'];
+            // for RPM
             if ($category == 'rpm') {
+                // check for special titles
                 $lower_title = strtolower($title);
-                if (preg_match('/RPM ([0-9]+(\.[0-9]+)+)/im', $title, $matches)) {
+                // numbered policies
+                if (preg_match('/^RPM ([0-9]+(\.[0-9]+)+)/im', $title, $matches)) {
+                    // policy name is just the number
                     $name = $matches[1];
-                } elseif (str_contains($lower_title, 'foreword')) {
+                    // add "Policy" after "RPM" at the beginning of the title
+                    $title = preg_replace('/^(RPM) ([0-9]+(\.[0-9]+)+)/i', '$1 Policy $2', $title);
+                }
+                // special cases
+                elseif (str_contains($lower_title, 'foreword')) {
                     $name = 'foreword';
-                } elseif (str_contains($lower_title, 'maintenance')) {
+                }
+                elseif (str_contains($lower_title, 'maintenance')) {
                     $name = 'maintenance';
-                } elseif (str_contains($lower_title, 'preface')) {
+                }
+                elseif (str_contains($lower_title, 'preface')) {
                     $name = 'preface';
                 }
-            } elseif ($category == 'uap') {
-                if (preg_match('/UAP ([0-9]+)/im', $title, $matches)) {
+            }
+            // for UAP 
+            elseif ($category == 'uap') {
+                // only bookmark if it's a numbered policy
+                if (preg_match('/^UAP ([0-9]+)/im', $title, $matches)) {
+                    // policy name is just the number
                     $name = $matches[1];
+                    // add "Policy" after "UAP" at the beginning of the title
+                    $title = preg_replace('/^(UAP) ([0-9]+)/i', '$1 Policy $2', $title);
                 }
             }
             // save by policystat id, searchable if name is empty
@@ -76,7 +92,7 @@ if ($form->ready()) {
                     $name,
                     $title,
                     $url,
-                    true
+                    true,
                 );
             }
             return sprintf(
