@@ -53,9 +53,9 @@ class SharedBookmark
             );
         }
         return sprintf(
-            '[%1s%s/]',
+            '[%1s%s]',
             $this->category,
-            $this->name ? '="' . $this->name . '"' : '',
+            $this->name ? '=' . $this->name : '',
         );
     }
 }
