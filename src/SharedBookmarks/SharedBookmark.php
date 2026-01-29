@@ -47,7 +47,7 @@ class SharedBookmark
             return sprintf(
                 '[%s%s]%s[/%s]',
                 $this->category,
-                $this->name ? '="' . $this->name . '"' : '',
+                $this->name ? '=' . $this->name : '',
                 $title,
                 $this->category,
             );
