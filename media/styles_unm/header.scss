@@ -91,6 +91,13 @@
     #header__hero {
         display: none;
     }
+
+    #header__name {
+        position: relative;
+        background: transparent;
+        color: inherit;
+        box-shadow: none;
+    }
 }
 
 // main navbar
