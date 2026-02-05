@@ -6,6 +6,7 @@ use DateTime;
 use DigraphCMS\Config;
 use DigraphCMS\Content\Page;
 use DigraphCMS\Content\Pages;
+use DigraphCMS\Context;
 use DigraphCMS\Cron\DeferredJob;
 use DigraphCMS\DB\DB;
 use DigraphCMS\Events\Dispatcher;
@@ -258,10 +259,13 @@ class OUS extends AbstractPlugin
         $page = Pages::get($s->getBbCode());
         if (!$page)
             throw new RuntimeException('Bulk mail page content shortcode specified a page that does not exist');
-        if ($page instanceof Page)
-            return $page->richContent('body');
-        else
-            throw new RuntimeException('Bulk mail page content shortcode specified a page that is not a Page instance');
+        if ($page instanceof Page) {
+            Context::beginPageContext($page);
+            $content = $page->richContent('body');
+            Context::end();
+            return $content;
+        }
+        throw new RuntimeException('Bulk mail page content shortcode specified a page that is not a Page instance');
     }
 
     public static function onShortCode_semester(ShortcodeInterface $s): ?string
