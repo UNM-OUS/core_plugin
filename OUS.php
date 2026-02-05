@@ -4,6 +4,7 @@ namespace DigraphCMS_Plugins\unmous\ous_digraph_module;
 
 use DateTime;
 use DigraphCMS\Config;
+use DigraphCMS\Content\Page;
 use DigraphCMS\Content\Pages;
 use DigraphCMS\Cron\DeferredJob;
 use DigraphCMS\DB\DB;
@@ -27,6 +28,7 @@ use DigraphCMS\Users\Users;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\BulkMail;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\People\FacultyInfo;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedBookmarks\SharedBookmarks;
+use RuntimeException;
 use Thunder\Shortcode\Shortcode\ShortcodeInterface;
 
 // register additional event subscribers for this plugin
@@ -249,6 +251,17 @@ class OUS extends AbstractPlugin
         }
         // return finished link
         return $a;
+    }
+
+    public static function onShortCode_bulkmail_page_content(ShortcodeInterface $s): string
+    {
+        $page = Pages::get($s->getBbCode());
+        if (!$page)
+            throw new RuntimeException('Bulk mail page content shortcode specified a page that does not exist');
+        if ($page instanceof Page)
+            return $page->richContent('body');
+        else
+            throw new RuntimeException('Bulk mail page content shortcode specified a page that is not a Page instance');
     }
 
     public static function onShortCode_semester(ShortcodeInterface $s): ?string
