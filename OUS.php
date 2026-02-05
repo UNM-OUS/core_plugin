@@ -261,7 +261,7 @@ class OUS extends AbstractPlugin
             throw new RuntimeException('Bulk mail page content shortcode specified a page that does not exist');
         if ($page instanceof Page) {
             Context::beginPageContext($page);
-            $content = $page->richContent('body');
+            $content = $page->richContent('body')->html();
             Context::end();
             return $content;
         }

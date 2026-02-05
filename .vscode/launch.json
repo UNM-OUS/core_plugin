@@ -5,7 +5,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch Server",
+      "name": "Launch Server (Xdebug enabled)",
       "type": "php",
       "request": "launch",
       "runtimeArgs": [
@@ -21,6 +21,25 @@
       },
       "env": {
         "XDEBUG_MODE": "debug,develop",
+      }
+    },
+    {
+      "name": "Launch Server (no Xdebug)",
+      "type": "php",
+      "request": "launch",
+      "runtimeArgs": [
+        "-S",
+        "0.0.0.0:0",
+        "${workspaceRoot}/demo/index.php"
+      ],
+      "cwd": "${workspaceRoot}/demo",
+      "serverReadyAction": {
+        "pattern": "Development Server \\(http://0.0.0.0:([0-9]+)\\) started",
+        "uriFormat": "http://localhost:%s",
+        "action": "openExternally"
+      },
+      "env": {
+        "XDEBUG_MODE": "off"
       }
     }
   ]
