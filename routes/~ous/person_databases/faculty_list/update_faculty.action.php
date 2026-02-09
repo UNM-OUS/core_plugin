@@ -1,10 +1,10 @@
 <h1>Update faculty list</h1>
 <p>
-    Uploaded files are expected to be in more or less the formats we traditionally get from HR and Faculty Contracts.
-    The order of columns is not important, and extra columns the tool doesn't use will be ignored, but the following columns are required:
+    Uploaded files are expected to be in more or less the formats we traditionally get from HR and Faculty Contracts. The order of columns is not important, and extra columns the tool doesn't use will be ignored, but the following columns are expected:
 </p>
 <ul>
     <li>Name, Full Name, or First Name and Last Name</li>
+    <li>Preferred name (optional)</li>
     <li>Email</li>
     <li>UNM ID (not saved, but used to generate a unique ID if NetIDs are missing)</li>
     <li>NetID</li>

@@ -213,6 +213,9 @@ class FacultyInfo
         if ($row['last name']) {
             $last_name = $row['last name'];
         }
+        if ($row['preferred name']) {
+            $first_name = $row['preferred name'];
+        }
         // remove initials like A. B. from first name
         $first_name = preg_replace('/ [A-Z]\./', '', $first_name);
         $first_name = trim($first_name);
