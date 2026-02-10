@@ -5,7 +5,6 @@ namespace DigraphCMS_Plugins\unmous\ous_digraph_module\LoboAlerts;
 use DigraphCMS\Cache\Cache;
 use DigraphCMS\Config;
 use DigraphCMS\Curl\CurlHelper;
-use DigraphCMS\DB\DB;
 use DigraphCMS\Events\Dispatcher;
 use DigraphCMS\Exception;
 use DigraphCMS\ExceptionLog;
@@ -17,6 +16,7 @@ use Throwable;
 
 class AlertBanners
 {
+
     /** @return AlertBanner[] */
     public static function alerts(): array
     {
@@ -29,9 +29,9 @@ class AlertBanners
                 if (Config::get('unm.test_site.active')) {
                     $alerts[] = new AlertBanner(
                         Config::get('unm.test_site.banner.title')
-                            ?: 'This is a test site',
+                        ?: 'This is a test site',
                         Config::get('unm.test_site.banner.message')
-                            ?: 'This is a site intended for internal testing and development. It may not be accurate or up-to-date.',
+                        ?: 'This is a site intended for internal testing and development. It may not be accurate or up-to-date.',
                         'test-site',
                         'testmode',
                     );
@@ -48,29 +48,41 @@ class AlertBanners
                 // get alerts from main source
                 $loboAlert_data = CurlHelper::get('https://webcore.unm.edu/v2/loboalerts.json');
                 try {
+                    // try to clean up and escape quotes in the "details" field, because UCAM/UNMPD can't reliably make properly formatted JSON for some reason
+                    if ($loboAlert_data) {
+                        $loboAlert_data = preg_replace_callback('/"details":\s*"(.*)"([,\r\n}])/s', function ($matches) {
+                            $string = $matches[1];
+                            $string = addcslashes($string, '"');
+                            return '"details":"' . $string . '"' . $matches[2];
+                        }, $loboAlert_data);
+                    }
+                    // if we got data and it decodes properly, add the alert (if it's not "none")
                     if ($loboAlert_data && $loboAlert = json_decode($loboAlert_data, true, 512, JSON_THROW_ON_ERROR)) {
                         if ($loboAlert['alert'] != 'none') {
                             $alerts[] = new AlertBanner(
                                 $loboAlert['alert'] ?? 'LoboAlert',
                                 str_replace('&#xA;', '', @$loboAlert['details'] ?? ''),
                                 'warning',
-                                md5(serialize($loboAlert))
+                                md5(serialize($loboAlert)),
                             );
                         }
                     }
-                } catch (Throwable $th) {
+                }
+                catch (Throwable $th) {
                     ExceptionLog::log(new Exception("LoboAlert parsing error", $loboAlert_data, $th));
                 }
                 // get OUS-global alerts
-                foreach (static::globalAlerts() as $alert) $alerts[] = $alert;
+                foreach (static::globalAlerts() as $alert)
+                    $alerts[] = $alert;
                 // get site alerts
-                foreach (static::siteAlerts() as $alert) $alerts[] = $alert;
+                foreach (static::siteAlerts() as $alert)
+                    $alerts[] = $alert;
                 // use dispatcher to append more alerts
                 Dispatcher::dispatchEvent('onLoboAlerts', [&$alerts]);
                 // return the final alert list
                 return $alerts;
             },
-            300
+            300,
         ) ?? [];
     }
 
@@ -91,4 +103,5 @@ class AlertBanners
         // @phpstan-ignore-next-line
         return SiteAlerts::new()->currentAlerts()->fetchAll();
     }
+
 }
