@@ -60,6 +60,7 @@ $tabs->addTab('excel', 'Spreadsheet', function () use ($query) {
                 $row['research'] ? 'Yes' : 'No',
                 $row['visiting'] ? 'Yes' : 'No',
                 $row['netid'],
+                $row['banner'],
                 $row['email'],
             ];
         },
@@ -76,6 +77,7 @@ $tabs->addTab('excel', 'Spreadsheet', function () use ($query) {
             'Research',
             'Visiting',
             'NetID',
+            'Banner ID',
             'Email',
         ]
     );
@@ -88,21 +90,7 @@ $tabs->addTab('excel', 'Spreadsheet', function () use ($query) {
             date('Y-m-d')
         ])),
         null,
-        [
-            'First name',
-            'Last name',
-            'Level 3 org',
-            'Department',
-            'Title',
-            'Rank',
-            'Voting',
-            'HSC',
-            'Branch',
-            'Research',
-            'Visiting',
-            'NetID',
-            'Email',
-        ]
+        null,
     );
 
     echo $table;

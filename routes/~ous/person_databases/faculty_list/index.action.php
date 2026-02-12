@@ -26,6 +26,7 @@ $table = new DigraphCMS\UI\Pagination\PaginatedTable(
             $row['research'] ? 'Yes' : 'No',
             $row['visiting'] ? 'Yes' : 'No',
             $row['netid'],
+            $row['banner'],
             $row['email']
         ];
     },
@@ -42,6 +43,7 @@ $table = new DigraphCMS\UI\Pagination\PaginatedTable(
         new ColumnBooleanFilteringHeader('Research', 'research'),
         new ColumnBooleanFilteringHeader('Visiting', 'visiting'),
         new ColumnStringFilteringHeader('NetID', 'netid'),
+        new ColumnStringFilteringHeader('Banner ID', 'banner'),
         new ColumnStringFilteringHeader('Email', 'email'),
     ]
 );

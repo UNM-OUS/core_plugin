@@ -12,7 +12,6 @@ use DigraphCMS\HTML\Forms\SELECT;
 use DigraphCMS\URL\URL;
 use DigraphCMS\Users\Permissions;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedDB;
-use Envms\FluentPDO\Queries\Select as QueriesSelect;
 
 echo '<div class="navigation-frame navigation-frame--stateless" id="list-exporter-picker-interface">';
 $form = new FormWrapper();
@@ -39,7 +38,6 @@ switch ($type->value()) {
         $query = $query->from('staff_list');
         break;
 }
-assert($query instanceof QueriesSelect);
 
 if ($type->value()) {
     $org = (

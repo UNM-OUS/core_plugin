@@ -6,8 +6,8 @@
     <li>Name, Full Name, or First Name and Last Name</li>
     <li>Preferred name (optional)</li>
     <li>Email</li>
-    <li>UNM ID (not saved, but used to generate a unique ID if NetIDs are missing)</li>
-    <li>NetID</li>
+    <li>UNM ID or Banner ID</li>
+    <li>NetID (optional if only updating voting status)</li>
     <li>Org Level 3 Desc</li>
     <li>Org Desc</li>
     <li>Job Title</li>
@@ -43,13 +43,15 @@ $form->button()->setText('Upload file');
 
 $type = (new Field('List type', new SELECT(
     [
-        'all' => 'All faculty',
-        'voting' => 'Voting faculty',
+        'all'                => 'All faculty',
+        'voting'             => 'Voting faculty',
+        'voting_status_only' => 'Voting status only',
     ],
-    '-- select --'
+    '-- select --',
 )))
     ->addTip("If \"All faculty\" is selected, all faculty records will be updated. Any faculty records not included in the uploaded spreadsheet will be deleted.")
     ->addTip("If \"Voting faculty\" is selected, only voting faculty records will be updated. Any voting faculty records not included in the uploaded spreadsheet will be deleted, but non-voting records will not be touched.")
+    ->addTip("If \"Voting status only\" is selected, only the voting status of existing faculty records will be updated. No records will be deleted, but no new records will be added either. Matches will be made by either Banner ID or NetID, so one or both of those columns must be included in the spreadsheet for this option to work.")
     ->setRequired(true)
     ->addForm($form);
 
@@ -58,7 +60,8 @@ $orgs = SharedDB::query()
     ->select('DISTINCT(org) as org', true)
     ->orderBy('org')
     ->fetchAll();
-if (!is_array($orgs)) $orgs = [];
+if (!is_array($orgs))
+    $orgs = [];
 $orgs = array_map(fn($o) => $o['org'], $orgs);
 $org = (new Field('School/college', new SELECT(array_combine($orgs, $orgs), '-- all --')))
     ->addTip('If you are not sure, leave this blank')
@@ -72,38 +75,55 @@ $file = (new Field('Faculty list spreadsheet', $upload = new UploadSingle()))
 
 if ($form->ready()) {
     $type = $type->value();
-    assert($type == 'normal' || $type == 'voting');
+    assert($type == 'all' || $type == 'voting' || $type == 'voting_status_only');
     $org = $org->value();
     assert(is_string($org) && $org || is_null($org));
     $job_group = Digraph::uuid('update_faculty');
     $job = new SpreadsheetJob(
         $file->value()['tmp_name'],
         function (array $row, DeferredJob $job) use ($type) {
-            $voting = null;
-            if ($type == 'voting') $voting = true;
-            FacultyInfo::import($row, $voting, $job->group());
-            return "Imported faculty record for " . $row['netid'];
+            switch ($type) {
+                case 'all':
+                    FacultyInfo::import($row, null, $job->group());
+                    break;
+                case 'voting':
+                    FacultyInfo::import($row, true, $job->group());
+                    break;
+                case 'voting_status_only':
+                    FacultyInfo::import($row, true, $job->group(), true);
+                    break;
+            }
+            return "Imported faculty record";
         },
         teardownFn: function () use ($type, $org, $job_group) {
-            // teardown function should clear all faculty records of different
-            // job IDs that would have been in this update
-            $query = SharedDB::query()
-                ->delete('faculty_list')
-                ->where('job <> ?', $job_group);
-            // if type is voting, only delete voting faculty
-            if ($type == 'voting') {
-                $query->where('voting');
+            // if voting_status_only or voting, teardown should only set voting status to false for old records, but not delete anything
+            if ($type == 'voting_status_only' || $type == 'voting') {
+                $query = SharedDB::query()
+                    ->update('faculty_list')
+                    ->set([
+                        'voting' => 0,
+                        'job'    => $job_group,
+                    ])
+                    ->where('job <> ?', $job_group);
             }
-            // if org is set, only delete faculty from that org
+            // otherwise fully clear out old records that were not updated by this job
+            else {
+                $query = SharedDB::query()
+                    ->delete('faculty_list')
+                    ->where('job <> ?', $job_group);
+            }
+            // if org is set, only touch records from that org
             if ($org) {
-                $query->where('org', $org);
+                $query->where('org = ?', $org);
             }
             // execute
             $count = $query->execute();
-            if ($org) return "Teardown deleted $count '$type' records from $org";
-            else return "Teardown deleted $count '$type' records";
+            if ($org)
+                return "Teardown cleaned up $count '$type' records from $org";
+            else
+                return "Teardown cleaned up $count '$type' records";
         },
-        group: $job_group
+        group: $job_group,
     );
     // redirect to job progress
     throw new RedirectException(new URL('?job=' . $job->group()));
