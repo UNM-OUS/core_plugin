@@ -43,7 +43,7 @@ if ($messages->count()) {
                 $message->email(),
                 $message->user(),
                 $message->sent() ? Format::date($message->sent()) : '',
-                $email ? sprintf('<a href="%s">%s</a>', $email->url_adminInfo(), $email->uuid()) : '',
+                $email ? sprintf('<a href="%s">%s</a>', new URL('message:' . $email->uuid()), $email->uuid()) : '',
                 $status
             ];
         },
