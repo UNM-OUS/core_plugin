@@ -202,6 +202,11 @@ class FacultyInfo
         // get NetID and/or banner ID
         $netID = static::importNetID($row, false);
         $banner = static::importBannerID($row);
+        // check if person exists
+        if (!static::search($banner ?? $netID)) {
+            ExceptionLog::log(new DigraphCMSException('Import: Attempting to update voting status for non-existent person ' . ($netID ?? $banner), $row));
+            return;
+        }
         // try to update by banner ID or NetID. If both are provided, banner ID will take precedence since it's more reliable. If neither are provided, throw an exception since we have no way to know who this voting status update applies to.
         if ($banner)
             $updated = SharedDB::query()
@@ -223,9 +228,6 @@ class FacultyInfo
                 ->execute();
         else
             throw new Exception('At least one of NetID or Banner ID must be provided for voting status updates');
-        // throw an exception if no records were updated, since that likely means the NetID or banner ID provided doesn't match any existing records and thus we don't know who to update the voting status for
-        if (!$updated)
-            ExceptionLog::log(new DigraphCMSException('Import: Failed to update voting status for ' . ($netID ?: $banner), $row));
     }
 
     protected static function importNetID(array $row, bool $force_generation): string|null
