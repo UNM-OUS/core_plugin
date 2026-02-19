@@ -31,5 +31,5 @@ echo new PaginatedTable(
         'Emails',
         'Created',
         'Updated',
-    ]
+    ],
 );

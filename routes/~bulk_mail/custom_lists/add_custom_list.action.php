@@ -25,15 +25,15 @@ $emails = (new Field('List of emails', new TEXTAREA()))
         ->addForm($form);
 
 if ($form->ready()) {
-    $list = CustomLists::create(
-            $name->value(),
-    );
-    $addresses = preg_split('/\r?\n/', $emails->value());
-    assert(is_array($addresses));
-    $list->replaceRecipients($addresses);
-    $list->update();
-    Notifications::flashConfirmation('List created');
-    throw new RedirectException(new URL('./'));
+        $list = CustomLists::create(
+                $name->value(),
+        );
+        $addresses = preg_split('/\r?\n/', $emails->value());
+        assert(is_array($addresses));
+        $list->replaceRecipients($addresses);
+        $list->update();
+        Notifications::flashConfirmation('List created');
+        throw new RedirectException(new URL('./'));
 }
 
 echo $form;

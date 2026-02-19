@@ -1,7 +1,6 @@
 <?php
 
 use DigraphCMS\Context;
-use DigraphCMS\DB\DB;
 use DigraphCMS\HTML\Forms\Email;
 use DigraphCMS\HTML\Forms\Field;
 use DigraphCMS\HTML\Forms\FormWrapper;
@@ -9,13 +8,13 @@ use DigraphCMS\HTML\Forms\SELECT;
 use DigraphCMS\HTTP\HttpError;
 use DigraphCMS\HTTP\RefreshException;
 use DigraphCMS\RichContent\RichContentField;
-use DigraphCMS\Session\Session;
 use DigraphCMS\UI\Breadcrumb;
 use DigraphCMS\UI\Notifications;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\BulkMail;
 
 $mailing = BulkMail::mailing(intval(Context::url()->actionSuffix()));
-if (!$mailing || $mailing->sent()) throw new HttpError(404);
+if (!$mailing || $mailing->sent())
+    throw new HttpError(404);
 include __DIR__ . '/_actions.include.php';
 
 printf('<h1>Edit: %s</h1>', $mailing->name());

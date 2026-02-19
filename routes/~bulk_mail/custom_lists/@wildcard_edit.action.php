@@ -13,7 +13,8 @@ use DigraphCMS\Users\Permissions;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\CustomLists\CustomLists;
 
 $list = CustomLists::get(Context::url()->actionSuffix());
-if (!$list) throw new HttpError(404);
+if (!$list)
+    throw new HttpError(404);
 
 printf('<h1>Edit list: %s</h1>', $list->label());
 
@@ -40,7 +41,8 @@ if ($form->ready()) {
 echo $form;
 
 // deletion tool
-if (!Permissions::inMetaGroup('bulkmail__edit')) return;
+if (!Permissions::inMetaGroup('bulkmail__edit'))
+    return;
 
 echo '<div class="card navigation-frame navigation-frame--stateless" id="list-deletion-interface" data-target="_top">';
 echo "<h2>Delete</h2>";
@@ -48,7 +50,8 @@ echo "<p>Delete this custom list. This action cannot be undone.</p>";
 
 if (Context::arg('delete') != 1) {
     printf("<a href='%s' class='button button--warning' data-target='_frame'>Delete list</a>", new URL('?delete=1'));
-} else {
+}
+else {
     $confirm = new CallbackLink(function () use ($list) {
         $list->delete();
         Notifications::flashConfirmation(sprintf('Custom recipient list deleted: %s', $list->label()));

@@ -12,7 +12,8 @@ if ($mailing->sent()) {
     ActionMenu::addContextAction($mailing->messagesUrl(), 'mailing messages (' . $mailing->messageCount() . ')');
     ActionMenu::addContextAction($mailing->sourceUrl(), 'mailing source');
     ActionMenu::addContextAction($mailing->copyUrl(), 'copy mailing');
-} else {
+}
+else {
     // mailing has not been sent
     ActionMenu::addContextAction($mailing->editUrl(), 'edit mailing');
     ActionMenu::addContextAction($mailing->previewUrl(), 'preview mailing');

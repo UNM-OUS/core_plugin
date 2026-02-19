@@ -16,14 +16,15 @@ $table_columns = ['Date', 'Template'];
 $source_columns = [];
 $schedule = [];
 foreach (BulkMail::templates() as $mailing) {
-    if (!$mailing->scheduledTimes()) continue;
+    if (!$mailing->scheduledTimes())
+        continue;
     foreach ($mailing->sources() as $source) {
         $source_columns[$source->name()] = $source->label();
     }
     foreach ($mailing->scheduledTimes() as $mailing_time) {
         $schedule[] = [
-            'time' => $mailing_time,
-            'template' => $mailing
+            'time'     => $mailing_time,
+            'template' => $mailing,
         ];
     }
 }
@@ -47,8 +48,8 @@ $table = new PaginatedTable(
     [
         'Date',
         'Template',
-        'Recipients'
-    ]
+        'Recipients',
+    ],
 );
 $table->paginator()->perPage(1000);
 

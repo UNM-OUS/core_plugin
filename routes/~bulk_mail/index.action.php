@@ -22,7 +22,7 @@ echo new PaginatedTable(
             sprintf('<a href="%s">recipients</a>', $mailing->recipientsUrl()),
             sprintf('<a href="%s">schedule</a>', $mailing->scheduleUrl()),
             Format::date($mailing->updated()),
-            sprintf('<a href="%s">delete</a>', $mailing->deleteUrl())
+            sprintf('<a href="%s">delete</a>', $mailing->deleteUrl()),
         ];
     },
     [
@@ -31,8 +31,8 @@ echo new PaginatedTable(
         '',
         '',
         'Updated',
-        ''
-    ]
+        '',
+    ],
 );
 
 echo "<h2>Send log</h2>";
@@ -51,7 +51,7 @@ echo new PaginatedTable(
         '',
         '',
         'Sent',
-    ]
+    ],
 );
 
 // look for and surface relevant past mailings from this time last year
@@ -70,10 +70,10 @@ Sidebar::add(function (): string {
     $relevant
         ->where(
             'sent > ?',
-            $start->getTimestamp()
+            $start->getTimestamp(),
         )->where(
             'sent < ?',
-            $end->getTimestamp()
+            $end->getTimestamp(),
         );
     // if ($relevant->count() == 0) return null;
     return sprintf(
@@ -90,6 +90,6 @@ Sidebar::add(function (): string {
                     sprintf('<a href="%s">source</a>', $mailing->sourceUrl()),
                 ];
             }
-        )
+        ),
     );
 });

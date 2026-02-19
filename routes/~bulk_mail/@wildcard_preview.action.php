@@ -9,7 +9,8 @@ use DigraphCMS\RichContent\RichContent;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\BulkMail;
 
 $mailing = BulkMail::mailing(intval(Context::url()->actionSuffix()));
-if (!$mailing) throw new HttpError(404);
+if (!$mailing)
+    throw new HttpError(404);
 include __DIR__ . '/_actions.include.php';
 
 printf('<h1>Preview: %s</h1>', $mailing->name());
@@ -18,7 +19,7 @@ printf('<h1>Preview: %s</h1>', $mailing->name());
 Context::beginEmail();
 Context::fields()['bulk_mail'] = [
     'email' => 'nobody@localhost',
-    'user' => null
+    'user'  => null,
 ];
 
 $email = new Email(
@@ -27,7 +28,7 @@ $email = new Email(
     'nobody@localhost',
     null,
     $mailing->from(),
-    new RichContent($mailing->body())
+    new RichContent($mailing->body()),
 );
 
 $file = new File(
@@ -37,7 +38,7 @@ $file = new File(
         'bulk_mail_preview',
         $mailing->id(),
         $mailing->updated()->getTimestamp(),
-    ]
+    ],
 );
 printf('<iframe src="%s" style="border:0;width:100%%;" class="autosized-frame"></iframe>', $file->url());
 

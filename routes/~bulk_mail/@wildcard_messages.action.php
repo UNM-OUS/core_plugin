@@ -15,7 +15,8 @@ use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Message;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\AbstractRecipientSource;
 
 $mailing = BulkMail::mailing(intval(Context::url()->actionSuffix()));
-if (!$mailing || !$mailing->sent()) throw new HttpError(404);
+if (!$mailing || !$mailing->sent())
+    throw new HttpError(404);
 include __DIR__ . '/_actions.include.php';
 
 printf('<h1>Messages: %s</h1>', $mailing->name());
@@ -35,16 +36,20 @@ if ($messages->count()) {
         $messages,
         function (Message $message): array {
             $email = $message->emailMessage();
-            if (!$email) $status = '';
-            elseif ($email->error()) $status = '<span class="notification notification--error">error</span>';
-            elseif ($email->sent()) $status = '<span class="notification notification--confirmation">sent ' . Format::date($email->sent()) . '</span>';
-            else $status = '<span class="notification notification--notice">queued</span>';
+            if (!$email)
+                $status = '';
+            elseif ($email->error())
+                $status = '<span class="notification notification--error">error</span>';
+            elseif ($email->sent())
+                $status = '<span class="notification notification--confirmation">sent ' . Format::date($email->sent()) . '</span>';
+            else
+                $status = '<span class="notification notification--notice">queued</span>';
             return [
                 $message->email(),
                 $message->user(),
                 $message->sent() ? Format::date($message->sent()) : '',
                 $email ? sprintf('<a href="%s">%s</a>', new URL('message:' . $email->uuid()), $email->uuid()) : '',
-                $status
+                $status,
             ];
         },
         [
@@ -53,7 +58,7 @@ if ($messages->count()) {
             'Built',
             'Email ID',
             'Status',
-        ]
+        ],
     );
 }
 

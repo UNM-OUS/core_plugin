@@ -18,7 +18,8 @@ use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\BulkMail;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Mailing;
 
 $mailing = BulkMail::mailing(intval(Context::url()->actionSuffix()));
-if (!$mailing || $mailing->sent()) throw new HttpError(404);
+if (!$mailing || $mailing->sent())
+    throw new HttpError(404);
 
 printf('<h1>Schedule: %s</h1>', $mailing->name());
 Breadcrumb::setTopName($mailing->name());
@@ -51,7 +52,7 @@ $table = new PaginatedTable(
             }))
                 ->setID('remove-' . $time)
                 ->addChild('remove')
-                ->setData('target', 'scheduled-times')
+                ->setData('target', 'scheduled-times'),
         ];
     }
 );
@@ -79,30 +80,31 @@ $interpreted_times = array_map(
     function (string $in) use ($form) {
         try {
             $output = new DateTime($in, Format::timezone());
-        } catch (Throwable $th) {
+        }
+        catch (Throwable $th) {
             $form->addChild(sprintf(
                 '<div class="notification notification--warning">Error parsing line: %s</div>',
-                htmlspecialchars($in)
+                htmlspecialchars($in),
             ));
             return false;
         }
         if ($output->getTimestamp() < time()) {
             $form->addChild(sprintf(
                 '<div class="notification notification--warning">Warning: line %s is in the past and will be ignored.</div>',
-                htmlspecialchars($in)
+                htmlspecialchars($in),
             ));
             return false; // ignore past dates
         }
         return $output;
     },
-    $interpreted_times
+    $interpreted_times,
 );
 /** @var DateTime[] */
 $interpreted_times = array_filter($interpreted_times);
 foreach ($interpreted_times as $time) {
     $form->addChild(sprintf(
         '<div class="notification notification--confirmation">%s</div>',
-        Format::datetime($time)
+        Format::datetime($time),
     ));
 }
 if ($form->submitted()) {

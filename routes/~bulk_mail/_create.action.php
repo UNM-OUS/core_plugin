@@ -37,19 +37,19 @@ if ($form->ready()) {
         ->insertInto(
             'bulk_mail',
             [
-                'name' => $name->value(),
-                '`from`' => $from->value(),
-                'subject' => $subject->value(),
-                'body' => '',
-                'sources' => '',
+                'name'             => $name->value(),
+                '`from`'           => $from->value(),
+                'subject'          => $subject->value(),
+                'body'             => '',
+                'sources'          => '',
                 'extra_recipients' => '',
-                'schedule' => '',
-                'category' => $category->value(),
-                'created' => time(),
-                'created_by' => Session::uuid(),
-                'updated' => time(),
-                'updated_by' => Session::uuid()
-            ]
+                'schedule'         => '',
+                'category'         => $category->value(),
+                'created'          => time(),
+                'created_by'       => Session::uuid(),
+                'updated'          => time(),
+                'updated_by'       => Session::uuid(),
+            ],
         )
         ->execute();
     throw new RedirectException(new URL("edit:$id"));

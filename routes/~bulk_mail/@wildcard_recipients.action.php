@@ -17,7 +17,8 @@ use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\BulkMail;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\Recipients\AbstractRecipientSource;
 
 $mailing = BulkMail::mailing(intval(Context::url()->actionSuffix()));
-if (!$mailing || $mailing->sent()) throw new HttpError(404);
+if (!$mailing || $mailing->sent())
+    throw new HttpError(404);
 include __DIR__ . '/_actions.include.php';
 
 printf('<h1>Select recipients: %s</h1>', $mailing->name());
@@ -43,15 +44,15 @@ echo count($mailing->sources()) ? new PaginatedTable(
                 DB::query()->update(
                     'bulk_mail',
                     [
-                        'sources' => implode(',', $sources),
-                        'updated' => time(),
-                        'updated_by' => Session::uuid()
+                        'sources'    => implode(',', $sources),
+                        'updated'    => time(),
+                        'updated_by' => Session::uuid(),
                     ],
-                    $mailing->id()
+                    $mailing->id(),
                 )->execute();
             }))
                 ->setData('target', 'recipient-sources')
-                ->addChild(new Icon('delete', 'Remove source'))
+                ->addChild(new Icon('delete', 'Remove source')),
         ];
     }
 ) : '';
@@ -70,8 +71,8 @@ $table = new PaginatedTable(
             $source->label(),
             number_format($source->count()),
             $selected
-                ? ''
-                : (new CallbackLink(function () use ($source, $selectedSourceNames, $mailing) {
+            ? ''
+            : (new CallbackLink(function () use ($source, $selectedSourceNames, $mailing) {
                 $selectedSourceNames = array_filter($selectedSourceNames, function ($s) use ($source) {
                     return !($s == $source->name() || str_starts_with($source->name(), "$s/"));
                 });
@@ -79,11 +80,11 @@ $table = new PaginatedTable(
                 DB::query()->update(
                     'bulk_mail',
                     [
-                        'sources' => implode(',', $selectedSourceNames),
-                        'updated' => time(),
-                        'updated_by' => Session::uuid()
+                        'sources'    => implode(',', $selectedSourceNames),
+                        'updated'    => time(),
+                        'updated_by' => Session::uuid(),
                     ],
-                    $mailing->id()
+                    $mailing->id(),
                 )->execute();
             }))
                 ->setData('target', 'recipient-sources')
