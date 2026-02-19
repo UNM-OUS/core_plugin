@@ -21,8 +21,8 @@ if (!$message)
 assert($message instanceof Message);
 $mailing = $message->mailing();
 Breadcrumb::parent(
-    (new URL('messages:' . $mailing->id())
-        ->setName($mailing->subject())),
+    (new URL('messages:' . $mailing->id()))
+        ->setName($mailing->subject()),
 );
 
 // make sure the message actually exists in the email system
