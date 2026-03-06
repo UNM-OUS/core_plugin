@@ -14,7 +14,7 @@ use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\MessageSelect;
 
 // try to find this message ID in bulk mail
 $message = (new MessageSelect())
-    ->where('email_message_id', Context::url()->actionSuffix())
+    ->where('email_uuid', Context::url()->actionSuffix())
     ->fetch();
 if (!$message)
     throw new HttpError(404);
