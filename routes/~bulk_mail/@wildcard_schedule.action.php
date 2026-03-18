@@ -117,7 +117,7 @@ if ($form->ready()) {
         $mailing->addScheduledTime($time);
     }
     $mailing->update();
-    Notifications::flashConfirmationHTML("Scheduled " . count($interpreted_times) . " mailings");
+    Notifications::flashConfirmation("Scheduled " . count($interpreted_times) . " mailings");
     throw new RefreshException();
 }
 echo $form;
