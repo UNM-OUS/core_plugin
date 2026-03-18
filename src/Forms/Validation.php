@@ -17,18 +17,22 @@ class Validation
      */
     public static function domainUrl(string|array $domain, string|null $message = null): callable
     {
-        $domain = (array)$domain;
+        $domain = (array) $domain;
         return function (InputInterface $input) use ($domain, $message): string|null {
             if (!$input->value())
                 return null;
             $url = parse_url($input->value(), PHP_URL_HOST);
-            if (!$url) return "Please enter a valid URL";
+            if (!$url)
+                return "Please enter a valid URL";
             $url = strtolower($url);
             foreach ($domain as $d) {
-                if ($url == $d) return null;
-                if (preg_match('/\.' . preg_quote($d) . '$/', $url)) return null;
+                if ($url == $d)
+                    return null;
+                if (preg_match('/\.' . preg_quote($d) . '$/', $url))
+                    return null;
             }
-            if ($message) return $message;
+            if ($message)
+                return $message;
             $list = implode(', ', $domain);
             $list = preg_replace('/, ([^,]+)$/', ', and $1', $list);
             return "Only URLs from $list and their subdomains are allowed in this field";
@@ -52,9 +56,22 @@ class Validation
                 }
                 // return null
                 return null;
-            } else {
+            }
+            else {
                 return static::netID()($input);
             }
+        };
+    }
+
+    public static function notHealthDotUnmEmail(): callable
+    {
+        return function (InputInterface $input): string|null {
+            if (!$input->value())
+                return null;
+            if (str_ends_with($input->value(), '@health.unm.edu')) {
+                return "<kbd>@health.unm.edu</kbd> is not a valid email domain. Did you mean <kbd>@salud.unm.edu</kbd>?";
+            }
+            return null;
         };
     }
 
@@ -75,7 +92,8 @@ class Validation
                 }
                 // return null
                 return null;
-            } else {
+            }
+            else {
                 return static::netIdWithExtension()($input);
             }
         };
@@ -181,4 +199,5 @@ class Validation
             return null;
         };
     }
+
 }
