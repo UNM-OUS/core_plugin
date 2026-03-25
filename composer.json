@@ -2,7 +2,7 @@
     "name": "unmous/core_plugin",
     "type": "digraph-plugin",
     "require": {
-        "digraphcms/digraph-core": "^2",
+        "digraphcms/digraph-core": "~2|~3",
         "apereo/phpcas": "^1.6",
         "mpdf/qrcode": "^1.2",
         "joby/toolbox": "^1.0"
