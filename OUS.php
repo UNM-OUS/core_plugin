@@ -109,7 +109,7 @@ class OUS extends AbstractPlugin
         ))->setShortcut('Ctrl+Shift+B');
     }
 
-    public static function cronJob_halfhourly(): void
+    public static function cronJob_email(): void
     {
         // loop through all of the bulk mail templates and send any that need to be sent
         // also remove any past scheduled times from any templates that are sent
