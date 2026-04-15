@@ -118,6 +118,7 @@ if ($form->ready()) {
             }
             // execute
             $count = $query->execute();
+            assert(is_int($count));
             if ($org)
                 return "Teardown cleaned up $count '$type' records from $org";
             else

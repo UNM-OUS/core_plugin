@@ -197,6 +197,9 @@ class FacultyInfo
         ]);
     }
 
+    /**
+     * @param array<string,string> $row
+     */
     protected static function importVotingStatusUpdate(array $row, string $job_group): void
     {
         // get NetID and/or banner ID
@@ -230,6 +233,9 @@ class FacultyInfo
             throw new Exception('At least one of NetID or Banner ID must be provided for voting status updates');
     }
 
+    /**
+     * @param array<string,string> $row
+     */
     protected static function importNetID(array $row, bool $force_generation): string|null
     {
         $netid = trim(strtolower($row['netid'] ?? ''));
@@ -240,6 +246,9 @@ class FacultyInfo
         return null;
     }
 
+    /**
+     * @param array<string,string> $row
+     */
     protected static function importBannerID(array $row): int|null
     {
         $banner = trim($row['unm id'] ?? $row['unmid'] ?? $row['banner id'] ?? '');
