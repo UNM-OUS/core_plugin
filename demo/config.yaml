@@ -19,21 +19,6 @@ email:
 errors:
   display_trace: true
 
-# much shorter caching settings
-cache:
-  path: "${paths.base}/cache"
-  ttl: 60
-  template_ttl: 60
-  content_ttl: 0
-
-# don't cache files as long
-files:
-  ttl: 60
-
-# shorter head cache time
-theme:
-  head_cache_ttl: 60
-
 # show sign in
 usermenu:
   guest_signin: true

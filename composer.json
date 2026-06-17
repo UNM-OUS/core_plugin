@@ -5,7 +5,8 @@
         "digraphcms/digraph-core": "~2|~3",
         "apereo/phpcas": "^1.6",
         "mpdf/qrcode": "^1.2",
-        "joby/toolbox": "^1.0"
+        "joby/toolbox": "^1.0",
+        "joby/smol-fs": "^1.2"
     },
     "require-dev": {
         "php": ">=8.1",
@@ -21,7 +22,8 @@
     },
     "scripts": {
         "migrate": [
-            "phinx migrate"
+            "phinx migrate",
+            "DigraphCMS_Plugins\\unmous\\ous_digraph_module\\Migrator::migrate"
         ],
         "seed": [
             "phinx seed:run"
