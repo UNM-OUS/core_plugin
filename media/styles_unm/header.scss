@@ -100,35 +100,8 @@
     }
 }
 
-// main navbar
 #main-nav {
-    @include unm-menubar(var(--background-a80));
     font-size: larger;
-    font-weight: lighter;
-    border-top: 1px solid var(--background-a80);
-    border-bottom: 2px solid var(--background-lighter);
-    align-items: flex-end;
-
-    &.menubar--overflowed {
-
-        .menuitem {
-            width: 100%;
-        }
-
-        &.menubar--overflowed--open {
-            background: var(--background-dark);
-
-            .menubar--overflowed__toggle {
-                background: var(--background-darker);
-
-                .menuitem__link {
-                    &:before {
-                        display: none;
-                    }
-                }
-            }
-        }
-    }
 }
 
 body {

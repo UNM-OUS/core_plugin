@@ -5,6 +5,7 @@ use DigraphCMS\Cache\CachedInitializer;
 use DigraphCMS\Config;
 use DigraphCMS\DB\DB;
 use DigraphCMS\Digraph;
+use DigraphCMS\Media\Media;
 use DigraphCMS\Plugins\Plugins;
 use DigraphCMS\URL\URLs;
 use Mimey\MimeTypes;
@@ -27,12 +28,13 @@ if (php_sapi_name() === 'cli-server') {
         if (file_exists($filePath)) {
             header(sprintf(
                 "Content-Type: %s",
-                (new MimeTypes)->getMimeType(strtolower(pathinfo($filePath, FILEINFO_EXTENSION)))
+                (new MimeTypes)->getMimeType(strtolower(pathinfo($filePath, FILEINFO_EXTENSION))),
             ));
             header("Content-Length: " . filesize($filePath));
             readfile($filePath);
             exit;
-        } else {
+        }
+        else {
             http_response_code(404);
             header("Content-Type: text/plain");
             echo "Not found";
@@ -54,6 +56,9 @@ CachedInitializer::config(
 
 // load composer plugins
 Plugins::loadFromComposer(__DIR__ . '/../composer.lock');
+
+// set demo site's media directory
+Media::addSource(__DIR__ . '/media');
 
 // load main repo as a plugin
 Plugins::load(realpath(__DIR__ . '/..'), false);

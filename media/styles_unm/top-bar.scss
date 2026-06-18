@@ -1,154 +1,46 @@
 /* basic styling */
 #unm-top-nav {
     margin: 0;
-    padding: 0;
+    padding: 0 $grid;
     background-color: #ba0c2f;
     font-size: 13px;
-    line-height: 1.6em;
-    height: 70px;
+    line-height: 30px;
+    color: #fff;
 
-    .unm-top-nav__wrapper {
-        margin: 0;
+    a {
+        color: inherit !important;
+        text-decoration: none !important;
+
+        &:hover,
+        &:focus {
+            text-decoration: underline !important;
+        }
+    }
+
+    .unm-navbar {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: $grid*2;
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .unm-menubar {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: $grid;
+
+            >a {
+                display: block;
+            }
+        }
     }
 
     * {
         box-sizing: border-box;
-    }
-}
-
-nav.unm-navbar {
-    margin: 0;
-
-    a.navbar-brand {
-        display: block;
-        overflow: hidden;
-        height: 66px;
-        padding: 0;
-        color: transparent !important;
-        line-height: 0;
-        background: #fff url(/unm-logo-tab.png);
-        background-position: center center;
-        background-repeat: no-repeat;
-        background-size: contain;
-    }
-
-    #unm_search_form,
-    .unm-menubar {
-        display: none;
-    }
-}
-
-#unm_search_for_submit {
-    opacity: 0;
-}
-
-.menubar--usermenu {
-    line-height: 18px;
-    font-size: 14px;
-    background: #333;
-    color: #fff;
-    justify-content: center;
-
-    .menuitem {
-        .menuitem__link {
-            padding: $grid/2 $grid;
-        }
-    }
-}
-
-/* first breakpoint, wide mode */
-@media (min-width: 768px) {
-    #unm-top-nav {
-        border: 1px solid #8a0923;
-        height: 30px;
-
-        .unm-top-nav__wrapper {
-            margin: 0 $grid/2;
-        }
-    }
-
-    /* make navbar flex display */
-    nav.unm-navbar {
-        margin: 0 auto;
-        display: flex;
-        justify-content: space-between;
-
-        /* put logo on left */
-        a.navbar-brand {
-            display: block;
-            overflow: hidden;
-            border-bottom: 3px solid #ba0c2f;
-            width: 235px;
-            z-index: 100;
-            margin-left: 0;
-            margin-top: -1px;
-        }
-
-        /* make wrapper for menubar and search flex display */
-        .menu {
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        /* style menubar */
-        .unm-menubar {
-            display: flex;
-            line-height: 30px;
-            font-size: 13px;
-            height: 30px;
-
-            a {
-                color: #fff !important;
-                text-decoration: none !important;
-                padding: 0 15px;
-
-                &:hover {
-                    color: #f2f2f2 !important;
-                }
-            }
-        }
-
-        /* style search form */
-        #unm_search_form {
-            display: block;
-            background: #fff;
-            border-radius: 10px;
-            padding: 0 2px 0 10px;
-            margin-right: 0;
-            line-height: 19.5px;
-            height: 22px;
-            margin-top: 4px;
-            margin-left: 10px;
-
-            input {
-                line-height: 19.5px;
-                border: 0;
-                outline: 0;
-                background: transparent;
-                width: 125px;
-                padding: 2px 0;
-                font-size: 12px;
-                color: #222;
-
-                &::placeholder {
-                    color: #777;
-                }
-            }
-
-            button {
-                background: transparent;
-                border: 0;
-                outline: 0;
-                cursor: pointer;
-            }
-        }
-    }
-
-    /* add padding to user menu, make it the right height to line up with logo */
-    .menubar--usermenu {
-        padding-left: calc(235px + var(--grid)) !important;
-        justify-content: flex-end;
-        padding-right: $grid/2;
     }
 }
 
