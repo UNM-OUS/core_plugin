@@ -10,7 +10,7 @@
       "request": "launch",
       "runtimeArgs": [
         "-S",
-        "0.0.0.0:3381",
+        "0.0.0.0:0",
         "${workspaceRoot}/demo/index.php"
       ],
       "cwd": "${workspaceRoot}/demo",
