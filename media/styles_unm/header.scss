@@ -52,24 +52,19 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: var(--background-a80);
+    background-color: var(--background-a90);
     padding: $grid;
-    border-top: 1px solid var(--background-light);
-    border-bottom: 1px solid var(--background-dark);
-    box-shadow: var(--shadow);
 }
 
 @media print {
     #header {
         background: transparent;
         padding: 0;
-        box-shadow: none;
         min-height: 0;
 
         >#header__wrapper {
             background: transparent;
             color: inherit;
-            box-shadow: none;
             border: 0;
             margin-top: 0;
 
@@ -96,15 +91,10 @@
         position: relative;
         background: transparent;
         color: inherit;
-        box-shadow: none;
     }
 }
 
 #main-nav {
+    border-top: $grid/2 solid var(--theme-highlight);
     font-size: larger;
-}
-
-body {
-    background: radial-gradient(circle, var(--background-light) 0%, var(--background) 100%);
-    background-attachment: fixed;
 }
