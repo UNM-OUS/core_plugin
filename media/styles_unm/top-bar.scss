@@ -1,15 +1,16 @@
 /* basic styling */
 #unm-top-nav {
     margin: 0;
-    padding: 0 $grid;
+    padding: 7px $grid/2;
     background-color: #333437;
     font-size: 13px;
-    line-height: 30px;
+    line-height: 16px;
     color: #fff;
 
     a {
         color: inherit !important;
         text-decoration: none !important;
+        white-space: nowrap;
 
         &:hover,
         &:focus {
