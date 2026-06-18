@@ -4,8 +4,6 @@ footer#footer {
     margin-left: 0;
     margin-right: 0;
     margin-bottom: 0;
-    box-shadow: var(--shadow-inset);
-    border-top: 2px solid #ccc;
 }
 
 footer#footer h1,
@@ -32,24 +30,30 @@ footer#footer .unm-links .social-icon-link {
     font-size: 24px;
     text-decoration: none;
     text-align: center;
+
     .fab:after {
         @include icofont;
     }
+
     .fa-facebook:after {
         content: "\ed37";
     }
+
     .fa-instagram:after {
         content: "\ed46";
     }
+
     .fa-twitter:after {
         content: "\f03d";
     }
+
     .fa-youtube:after {
         content: "\ed8b";
     }
 }
 
 @media (min-width: 700px) {
+
     footer#footer .unm-info,
     footer#footer .unm-links {
         display: inline-block;
@@ -60,8 +64,8 @@ footer#footer .unm-links .social-icon-link {
 }
 
 footer#footer {
-    background: var(--unm-cherry) url(https://webcore.unm.edu/v2/images/mesa-mountain-red.png) bottom right no-repeat;
-    color: var(--unm-cherry-inv);
+    background-color: var(--unm-gray);
+    color: var(--unm-gray-inv);
     margin-bottom: 0;
 }
 
