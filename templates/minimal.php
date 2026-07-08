@@ -32,6 +32,7 @@ use DigraphCMS\UI\UserMenu;
         <?php
 
         echo Templates::render('unm/loboalerts.php');
+        echo Templates::render('unm/top-nav.php');
         echo new UserMenu();
         echo Templates::render('sections/navbar.php');
         ?>
