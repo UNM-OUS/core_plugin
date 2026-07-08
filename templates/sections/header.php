@@ -12,7 +12,7 @@ $logo_light = Media::get('/logo_light.png')
     ->image()->height(240)->url();
 
 $hero = Media::get('/hero.jpg')->image();
-$picture = new ResponsivePicture($hero, 'header hero image');
+$picture = new ResponsivePicture($hero, '');
 $picture->setExpectedWidth(100);
 
 $site_name = Context::fields()['site.name'];
