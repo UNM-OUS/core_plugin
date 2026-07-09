@@ -97,4 +97,8 @@
 #main-nav {
     border-top: $grid/2 solid var(--theme-highlight);
     font-size: larger;
+
+    &.menubar.menubar--overflowed {
+        border-top: 0;
+    }
 }
