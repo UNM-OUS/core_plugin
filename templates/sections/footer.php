@@ -42,12 +42,5 @@ $logo = Media::get('/unm-footer-logo.png');
             <a href="https://nmhedss2.state.nm.us/Dashboard/index.aspx?ID=21">New Mexico Higher Education Dashboard</a>
         </p>
 
-        <!-- <p>
-            <a href="<?php echo new URL('/privacy/'); ?>">Website privacy information</a>
-        </p> -->
-
-        <p style="opacity:0.5;">
-            <a href="<?php echo Users::signinUrl(Context::url()) ?>">Log in to this site</a>
-        </p>
     </div>
 </footer>
