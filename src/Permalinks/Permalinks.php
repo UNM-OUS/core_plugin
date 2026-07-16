@@ -13,22 +13,37 @@ class Permalinks
 
     public static function create(string $target, ?string $slug = null): Permalink
     {
-        $slug = $slug ?? strtolower(Digraph::uuid());
-        $slug = static::cleanSlug($slug);
+        $slug = $slug
+            ? static::cleanSlug($slug)
+            : strtolower(Digraph::uuid());
+        if (!$slug)
+            $slug = static::generateSlug();
         // insert into database
         DB::query()
             ->insertInto('permalink', [
-                'target' => $target,
-                'slug' => $slug,
-                'count' => 0,
-                'created' => time(),
+                'target'     => $target,
+                'slug'       => $slug,
+                'count'      => 0,
+                'created'    => time(),
                 'created_by' => Session::uuid(),
-                'updated' => time(),
-                'updated_by' => Session::uuid()
+                'updated'    => time(),
+                'updated_by' => Session::uuid(),
             ])
             ->execute();
         // return object re-retrieved from database sort of as a sanity check
         return static::get($slug);
+    }
+
+    protected static function generateSlug(): string
+    {
+        $letters = 'abcdefghikmnopqrtuvwxyz2346789';
+        $slug = '';
+        $pool_length = strlen($letters) - 1;
+        while (strlen($slug) < 6) {
+            $i = random_int(0, $pool_length);
+            $slug .= substr($letters, $i, 1);
+        }
+        return $slug;
     }
 
     public static function cleanSlug(string $slug): string
@@ -54,7 +69,8 @@ class Permalinks
     public static function select(): PermalinkSelect
     {
         return new PermalinkSelect(
-            DB::query()->from('permalink')
+            DB::query()->from('permalink'),
         );
     }
+
 }
