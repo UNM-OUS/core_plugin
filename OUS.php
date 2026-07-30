@@ -87,11 +87,13 @@ class OUS extends AbstractPlugin
 
     public function onStaticUrlPermissions(URL $url, User $user): bool|null
     {
+        if ($url->directory() === '/' && $url->action() === 'robots.txt') return true;
         return static::testSitePermissions($url, $user);
     }
 
     public function onPageUrlPermissions(URL $url, User $user): bool|null
     {
+        if ($url->page()->slug() === 'home' && $url->action() === 'robots.txt') return true;
         return static::testSitePermissions($url, $user);
     }
 
@@ -154,8 +156,7 @@ class OUS extends AbstractPlugin
             if ($existing) {
                 // existing user found, return them
                 $cache[$netId] = Users::get($existing['user_uuid']);
-            }
-            elseif ($create) {
+            } elseif ($create) {
                 // no existing user found, but we've been tasked with creating them
                 $user = new User();
                 $user->addEmail(
@@ -185,8 +186,7 @@ class OUS extends AbstractPlugin
                 DB::commit();
                 // cache and return
                 $cache[$netId] = $user;
-            }
-            else {
+            } else {
                 $cache[$netId] = null;
             }
         }
@@ -310,8 +310,7 @@ class OUS extends AbstractPlugin
                 elseif (!in_array($title, static::FACULTY_GREETABLE_TITLES))
                     $title = 'Professor';
                 return sprintf("Dear %s %s,", $title, $faculty->last_name);
-            }
-            elseif ($name = PersonInfo::getFullNameFor($netId)) {
+            } elseif ($name = PersonInfo::getFullNameFor($netId)) {
                 return sprintf("Dear %s,", $name);
             }
         }
@@ -410,8 +409,8 @@ class OUS extends AbstractPlugin
         }
         $user->name(
             PersonInfo::getFullNameFor($netID)
-            ?? PersonInfo::getFirstNameFor($netID)
-            ?? $netID
+                ?? PersonInfo::getFirstNameFor($netID)
+                ?? $netID
         );
         $user->addEmail($netID . '@unm.edu', 'Main campus NetID', true);
     }
@@ -466,5 +465,4 @@ class OUS extends AbstractPlugin
             'update_shared_bookmarks',
         );
     }
-
 }
