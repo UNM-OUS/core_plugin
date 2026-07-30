@@ -3,6 +3,8 @@
 use DigraphCMS\Context;
 
 Context::response()->filename('robots.txt');
+Context::response()->enableCache();
+
 ?>
 User-agent: *
 Disallow:
