@@ -146,8 +146,8 @@ class Validation
         if (!preg_match('/^[a-z].{1,19}$/', $input)) {
             return "NetIDs must be 2-20 characters and begin with a letter";
         }
-        if (preg_match('/[^a-z0-9_]/', $input)) {
-            return "NetIDs must contain only alphanumeric characters and underscores";
+        if (preg_match('/[^a-z0-9_\-]/', $input)) {
+            return "NetIDs must contain only alphanumeric characters, dashes, and underscores";
         }
         return null;
     }
