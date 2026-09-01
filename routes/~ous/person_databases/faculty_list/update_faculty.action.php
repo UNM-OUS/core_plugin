@@ -33,7 +33,7 @@ use DigraphCMS_Plugins\unmous\ous_digraph_module\People\FacultyInfo;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedDB;
 
 // display progress bar if job is specified
-if ($job = Context::arg('job')) {
+if ($job = Context::arg_string('job', true)) {
     echo (new DeferredProgressBar($job));
     return;
 }
