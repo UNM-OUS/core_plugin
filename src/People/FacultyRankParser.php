@@ -2,7 +2,9 @@
 
 namespace DigraphCMS_Plugins\unmous\ous_digraph_module\People;
 
-class FacultyRankParser {
+class FacultyRankParser
+{
+
     /**
      * A list of common ranks that should be used as-is if they match the given
      * title. This allows a simple, fast, and reliable method for converting a
@@ -46,11 +48,12 @@ class FacultyRankParser {
         "Visiting Research Assistant Professor",
         "Visiting Scholar",
     ];
+
     /**
      * More complex regexes for attempting to infer a rank from a less structured
      * academic_title entry.
      */
-    const RANK_REGEX = [
+    const RANK_REGEX            = [
         '/(clin(ician|cian|ical|ican)(\-| )ed(ucator)?( ?\- ?|\, ?| +)|visiting |adjunct |clinical |research )*(assist(ant)? |asst\.? |assoc(iate)? |distinguished )?prof(ess?or|ession)?(of|in)?( |\,|\-|$)/',
         '/(clin(ician|cian|ical|ican)(\-| )ed(ucator)?( ?\- ?|\, ?| +)|visiting |adjunct |clinical )*(assist(ant)? |asst\.? )?instructor( |\,|\-|$)/',
         '/(adjunct |visiting |research )*(senior |principal )*lecturerr?( i{1,3}| l{1,3}| 1| 2| 3)?( |\,|\-|$)/',
@@ -59,35 +62,39 @@ class FacultyRankParser {
         '/research (scholar|scholor)/',
         '/post doctoral fellow/',
         '/research assistant/',
-        '/visiting scholar/'
-    ];
-    const RANK_WORD_CORRECTIONS = [
-        '1' => 'I',
-        '2' => 'II',
-        '3' => 'III',
-        'Assist' => 'Assistant',
-        'Assoc' => 'Associate',
-        'Asst.' => 'Assistant',
-        'Asst' => 'Assistant',
-        'Ii' => 'II',
-        'Iii' => 'III',
-        'L' => 'I',
-        'Lecturerr' => 'Lecturer',
-        'Ll' => 'II',
-        'Lll' => 'III',
-        'Prof' => 'Professor',
-        'Profesor' => 'Professor',
-        'Profession' => 'Professor',
-        'Professorin' => 'Professor',
-        'Professorof' => 'Professor',
-        'Scholor' => 'Scholar',
+        '/visiting scholar/',
     ];
 
-    public static function commonRankFromTitle(string $title): ?string
+    const RANK_WORD_CORRECTIONS = [
+        '1'           => 'I',
+        '2'           => 'II',
+        '3'           => 'III',
+        'Assist'      => 'Assistant',
+        'Assoc'       => 'Associate',
+        'Asst.'       => 'Assistant',
+        'Asst'        => 'Assistant',
+        'Ii'          => 'II',
+        'Iii'         => 'III',
+        'L'           => 'I',
+        'Lecturerr'   => 'Lecturer',
+        'Ll'          => 'II',
+        'Lll'         => 'III',
+        'Prof'        => 'Professor',
+        'Profesor'    => 'Professor',
+        'Profession'  => 'Professor',
+        'Professorin' => 'Professor',
+        'Professorof' => 'Professor',
+        'Scholor'     => 'Scholar',
+    ];
+
+    public static function commonRankFromTitle(string|null $title): ?string
     {
+        if ($title === null)
+            return null;
         $title = trim(strtolower($title));
         foreach (static::COMMON_RANKS as $common) {
-            if ($title == strtolower($common)) return $common;
+            if ($title == strtolower($common))
+                return $common;
         }
         return null;
     }
@@ -97,7 +104,7 @@ class FacultyRankParser {
         $rank = preg_replace(
             '/clin(ician|cian|ical|ican) *[\-,]? *ed(ucator)? *[\-,]? */i',
             'Clinician Educator - ',
-            $rank
+            $rank,
         );
         return $rank;
     }
@@ -111,7 +118,7 @@ class FacultyRankParser {
         // check regexes to try and infer a rank
         foreach (static::RANK_REGEX as $r) {
             if (preg_match($r, $title, $matches)) {
-                $rank = trim($matches[0],",- \n\r\t\v\x00");
+                $rank = trim($matches[0], ",- \n\r\t\v\x00");
                 break;
             }
         }
@@ -129,7 +136,8 @@ class FacultyRankParser {
                 $rank[$i] = @static::RANK_WORD_CORRECTIONS[$word] ?? $word;
             }
             return implode(' ', $rank);
-        } else {
+        }
+        else {
             return null;
         }
     }

@@ -131,7 +131,9 @@ class FacultyInfo
         // person's academic title), then default to 'Unknown Rank'
         $rank = FacultyRankParser::commonRankFromTitle($title)
             ?? (array_key_exists('academic title', $row) ? FacultyRankParser::inferRankFromTitle($row['academic title']) : null)
-            ?? (array_key_exists('academic title', $row) ? FacultyRankParser::commonRankFromTitle(StringFixer::jobTitle($row['academic title'])) : null)
+            ?? (array_key_exists('academic title', $row)
+                ? FacultyRankParser::commonRankFromTitle(StringFixer::jobTitle($row['academic title']))
+                : null)
             ?? ($title != 'Unknown Title' ? FacultyRankParser::inferRankFromTitle($title) : null)
             ?? $existing?->rank
             ?? 'Unknown Rank';
