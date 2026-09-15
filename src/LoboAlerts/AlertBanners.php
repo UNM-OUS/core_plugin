@@ -82,7 +82,7 @@ class AlertBanners
                 // return the final alert list
                 return $alerts;
             },
-            300,
+            60,
         ) ?? [];
     }
 
