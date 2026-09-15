@@ -107,21 +107,21 @@ class FacultyInfo
         // check for existing record
         $existing = static::search($netid ?? $banner);
         // email address
-        $email = ($row['email'] ? $row['email'] : null)
+        $email = (array_key_exists('email', $row) ? $row['email'] : null)
             ?? $existing?->email
             ?? $netid . '@unm.edu';
         // org (org level 3 desc in banner)
-        $org = ($row['org level 3 desc'] ? $row['org level 3 desc'] : null)
+        $org = (array_key_exists('org level 3 desc', $row) ? $row['org level 3 desc'] : null)
             ?? $existing?->org
             ?? 'Unknown Organization';
         $org = StringFixer::organization($org);
         // department (org desc in banner)
-        $department = ($row['org desc'] ? $row['org desc'] : null)
+        $department = (array_key_exists('org desc', $row) ? $row['org desc'] : null)
             ?? $existing?->department
             ?? 'Unknown Department';
         $department = StringFixer::department($department);
         // job title
-        $title = ($row['job title'] ? $row['job title'] : null)
+        $title = (array_key_exists('job title', $row) ? $row['job title'] : null)
             ?? $existing?->title
             ?? 'Unknown Title';
         $title = StringFixer::jobTitle($title);
@@ -130,8 +130,8 @@ class FacultyInfo
         // this person (to handle partial updates that might not include a
         // person's academic title), then default to 'Unknown Rank'
         $rank = FacultyRankParser::commonRankFromTitle($title)
-            ?? ($row['academic title'] ? FacultyRankParser::inferRankFromTitle($row['academic title']) : null)
-            ?? ($row['academic title'] ? FacultyRankParser::commonRankFromTitle(StringFixer::jobTitle($row['academic title'])) : null)
+            ?? (array_key_exists('academic title', $row) ? FacultyRankParser::inferRankFromTitle($row['academic title']) : null)
+            ?? (array_key_exists('academic title', $row) ? FacultyRankParser::commonRankFromTitle(StringFixer::jobTitle($row['academic title'])) : null)
             ?? ($title != 'Unknown Title' ? FacultyRankParser::inferRankFromTitle($title) : null)
             ?? $existing?->rank
             ?? 'Unknown Rank';
@@ -306,15 +306,12 @@ class FacultyInfo
                 $first_name = implode(' ', $name);
             }
         }
-        if ($row['first name']) {
+        if (array_key_exists('first name', $row))
             $first_name = $row['first name'];
-        }
-        if ($row['last name']) {
+        if (array_key_exists('last name', $row))
             $last_name = $row['last name'];
-        }
-        if ($row['preferred name']) {
+        if (array_key_exists('preferred name', $row))
             $first_name = $row['preferred name'];
-        }
         // remove initials like A. B. from first name
         $first_name = preg_replace('/ [A-Z]\./', '', $first_name);
         $first_name = trim($first_name);
