@@ -7,7 +7,6 @@ use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedDB;
 
 $query = SharedDB::query()
     ->from('faculty_list')
-    ->order('time desc')
     ->order('last_name, first_name');
 
 $table = new DigraphCMS\UI\Pagination\PaginatedTable(
@@ -27,7 +26,7 @@ $table = new DigraphCMS\UI\Pagination\PaginatedTable(
             $row['visiting'] ? 'Yes' : 'No',
             $row['netid'],
             $row['banner'],
-            $row['email']
+            $row['email'],
         ];
     },
     [
@@ -45,7 +44,7 @@ $table = new DigraphCMS\UI\Pagination\PaginatedTable(
         new ColumnStringFilteringHeader('NetID', 'netid'),
         new ColumnStringFilteringHeader('Banner ID', 'banner'),
         new ColumnStringFilteringHeader('Email', 'email'),
-    ]
+    ],
 );
 
 echo $table;
