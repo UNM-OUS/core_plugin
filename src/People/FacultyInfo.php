@@ -282,8 +282,7 @@ class FacultyInfo
      */
     protected static function importVoting(array $row): bool
     {
-        // TODO: look at row if we can get that data in the spreadsheets themselves
-        // as a last resort infer from existing records
+        // This will never be its own column, so we just try to import any existing flag for this person
         return !!static::search(strtolower(trim($row['netid'])), true);
     }
 
