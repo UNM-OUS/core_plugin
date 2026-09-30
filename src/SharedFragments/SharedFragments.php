@@ -1,22 +1,22 @@
 <?php
 
-namespace DigraphCMS_Plugins\unmous\ous_digraph_module\SharedBookmarks;
+namespace DigraphCMS_Plugins\unmous\ous_digraph_module\SharedFragments;
 
 use DigraphCMS\Cache\Cache;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedDB;
 use Envms\FluentPDO\Queries\Select;
 
-class SharedBookmarks
+class SharedFragments
 {
 
     public static function select(): Select
     {
         return SharedDB::query()
-            ->from('shared_bookmark')
-            ->asObject(SharedBookmark::class); //@phpstan-ignore-line this is right
+            ->from('shared_fragment')
+            ->asObject(SharedFragment::class); //@phpstan-ignore-line this is right
     }
 
-    public static function get(string $category, string $name): ?SharedBookmark
+    public static function get(string $category, string $name): ?SharedFragment
     {
         return self::select()
             ->where('category', strtolower($category))
@@ -24,7 +24,7 @@ class SharedBookmarks
             ->fetch() ?: null;
     }
 
-    public static function getById(int $id): ?SharedBookmark
+    public static function getById(int $id): ?SharedFragment
     {
         return self::select()
             ->where('id', $id)
@@ -34,7 +34,7 @@ class SharedBookmarks
     public static function categoryExists(string $category): bool
     {
         return Cache::get(
-            'ous/shared_bookmark_categories/' . md5($category),
+            'ous/shared_fragment_categories/' . md5($category),
             function () use ($category) {
                 return self::select()
                     ->where('category', $category)
@@ -44,19 +44,17 @@ class SharedBookmarks
         );
     }
 
-    public static function set(string $category, string $name, string $title, string $url, bool $searchable): SharedBookmark
+    public static function set(string $category, string $name, string $value, bool $searchable): SharedFragment
     {
         $category = strtolower(trim($category));
         $name = strtolower(trim($name));
-        $title = substr(trim($title), 0, 255);
-        $url = trim($url);
         $existing = self::get($category, $name);
+        $value = trim($value);
         if ($existing) {
             SharedDB::query()
-                ->update('shared_bookmark')
+                ->update('shared_fragment')
                 ->set([
-                    'title'      => $title,
-                    'url'        => $url,
+                    'value'      => $value,
                     'searchable' => $searchable ? '1' : '0'
                 ])
                 ->where('id', $existing->id())
@@ -64,12 +62,11 @@ class SharedBookmarks
         }
         else {
             SharedDB::query()
-                ->insertInto('shared_bookmark')
+                ->insertInto('shared_fragment')
                 ->values([
                     'category'   => $category,
                     'name'       => $name,
-                    'title'      => $title,
-                    'url'        => $url,
+                    'value'      => $value,
                     'searchable' => $searchable ? '1' : '0'
                 ])
                 ->execute();
@@ -80,16 +77,15 @@ class SharedBookmarks
     /**
      * Score how well a bookmark matches a given query.
      */
-    public static function scoreSearchResult(SharedBookmark $bookmark, string $query): int
+    public static function scoreSearchResult(SharedFragment $bookmark, string $query): int
     {
         $query = strtolower($query);
         $score = 0;
-        if ($bookmark->name() == $query || $bookmark->title() == $query) {
+        if ($bookmark->name() == $query || $bookmark->value() == $query) {
             $score += 100;
         }
-        $score += similar_text(metaphone($query), metaphone($bookmark->title()));
+        $score += similar_text(metaphone($query), metaphone($bookmark->value()));
         $score += similar_text(metaphone($query), metaphone($bookmark->category() . ' ' . $bookmark->name()));
-        $score += similar_text(metaphone($query), metaphone($bookmark->url()));
         return $score;
     }
 

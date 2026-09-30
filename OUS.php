@@ -29,6 +29,7 @@ use DigraphCMS\Users\Users;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\BulkMail\BulkMail;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\People\FacultyInfo;
 use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedBookmarks\SharedBookmarks;
+use DigraphCMS_Plugins\unmous\ous_digraph_module\SharedFragments\SharedFragments;
 use RuntimeException;
 use Thunder\Shortcode\Shortcode\ShortcodeInterface;
 
@@ -225,9 +226,15 @@ class OUS extends AbstractPlugin
 
     public static function onShortCode(ShortcodeInterface $s): ?string
     {
+        return static::buildBookmarkShortcode($s)
+            ?? static::buildFragmentShortcode($s);
+    }
+
+    protected static function buildBookmarkShortcode(ShortcodeInterface $s): string|null
+    {
         // handle shared bookmark shortcodes
         $category = $s->getName();
-        if (!SharedBookmarks::isCategory($category))
+        if (!SharedBookmarks::categoryExists($category))
             return null;
         $name = trim($s->getBbCode() ?? '');
         $bookmark = SharedBookmarks::get($category, $name);
@@ -256,6 +263,18 @@ class OUS extends AbstractPlugin
         }
         // return finished link
         return $a;
+    }
+
+    protected static function buildFragmentShortcode(ShortcodeInterface $s): string|null
+    {
+        $category = $s->getName();
+        if (!SharedFragments::categoryExists($category))
+            return null;
+        $name = trim($s->getBbCode() ?? '');
+        $fragment = SharedFragments::get($category, $name);
+        if (!$fragment)
+            return null;
+        return $fragment->value();
     }
 
     public static function onShortCode_bulkmail_page_content(ShortcodeInterface $s): string
