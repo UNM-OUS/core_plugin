@@ -2,7 +2,8 @@
 
 namespace DigraphCMS_Plugins\unmous\ous_digraph_module;
 
-use DateTime;
+use DateTimeImmutable;
+use DateTimeInterface;
 use DigraphCMS\Config;
 use DigraphCMS\Content\Page;
 use DigraphCMS\Content\Pages;
@@ -129,22 +130,21 @@ class OUS extends AbstractPlugin
         }
     }
 
-    public static function transferTime(DateTime|int|string $original_time, DateTime $original_reference, DateTime $new_reference): DateTime
+    public static function transferTime(DateTimeInterface|int|string $original_time, DateTimeInterface $original_reference, DateTimeInterface $new_reference): DateTimeImmutable
     {
         $original_time = Format::parseDate($original_time);
         // normalize time of references
-        $original_reference = (clone $original_reference)->setTime(0, 0, 0);
-        $new_reference = (clone $new_reference)->setTime(0, 0, 0);
+        $original_reference = DateTimeImmutable::createFromInterface($original_time)->setTime(0, 0, 0);
+        $new_reference = DateTimeImmutable::createFromInterface($new_reference)->setTime(0, 0, 0);
         // create a new time that is the same amount of time from $new_reference
         $interval = $original_reference->diff($original_time);
         $new_time = $new_reference->add($interval);
         // manually set the time to be exactly the same, to correctly handle time changes (mostly)
-        $new_time->setTime(
+        return $new_time->setTime(
             intval($original_time->format('G')),
             intval($original_time->format('i')),
             intval($original_time->format('s')),
         );
-        return $new_time;
     }
 
     public static function userFromNetId(string $netId, bool $create = false): ?User

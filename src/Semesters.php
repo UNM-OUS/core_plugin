@@ -4,19 +4,25 @@ namespace DigraphCMS_Plugins\unmous\ous_digraph_module;
 
 use DateInterval;
 use DateTime;
+use DateTimeImmutable;
+use DateTimeInterface;
 use DigraphCMS\Cache\Cache;
 use DigraphCMS\Config;
 use DigraphCMS\UI\Format;
 
 class Semesters
 {
+
     const SPRING_DEFAULT = [1, 15];
+
     const SUMMER_DEFAULT = [6, 1];
+
     const FALL_DEFAULT = [8, 15];
+
     const SEMESTERS = [
         'Spring' => 10,
         'Summer' => 60,
-        'Fall' => 80
+        'Fall'   => 80,
     ];
 
     /**
@@ -25,9 +31,11 @@ class Semesters
     public static function startDate(int $year, string $semester): array|null
     {
         $all = static::allDates();
-        if (!isset($all[$year])) return null;
+        if (!isset($all[$year]))
+            return null;
         $semester = strtolower(trim($semester));
-        if (!isset($all[$year][$semester])) return null;
+        if (!isset($all[$year][$semester]))
+            return null;
         return $all[$year][$semester];
     }
 
@@ -52,7 +60,7 @@ class Semesters
         );
     }
 
-    public static function transferTime(DateTime|int|string $from_time, Semester $to_semester, Semester|null $from_semester = null): DateTime
+    public static function transferTime(DateTimeInterface|int|string $from_time, Semester $to_semester, Semester|null $from_semester = null): DateTimeImmutable
     {
         $from_time = Format::parseDate($from_time);
         $from_semester = $from_semester ?? static::fromDate($from_time);
@@ -71,7 +79,8 @@ class Semesters
         if ($prelaunch) {
             if (Config::get('unm.semester_prelaunch_invert')) {
                 $date->sub($prelaunch);
-            } else {
+            }
+            else {
                 $date->add($prelaunch);
             }
         }
@@ -82,13 +91,16 @@ class Semesters
             // it is still the fall of the previous calendar year
             $year--;
             $semester = 'Fall';
-        } elseif ($month < static::summer($year)[0] || ($month == static::summer($year)[0] && $day < static::summer($year)[1])) {
+        }
+        elseif ($month < static::summer($year)[0] || ($month == static::summer($year)[0] && $day < static::summer($year)[1])) {
             // it is spring of the current calendar year
             $semester = 'Spring';
-        } elseif ($month < static::fall($year)[0] || ($month == static::fall($year)[0] && $day < static::fall($year)[1])) {
+        }
+        elseif ($month < static::fall($year)[0] || ($month == static::fall($year)[0] && $day < static::fall($year)[1])) {
             // it is summer of the current calendar year
             $semester = 'Summer';
-        } else {
+        }
+        else {
             // it is fall of the current calendar year
             $semester = 'Fall';
         }
@@ -99,7 +111,8 @@ class Semesters
     {
         if (Config::get('unm.semester_prelaunch')) {
             return new DateInterval(Config::get('unm.semester_prelaunch'));
-        } else {
+        }
+        else {
             return null;
         }
     }
@@ -139,14 +152,17 @@ class Semesters
     public static function latestFull(): Semester
     {
         $semester = static::current();
-        if ($semester->semester() == 'Summer') return $semester->previousFull();
-        else return $semester;
+        if ($semester->semester() == 'Summer')
+            return $semester->previousFull();
+        else
+            return $semester;
     }
 
     public static function current(): Semester
     {
         static $current;
-        if (!$current) $current = static::fromDate(time());
+        if (!$current)
+            $current = static::fromDate(time());
         return clone $current;
     }
 
@@ -158,8 +174,10 @@ class Semesters
     public static function currentFull(): Semester
     {
         $semester = static::current();
-        if ($semester->semester() == 'Summer') return $semester->nextFull();
-        else return $semester;
+        if ($semester->semester() == 'Summer')
+            return $semester->nextFull();
+        else
+            return $semester;
     }
 
     /**
@@ -169,14 +187,19 @@ class Semesters
      */
     public static function fromCode(string|int|null $code): ?Semester
     {
-        if (!$code) return null;
+        if (!$code)
+            return null;
         $code = intval($code);
         $year = intval(floor($code / 100));
-        if (!$year) return null;
+        if (!$year)
+            return null;
         $semester = @array_flip(Semesters::SEMESTERS)[$code - $year * 100];
-        if (!$semester) return null; // @phpstan-ignore-line
-        if ($year < 1000 || $year > 9999) return null;
-        else return new Semester($year, $semester);
+        if (!$semester) // @phpstan-ignore-line
+            return null;
+        if ($year < 1000 || $year > 9999)
+            return null;
+        else
+            return new Semester($year, $semester);
     }
 
     /**
@@ -186,11 +209,14 @@ class Semesters
      */
     public static function fromString(string|null $string): ?Semester
     {
-        if (!$string) return null;
+        if (!$string)
+            return null;
         $string = trim($string);
         if (preg_match('/^(spring|summer|fall) ([0-9]{4})$/i', $string, $m)) {
             return new Semester(intval($m[2]), $m[1]);
-        } else return null;
+        }
+        else
+            return null;
     }
 
     public static function prelaunchInvert(): bool
@@ -222,8 +248,12 @@ class Semesters
      */
     public static function compare(Semester $a, Semester $b): int
     {
-        if ($a == $b) return 0;
-        elseif ($a < $b) return -1;
-        else return 1;
+        if ($a == $b)
+            return 0;
+        elseif ($a < $b)
+            return -1;
+        else
+            return 1;
     }
+
 }
