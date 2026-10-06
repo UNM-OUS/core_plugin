@@ -29,6 +29,7 @@ echo new PaginatedTable(
         '',
         '',
         '',
+        '',
         'Updated',
         '',
     ],
