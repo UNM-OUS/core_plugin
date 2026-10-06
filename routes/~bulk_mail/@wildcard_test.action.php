@@ -29,7 +29,6 @@ $recipients = (new Field('Emails (one per line)', new TEXTAREA()))
     ->addTip('Duplicates will be automatically removed, including duplicates that are already included in the sources above.')
     ->addTip('Lines beginning with <kbd>#</kbd> are ignored, and can be used as comments.')
     ->addTip('Blank lines are ignored.')
-    ->setDefault($mailing->extraRecipients())
     ->addForm($form);
 
 if ($form->ready()) {
