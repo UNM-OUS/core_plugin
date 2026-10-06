@@ -20,20 +20,35 @@ use InvalidArgumentException;
 
 class Mailing
 {
+
     protected int $id;
+
     protected string $name;
+
     protected string $from;
+
     protected string $subject;
+
     protected string $body;
+
     protected string $sources;
+
     protected string $extra_recipients;
+
     protected string $category;
+
     protected int|null $sent;
+
     protected string|null $sent_by;
+
     protected int $created;
+
     protected string $created_by;
+
     protected int $updated;
+
     protected string $updated_by;
+
     /** @var string a newline-delimited list of timestamps, sorted */
     protected string $schedule;
 
@@ -46,14 +61,15 @@ class Mailing
      */
     public function send(): DeferredJob|null
     {
-        if ($this->sent()) return null;
+        if ($this->sent())
+            return null;
         DB::query()->update(
             'bulk_mail',
             [
-                'sent' => time(),
+                'sent'    => time(),
                 'sent_by' => Session::uuid(),
             ],
-            $this->id()
+            $this->id(),
         )->execute();
         $id = $this->id();
         return new DeferredJob(function (DeferredJob $job) use ($id) {
@@ -68,7 +84,8 @@ class Mailing
 
     public function sent(): ?DateTime
     {
-        if (!$this->sent) return null;
+        if (!$this->sent)
+            return null;
         return (new DateTime)->setTimestamp($this->sent);
     }
 
@@ -77,18 +94,18 @@ class Mailing
         return !!DB::query()->update(
             'bulk_mail',
             [
-                'name' => $this->name(),
-                '`from`' => $this->from(),
-                'subject' => $this->subject(),
-                'body' => $this->body(),
-                'sources' => implode(',', $this->sourceNames()),
-                '`category`' => $this->category(),
+                'name'             => $this->name(),
+                '`from`'           => $this->from(),
+                'subject'          => $this->subject(),
+                'body'             => $this->body(),
+                'sources'          => implode(',', $this->sourceNames()),
+                '`category`'       => $this->category(),
                 'extra_recipients' => $this->extraRecipients(),
-                'schedule' => $this->schedule,
-                'updated' => time(),
-                'updated_by' => Session::uuid(),
+                'schedule'         => $this->schedule,
+                'updated'          => time(),
+                'updated_by'       => Session::uuid(),
             ],
-            $this->id()
+            $this->id(),
         )->execute();
     }
 
@@ -139,7 +156,8 @@ class Mailing
     public static function rebuildRecipientJob(DeferredJob $job, int $id): string
     {
         $mailing = BulkMail::mailing($id);
-        if (!$mailing) return "Mailing $id not found";
+        if (!$mailing)
+            return "Mailing $id not found";
         $mailing->rebuildRecipients();
         return 'Rebuilt recipient list';
     }
@@ -174,7 +192,7 @@ class Mailing
             function (string $name): ?AbstractRecipientSource {
                 return BulkMail::source($name);
             },
-            $this->sourceNames()
+            $this->sourceNames(),
         ));
     }
 
@@ -189,9 +207,9 @@ class Mailing
             if ($recipient->userUuid()) {
                 DB::query()->update('bulk_mail_message', [
                     'bulk_mail_id' => $this->id(),
-                    'email' => $recipient->email(),
-                    'user' => $recipient->userUuid(),
-                    'sent' => null
+                    'email'        => $recipient->email(),
+                    'user'         => $recipient->userUuid(),
+                    'sent'         => null,
                 ])
                     ->where('bulk_mail_id', $this->id())
                     ->where('sent is null')
@@ -203,9 +221,9 @@ class Mailing
         // add new message
         DB::query()->insertInto('bulk_mail_message', [
             'bulk_mail_id' => $this->id(),
-            'email' => $recipient->email(),
-            'user' => $recipient->userUuid(),
-            'sent' => null
+            'email'        => $recipient->email(),
+            'user'         => $recipient->userUuid(),
+            'sent'         => null,
         ])->execute();
         return $this;
     }
@@ -219,7 +237,7 @@ class Mailing
                     return strtolower(trim($line));
                 },
                 // @phpstan-ignore-next-line
-                preg_split("/\r\n|\n|\r/", $this->extraRecipients())
+                preg_split("/\r\n|\n|\r/", $this->extraRecipients()),
             ),
             function (string $line): bool {
                 return !!filter_var($line, FILTER_VALIDATE_EMAIL);
@@ -230,7 +248,8 @@ class Mailing
     public static function sendMailingJob(DeferredJob $job, int $id): string
     {
         $mailing = BulkMail::mailing($id);
-        if (!$mailing) return "Mailing $id not found";
+        if (!$mailing)
+            return "Mailing $id not found";
         $messages = DB::query()
             ->from('bulk_mail_message')
             ->where('bulk_mail_id', $mailing->id())
@@ -247,12 +266,13 @@ class Mailing
     public static function sendMessageJob(int $id): string
     {
         $message = BulkMail::message($id);
-        if (!$message) return "Message $id not found";
+        if (!$message)
+            return "Message $id not found";
         $mailing = $message->mailing();
         Context::beginEmail();
         Context::fields()['bulk_mail'] = [
             'email' => $message->email(),
-            'user' => $message->user()
+            'user'  => $message->user(),
         ];
         $email = new Email(
             $mailing->category(),
@@ -260,17 +280,17 @@ class Mailing
             $message->email(),
             $message->user() ? $message->user()->uuid() : null,
             $mailing->from(),
-            new RichContent($mailing->body())
+            new RichContent($mailing->body()),
         );
         Emails::queue($email);
         DB::query()
             ->update(
                 'bulk_mail_message',
                 [
-                    'sent' => time(),
-                    'email_uuid' => $email->uuid()
+                    'sent'       => time(),
+                    'email_uuid' => $email->uuid(),
                 ],
-                $message->id()
+                $message->id(),
             )
             ->execute();
         Context::end();
@@ -290,19 +310,19 @@ class Mailing
         $key = DB::query()->insertInto(
             'bulk_mail',
             [
-                'name' => $this->name(),
-                '`from`' => $this->from(),
-                'subject' => $this->subject(),
-                'body' => $this->body(),
-                'schedule' => '',
-                'sources' => implode(',', $this->sourceNames()),
+                'name'             => $this->name(),
+                '`from`'           => $this->from(),
+                'subject'          => $this->subject(),
+                'body'             => $this->body(),
+                'schedule'         => '',
+                'sources'          => implode(',', $this->sourceNames()),
                 'extra_recipients' => $this->extraRecipients(),
-                'category' => $this->category(),
-                'created' => time(),
-                'created_by' => Session::uuid(),
-                'updated' => time(),
-                'updated_by' => Session::uuid(),
-            ]
+                'category'         => $this->category(),
+                'created'          => time(),
+                'created_by'       => Session::uuid(),
+                'updated'          => time(),
+                'updated_by'       => Session::uuid(),
+            ],
         )->execute();
         if ($key === false) {
             throw new \RuntimeException('Failed to copy mailing');
@@ -359,7 +379,8 @@ class Mailing
 
     public function sentBy(): ?User
     {
-        if (!$this->sent_by) return null;
+        if (!$this->sent_by)
+            return null;
         return Users::user($this->sent_by);
     }
 
@@ -391,6 +412,12 @@ class Mailing
             ->setName('Schedule: ' . $this->name());
     }
 
+    public function testUrl(): URL
+    {
+        return (new URL('/bulk_mail/test:' . $this->id))
+            ->setName('Test: ' . $this->name());
+    }
+
     /**
      * @return array<int>
      */
@@ -399,8 +426,8 @@ class Mailing
         $times = preg_split("/\r\n|\n|\r/", $this->schedule) ?: [];
         $times = array_filter($times);
         return array_map(
-            fn(string $time): int => (int)$time,
-            $times
+            fn(string $time): int => (int) $time,
+            $times,
         );
     }
 
@@ -440,7 +467,8 @@ class Mailing
     {
         $schedule = $this->scheduledTimes();
         // it's always sorted, so we can just check the first one, and if it's in the past we need to send this mailing
-        if (!$schedule) return false;
+        if (!$schedule)
+            return false;
         $first = reset($schedule);
         return $first <= time();
     }
@@ -480,4 +508,5 @@ class Mailing
         return (new URL('/bulk_mail/copy:' . $this->id))
             ->setName('Copy: ' . $this->name());
     }
+
 }
