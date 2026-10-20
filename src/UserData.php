@@ -6,6 +6,7 @@ use DigraphCMS\Cache\Cache;
 use DigraphCMS\Curl\CurlHelper;
 use DigraphCMS\Config;
 use DigraphCMS\DB\DB;
+use DigraphCMS\ExceptionLog;
 use DigraphCMS\HTTP\HttpError;
 use DigraphCMS\URL\URL;
 use DigraphCMS\Users\Group;
@@ -16,6 +17,7 @@ use Symfony\Component\Yaml\Yaml;
 
 class UserData
 {
+
     /** @return array<int,Group|string> */
     public static function userGroups(string $userID): array
     {
@@ -53,7 +55,8 @@ class UserData
     public static function netIdIsFaculty(string $netID): ?bool
     {
         static $cache = [];
-        if (!$netID) return null;
+        if (!$netID)
+            return null;
         $netID = strtolower($netID);
         return @$cache[$netID]
             ?? ($cache[$netID] = !!SharedDB::query()->from('faculty_list')
@@ -63,7 +66,8 @@ class UserData
     public static function netIdIsVotingFaculty(string $netID): ?bool
     {
         static $cache = [];
-        if (!$netID) return null;
+        if (!$netID)
+            return null;
         $netID = strtolower($netID);
         return @$cache[$netID]
             ?? ($cache[$netID] = !!SharedDB::query()
@@ -75,7 +79,8 @@ class UserData
     public static function netIdIsStaff(string $netID): ?bool
     {
         static $cache = [];
-        if (!$netID) return null;
+        if (!$netID)
+            return null;
         $netID = strtolower($netID);
         return @$cache[$netID]
             ?? ($cache[$netID] = !!SharedDB::query()->from('staff_list')
@@ -112,8 +117,10 @@ class UserData
         $query = DB::query()->from('user_source')
             ->where('provider_id = ?', [$netID])
             ->where('source = "cas" AND provider = "netid"');
-        if ($result = $query->fetch()) return Users::get($result['user_uuid']);
-        else return null;
+        if ($result = $query->fetch())
+            return Users::get($result['user_uuid']);
+        else
+            return null;
     }
 
     /** @return string[] */
@@ -127,7 +134,7 @@ class UserData
                 return $row['provider_id'];
             },
             // @phpstan-ignore-next-line
-            $query->fetchAll()
+            $query->fetchAll(),
         );
     }
 
@@ -170,8 +177,8 @@ class UserData
                 // get data from central config file
                 static::getData($forceRefresh),
                 // get data from local config
-                Config::get('unm.known_netids')
-            )
+                Config::get('unm.known_netids'),
+            ),
         );
     }
 
@@ -182,7 +189,8 @@ class UserData
     {
         // use a static cache variable
         static $cache;
-        if ($cache !== null && !$forceRefresh) return $cache;
+        if ($cache !== null && !$forceRefresh)
+            return $cache;
         $cacheID = 'unm/userdata';
         // if force refresh is true or stored cache isn't set or is expired, run job to get data
         if ($forceRefresh || !Cache::exists($cacheID) || Cache::expired($cacheID)) {
@@ -190,19 +198,31 @@ class UserData
             $data = [];
             foreach (Config::get('unm.user_sources') as $source) {
                 $source_data = CurlHelper::get($source);
-                if ($source_data === null) throw new HttpError(503, 'User data from an external source failed to load, this is a rare and usually a temporary error. Please try again in a few minutes.');
-                if (!$source_data = Yaml::parse($source_data)) throw new Exception('User source ' . $source . ' failed to parse.');
+                if ($source_data === null) {
+                    ExceptionLog::logMessage(sprintf(
+                        "User data from %s failed to load. Curl %s: %s",
+                        $source,
+                        CurlHelper::errorNumber(),
+                        CurlHelper::error(),
+                    ));
+                    throw new HttpError(503, 'User data from an external source failed to load, this is a rare and usually a temporary error. Please try again in a few minutes.');
+                }
+                if (!$source_data = Yaml::parse($source_data))
+                    throw new Exception('User source ' . $source . ' failed to parse.');
                 /** @var array<string,array{groups:string[]}> $source_data */
                 $data = array_merge_recursive($data, $source_data);
             }
             foreach ($data as $netid => $user) {
                 $data[$netid]['groups'] = array_values(array_unique($user['groups']));
             }
-            if ($data) Cache::set($cacheID, $data, 86400);
-            else throw new Exception('UNM user source failed to parse');
+            if ($data)
+                Cache::set($cacheID, $data, 86400);
+            else
+                throw new Exception('UNM user source failed to parse');
             return $cache = $data;
         }
         // otherwise just return the main cache value
         return $cache = Cache::get($cacheID);
     }
+
 }
